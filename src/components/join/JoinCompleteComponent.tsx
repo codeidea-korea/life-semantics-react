@@ -7,6 +7,10 @@ import { UserInterface } from "@interfaces/userInterface";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const JoinCompleteComponent = () => {
+    const navigate = useNavigate();
+    const handleNavigate = (url: string) => {
+        navigate(url);
+    }
   return (
     <React.Fragment>
       <div className="complete">
@@ -14,10 +18,10 @@ const JoinCompleteComponent = () => {
         <img src="images/big-check.svg" />
       </div>
       <div className="buttonFix">
-        <button type="button" className="button active" >
+        <button type="button" className="button active" onClick={event => handleNavigate('/')}>
           홈 화면으로 돌아가기
         </button>
-        <button type="button" className="button" >
+        <button type="button" className="button" onClick={() => navigate(-1)}>
           이전 화면으로 돌아가기
         </button>
       </div>

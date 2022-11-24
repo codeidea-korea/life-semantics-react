@@ -15,10 +15,11 @@ const Account = () => {
         navigate('/deleteAccount');
     };
 
-    const handleLogOut = () => {
+    const moveMain = () => {
         setModal({...modal, show: false});
         navigate('/');
     };
+
     const handleConfirmLogout = () => {
         setModal({
             ...modal,
@@ -33,7 +34,7 @@ const Account = () => {
             ),
             confirmText: "네",
             cancelText: "아니요",
-            onConfirmCallback: handleLogOut,
+            onConfirmCallback: moveMain,
         });
     };
 
@@ -43,7 +44,7 @@ const Account = () => {
             <div className="account">
                 <h2>계정관리</h2>
                 <div className="">
-                    <Link to={""}>내 정보 수정하기</Link>
+                    <Link to={"/modify"}>내 정보 수정하기</Link>
                     <div className="accountBox">
                         <div>
                             <span>현재 계정</span>

@@ -41,15 +41,15 @@ const ProgramInfo = () => {
       cancelShow: true,
       callBackShow: true,
       content: <div>예약이 완료되었습니다.</div>,
-      confirmText: "취소",
-      cancelText: "확인",
-      onConfirmCallback: handleLogOut,
+      confirmText: "확인",
+      cancelText: "취소",
+      onConfirmCallback: handleMoveReservation,
     });
   };
 
-  const handleLogOut = () => {
+  const handleMoveReservation = () => {
     setModal({ ...modal, show: false });
-    navigate("/");
+    navigate("/reservation");
   };
 
   const handleReserveToast = () => {
