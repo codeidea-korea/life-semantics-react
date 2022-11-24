@@ -49,7 +49,11 @@ const BookComponent = () => {
     };
 
     const moveProgramPage = (pgIdx: string) => {
-        navigate('/programView', {state: {pgIdx: pgIdx}})
+        navigate('/programView', {state: {pgIdx: pgIdx}});
+    }
+
+    const moveLoginPage = () => {
+        navigate('/login');
     }
 
     useEffect(() => {
@@ -165,7 +169,7 @@ const BookComponent = () => {
                                     )}
                                     {item.pgStatus === "applying" && (
                                         <button type="button" className="btn-02 active"
-                                                onClick={(event) => moveProgramPage(item.pgIdx)}>
+                                                onClick={moveLoginPage}>
                                             예약하기
                                         </button>
                                     )}
