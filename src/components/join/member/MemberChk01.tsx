@@ -60,7 +60,7 @@ const MemberChk01 = ({ nextStep }: { nextStep: Function }) => {
         </label>
         <div className="CodeCheck">
           <InputElement type="text" placeholder="아이디 확인" id="username" />
-          <button type="button">중복확인</button>
+          <button type="button" className="doubleCheck green">중복확인</button>
         </div>
         <label>
           <span>비밀번호</span>

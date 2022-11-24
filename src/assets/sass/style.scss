@@ -3536,9 +3536,18 @@ button[type="button"] {
 }
 .CodeCheck {
   position: relative;
+  button.doubleCheck{
+    background-color: #fff;
+    color: #000;
+    border:1px solid $font-color;
+  }
+  button.doubleCheck.green{
+    border: 1px solid $main-color;
+  }
 }
 .CodeCheck .toastPop {
   width: 100%;
+
 }
 
 .toastPopup {
