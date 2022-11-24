@@ -41,8 +41,8 @@ const ProgramInfo = () => {
       cancelShow: true,
       callBackShow: true,
       content: <div>예약이 완료되었습니다.</div>,
-      confirmText: "취소",
-      cancelText: "확인",
+      confirmText: "확인",
+      cancelText: "취소",
       onConfirmCallback: handleLogOut,
     });
   };
