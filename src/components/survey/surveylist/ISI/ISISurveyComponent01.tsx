@@ -8,16 +8,15 @@ import $ from "jquery";
 const ISISurveyComponent01 = () => {
   return (
     <React.Fragment>
-      <h2>시작전 설문 - 수면(ISI)</h2>
+      <h2>시작전 설문 - 불면(ISI)</h2>
 
       <div className="surveyList isi">
         <p>
-          1. 최근 2주동안에 당신의 불면증의<br/> <span>심한 정도</span>를 아래에
-          표시하십시오?
+          1. <span className="line">당신의 불면증에 관한 문제들의 현재(최근2주간) 심한 정도를 표시해 주세요</span>
         </p>
         <ul>
           <li className="surveyContent">
-            <p>a.잠들기 어려움</p>
+            <p>a.잠들기 어렵다.</p>
             <ul>
               <li>
                 <InputElement
@@ -26,7 +25,7 @@ const ISISurveyComponent01 = () => {
                   value="1"
                   name="qna1"
                 />
-                <label htmlFor="">전혀</label>
+                <label htmlFor="">없음</label>
               </li>
               <li>
                 <InputElement
@@ -44,7 +43,7 @@ const ISISurveyComponent01 = () => {
                   value="3"
                   name="qna1"
                 />
-                <label htmlFor="">보통</label>
+                <label htmlFor="">중간</label>
               </li>
               <li>
                 <InputElement
@@ -67,7 +66,7 @@ const ISISurveyComponent01 = () => {
             </ul>
           </li>
           <li className="surveyContent">
-            <p>b.수면 유지가 어려움(자주 깬)</p>
+            <p>b.잠을 유지하기 어렵다.</p>
             <ul>
               <li>
                 <InputElement
@@ -76,7 +75,7 @@ const ISISurveyComponent01 = () => {
                   value="1"
                   name="qna2"
                 />
-                <label htmlFor="">전혀</label>
+                <label htmlFor="">없음</label>
               </li>
               <li>
                 <InputElement
@@ -94,7 +93,7 @@ const ISISurveyComponent01 = () => {
                   value="3"
                   name="qna2"
                 />
-                <label htmlFor="">보통</label>
+                <label htmlFor="">중간</label>
               </li>
               <li>
                 <InputElement
@@ -117,7 +116,7 @@ const ISISurveyComponent01 = () => {
             </ul>
           </li>
           <li className="surveyContent">
-            <p>c.새벽에 너무 일찍 잠에서 깸</p>
+            <p>c.쉽게 깬다.</p>
             <ul>
               <li>
                 <InputElement
@@ -126,7 +125,7 @@ const ISISurveyComponent01 = () => {
                   value="1"
                   name="qna3"
                 />
-                <label htmlFor="">전혀</label>
+                <label htmlFor="">없음</label>
               </li>
               <li>
                 <InputElement
@@ -144,7 +143,7 @@ const ISISurveyComponent01 = () => {
                   value="3"
                   name="qna3"
                 />
-                <label htmlFor="">보통</label>
+                <label htmlFor="">중간</label>
               </li>
               <li>
                 <InputElement
@@ -167,14 +166,8 @@ const ISISurveyComponent01 = () => {
             </ul>
           </li>
         </ul>
-        <p>
-          2. 당신의 현재 수면 패턴에 얼마나 만족하십니까? 
-          <p className="subTitle">
-          (좌우로 <span>동그라미</span>를 움직여주세요.)
-        </p>
-        </p>
 
-        <RangeComponent/>
+
 
       </div>
     </React.Fragment>

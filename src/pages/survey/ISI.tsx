@@ -40,7 +40,7 @@ const ISI = () => {
       cancelShow: false,
       content: (
         <div>
-          수면<span>(ISI)</span> 설문을
+          불면<span>(ISI)</span> 설문을
           <br />
           완료하셨습니다.
         </div>
@@ -70,7 +70,7 @@ const ISI = () => {
   return (
     <div>
       <ModalComponent/>
-      <TitleHeadComponent name="수면(ISI)" />
+      <TitleHeadComponent name="불면(ISI)" />
       <div className="tired painBox " id="ISI">
         <ISISurveyComponent01 />
         <ISISurveyComponent02 />
@@ -79,7 +79,7 @@ const ISI = () => {
         <button type="button" className="prev" onClick={handlePrevStep}>
           이전
         </button>
-        <button type="button" className="next" onClick={handleNextStep}>
+        <button type="button" className="next" onClick={handleModal}>
           다음
         </button>
       </div>

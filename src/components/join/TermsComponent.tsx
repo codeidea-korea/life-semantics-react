@@ -43,11 +43,6 @@ const TermsComponent = () => {
             </li>
             <li>
               <InputElement type="checkbox" />
-              <label>[필수] 라이프 레코드 이용 동의</label>
-              <Link to=""></Link>
-            </li>
-            <li>
-              <InputElement type="checkbox" />
               <label>[필수] 개인정보 수집 및 이용 동의</label>
               <Link to=""></Link>
             </li>

@@ -47,7 +47,8 @@ const SurveyBefore = () => {
                         </div>
                     </div>
                     <ul>
-                      <li onClick={event => handleNavigate("/deStress")}>디스트레스</li>
+                       {/*설문을 완료 했을때 회색으로 변경 active */}
+                      <li onClick={event => handleNavigate("/deStress")} className="active">디스트레스</li>
                       <li onClick={event => handleNavigate("/pain")}>통증</li>
                       <li onClick={event => handleNavigate("/tired")}>피로</li>
                     </ul>
