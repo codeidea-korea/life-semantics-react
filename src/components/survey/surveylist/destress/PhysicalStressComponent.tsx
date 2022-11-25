@@ -23,7 +23,7 @@ const PhysicalStressComponent = () => {
           <span>(좌우로 동그라미를 움직여주세요.)</span>
         </div>
         <RangeComponent />
-        <RangeArrowComponent left="디스트레스 낮음" right="디스트레스 높음" />
+        <RangeArrowComponent left={<span>디스트레스<br/> 낮음</span>} right={<span>디스트레스 <br/>높음</span>} />
         <div className="checkList">
           <p>
             지난 일주일 동안 염려되었던 항목이 있습니까?

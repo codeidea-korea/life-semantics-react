@@ -7,7 +7,7 @@ import { UserInterface } from '@interfaces/userInterface';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 
-const  RangeArrowComponent= ({left, right}:{left:string, right:string}) => {
+const  RangeArrowComponent= ({left, right}:{left:React.ReactElement | string; right:React.ReactElement | string;}) => {
 
     return (
         <React.Fragment>

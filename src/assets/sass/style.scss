@@ -1148,6 +1148,9 @@ select {
       display: block;
       width: 50px;
       color: $font-color;
+      span{
+        top: 10px;
+      }
     }
   }
   .arrowLeft {
@@ -1172,6 +1175,9 @@ select {
       display: block;
       width: 40px;
       color: $font-color;
+      span{
+        top: 10px;
+      }
     }
   }
 }
