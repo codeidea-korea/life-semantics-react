@@ -85,16 +85,21 @@ const SurveyToday = () => {
     });
   };
   /* 설문완료 */
-  const handleSurveyComplete = () => {
+  const handleTodaySurveyComplete = () => {
     setModal({
       ...modal,
       show: true,
       title: "",
       cancelShow: false,
+      callBackShow: true,
       content: <div>설문을 완료했습니다.</div>,
       confirmText: "확인",
+      onConfirmCallback : moveSurveyMain
     });
   };
+
+
+
   /* 설문종료 */
   const handleModal05 = () => {
     setModal({
@@ -111,8 +116,13 @@ const SurveyToday = () => {
     setToast(true);
     setTimeout(() => {
       setToast(false);
-      handleSurveyComplete();
+      handleTodaySurveyComplete();
     }, 3000);
+  };
+
+  const moveSurveyMain = () => {
+    setModal({...modal, show: false});
+    navigate('/survey');
   };
 
   useEffect(() => {
