@@ -5,7 +5,7 @@ import TitleHeadComponent from '@/components/head/TitleHeadComponent';
 const LoginLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <BaseLayout>
-    <TitleHeadComponent name='통증' />
+    <TitleHeadComponent name='통증' targetUrl= ""/>
       {children}
     </BaseLayout>
   );

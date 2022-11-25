@@ -39,7 +39,7 @@ const IndexPage = () => {
 
   return (
     <WebLayout>
-      <TitleHeadComponent name="회원가입" />
+      <TitleHeadComponent name="회원가입" targetUrl= ""/>
       <div className="Join">
         <div className="Step">
           {step !== 4 && (

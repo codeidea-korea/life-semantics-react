@@ -70,7 +70,7 @@ const ISI = () => {
   return (
     <div>
       <ModalComponent/>
-      <TitleHeadComponent name="불면(ISI)" />
+      <TitleHeadComponent name="불면(ISI)" targetUrl= ""/>
       <div className="tired painBox " id="ISI">
         <ISISurveyComponent01 />
         <ISISurveyComponent02 />

@@ -10,7 +10,7 @@ const ModifyInformation = () => {
     }
     return (
         <WebLayout>
-            <TitleHeadComponent name="내 정보 수정"/>
+            <TitleHeadComponent name="내 정보 수정" targetUrl= ""/>
             <div className="modifyList">
                 <ul>
                     <li onClick={event => handleNavigate("/joinModify", 1)}>회원정보 수정</li>

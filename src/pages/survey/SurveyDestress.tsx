@@ -79,6 +79,7 @@ const SurveyDeStress = () => {
             show: true,
             title: "",
             cancelShow: false,
+            callBackShow: true,
             content: (
                 <div>
                     디스트레스 설문이
@@ -87,12 +88,18 @@ const SurveyDeStress = () => {
                 </div>
             ),
             confirmText: "확인",
+            onConfirmCallback : moveSurveyMain
         });
+    };
+
+    const moveSurveyMain = () => {
+        setModal({...modal, show: false});
+        navigate('/surveyBefore');
     };
 
     return (
         <React.Fragment>
-            <TitleHeadComponent name="디스트레스"/>
+            <TitleHeadComponent name="디스트레스" targetUrl= ""/>
             <div className="destress painBox">
                 <div>
                     <h2>시작전 설문 - 디스트레스</h2>

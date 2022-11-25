@@ -121,7 +121,7 @@ const SurveyToday = () => {
 
   return (
     <React.Fragment>
-      <TitleHeadComponent name="일일 설문" />
+      <TitleHeadComponent name="일일 설문" targetUrl= ""/>
       <div className="survey surveyToday">
         <div className="dDay">D+16</div>
         <DateComponent />

@@ -86,6 +86,7 @@ const Pain = () => {
             show: true,
             title: "",
             cancelShow: false,
+            callBackShow: true,
             content: (
                 <div>
                     통증 설문을<br/>
@@ -93,13 +94,19 @@ const Pain = () => {
                 </div>
             ),
             confirmText: "확인",
+            onConfirmCallback : moveSurveyMain
         });
+    };
+
+    const moveSurveyMain = () => {
+        setModal({...modal, show: false});
+        navigate('/surveyBefore');
     };
 
 
     return (
         <React.Fragment>
-            <TitleHeadComponent name="통증"/>
+            <TitleHeadComponent name="통증" targetUrl={'/survey'}/>
             <div className="painBox">
                 <h2>시작전 설문 - 통증</h2>
                 <div className="Step">

@@ -76,7 +76,7 @@ const Tired = () => {
 
   return (
     <React.Fragment>
-      <TitleHeadComponent name="피로" />
+      <TitleHeadComponent name="피로" targetUrl= ""/>
       <div className="tired painBox">
         <div className="Step">
           <ul>

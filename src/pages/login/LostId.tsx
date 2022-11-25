@@ -64,7 +64,7 @@ const IndexPage = () => {
     <WebLayout>
       <ModalComponent />
       <div className="Login">
-        <TitleHeadComponent name="아이디 찾기" />
+        <TitleHeadComponent name="아이디 찾기" targetUrl= ""/>
         <div className="Container">
           <div className="LostId">
             <h3>회원 정보를 입력해 주세요.</h3>

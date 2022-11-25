@@ -58,7 +58,7 @@ const Survey = () => {
 
     return (
         <React.Fragment>
-            <TitleHeadComponent name="설문 작성"/>
+            <TitleHeadComponent name="설문 작성" targetUrl= "/main"/>
             <div className="survey">
                 <div className="surveyMain">
                     <div className="surveyName">

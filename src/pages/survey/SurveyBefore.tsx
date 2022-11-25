@@ -14,7 +14,7 @@ const SurveyBefore = () => {
     }
     return (
         <React.Fragment>
-            <TitleHeadComponent name="시작 전 설문"/>
+            <TitleHeadComponent name="시작 전 설문" targetUrl="/survey"/>
             <div className="survey">
                 <div className="surveyMain">
                     <div className="surveyName">
@@ -48,9 +48,10 @@ const SurveyBefore = () => {
                     </div>
                     <ul>
                        {/*설문을 완료 했을때 회색으로 변경 active */}
-                      <li onClick={event => handleNavigate("/deStress")} className="active">디스트레스</li>
+                      <li onClick={event => handleNavigate("/deStress")}>디스트레스</li>
                       <li onClick={event => handleNavigate("/pain")}>통증</li>
-                      <li onClick={event => handleNavigate("/tired")}>피로</li>
+                      {/*<li onClick={event => handleNavigate("/tired")} className="active">피로</li>*/}
+                      <li className="active">피로</li>
                     </ul>
                 </div>
             </div>

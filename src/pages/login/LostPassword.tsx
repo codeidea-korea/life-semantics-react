@@ -66,7 +66,7 @@ const LostPassword = () => {
 
   return (
     <WebLayout>
-      <TitleHeadComponent name="비밀번호 찾기" />
+      <TitleHeadComponent name="비밀번호 찾기" targetUrl= ""/>
       <div className="Login">
         <div className="Temporary">
           <p>임시 비밀번호 발급</p>

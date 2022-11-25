@@ -103,7 +103,7 @@ const NCCN = () => {
 
   return (
     <div>
-      <TitleHeadComponent name="수면위생(NCCN)" />
+      <TitleHeadComponent name="수면위생(NCCN)" targetUrl= ""/>
       <div className="tired painBox" id="NCCN">
       <ModalComponent/>
         <h2>시작전 설문 - 수면위생(NCCN)</h2>

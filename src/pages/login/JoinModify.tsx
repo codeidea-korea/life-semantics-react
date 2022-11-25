@@ -112,7 +112,7 @@ const JoinModify = () => {
 
   return (
     <React.Fragment>
-      <TitleHeadComponent name={stepTitle} />
+      <TitleHeadComponent name={stepTitle} targetUrl= ""/>
       <div className="modify">
         <div className="modifyProgress">
           <ul className="Step">
