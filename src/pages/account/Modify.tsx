@@ -1,17 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import WebLayout from "@layouts/web/WebLayout";
 import HeaderComponent from "@components/head/Header";
-import {Link, useNavigate} from "react-router-dom";
+import BookComponent from "@components/program/book/BookComponent";
+import GoodByeComponent from "@components/program/GoodByeProgramComponent";
+import GoodSleepComponent from "@components/program/GoodSleepProgramComponent";
+import BannerComponent from "@components/program/banner/BannerComponent";
+import { Link } from "react-router-dom";
 import InputElement from "@components/elements/InputElement";
 
 const Modify = () => {
-
-  const navigate = useNavigate();
-
-  const handleNavigate = (url: string) => {
-    navigate(url);
-  }
-
   return (
     <WebLayout>
       <HeaderComponent />
@@ -33,13 +30,17 @@ const Modify = () => {
               <label htmlFor="">비밀번호</label>
               <InputElement type="password" maxLength={16} />
             </span>
-            <Link to="/password">비밀번호가 기억나지 않아요.</Link>
+            <Link to="">비밀번호가 기억나지 않아요.</Link>
           </div>
           
         </div>
         <div className="buttonBox">
-          <button type="button" className="prevButton" onClick={() => navigate(-1)}>취소</button>
-          <button type="button" className="nextButton" onClick={event => handleNavigate("/myPage")}>확인</button>
+          <button type="button" className="prevButton">
+            확인
+          </button>
+          <button type="button" className="nextButton">
+            취소
+          </button>
         </div>
       </div>
     </WebLayout>

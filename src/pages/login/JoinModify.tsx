@@ -83,8 +83,8 @@ const JoinModify = () => {
           저장되지 않습니다.
         </div>
       ),
-      confirmText: "아니요",
-      cancelText: "네",
+      confirmText: "네",
+      cancelText: "아니요",
     });
   };
   const handleChange01 = () => {
