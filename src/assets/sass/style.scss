@@ -1177,6 +1177,8 @@ select {
       color: $font-color;
       span{
         top: 10px;
+        width: 100px;
+        display: block;
       }
     }
   }
