@@ -7,7 +7,7 @@ const ModifyInformation = () => {
     const navigate = useNavigate();
     const handleNavigate = (url: string, step: number) => {
         navigate(url, {state: {step: step}});
-    }
+    };
     return (
         <WebLayout>
             <TitleHeadComponent name="내 정보 수정" targetUrl= ""/>

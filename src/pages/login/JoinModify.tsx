@@ -129,7 +129,7 @@ const JoinModify = () => {
             이전
           </button>
           <button type="button" className="next" onClick={handleNextStep}>
-            수정
+            다음
           </button>
         </div>
       </div>

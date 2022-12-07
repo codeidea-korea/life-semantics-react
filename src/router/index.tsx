@@ -1,33 +1,33 @@
-import React from "react";
-import {useRoutes} from "react-router-dom";
-import Index from "@/pages/Index";
-import TotalLayout from "@layouts/web/TotalLayout";
-import Schedule from "@pages/account/Schedule";
-import LostPassword from "@pages/login/LostPassword";
-import SurveyDeStress from "@pages/survey/SurveyDestress";
-import SurveyBefore from "@pages/survey/SurveyBefore";
-import Program from "@pages/program/Program";
-import BookProgram from "@pages/program/BookProgram";
-import ProgramInfo from "@pages/program/ProgramInfo";
-import ProgramList from "@pages/program/ProgramList";
-import ReservationList from "@pages/account/ReservationList";
-import Pain from "@pages/survey/Pain";
-import Tired from "@pages/survey/Tired";
-import Survey from "@pages/survey/Survey";
-import Join from "@pages/join/Join";
-import LostId from "@pages/login/LostId";
-import ISI from "@pages/survey/ISI";
-import NCCN from "@pages/survey/NCCN";
-import Account from "@pages/account/Account";
-import DeleteAccount from "@pages/account/DeleteAccount";
-import ForestList from "@pages/forest/ForestList";
-import ForestContent from "@pages/forest/ForestContent";
-import JoinModify from "@pages/login/JoinModify";
-import Modify from "@pages/account/Modify";
-import ModifyInformation from "@pages/account/ModifyInformation";
-import SurveyToday from "@pages/survey/SurveyToday";
-import Policy from "@pages/join/Policy";
-import Login from "@pages/login/Login";
+import React from 'react';
+import {useRoutes} from 'react-router-dom';
+import Index from '@/pages/Index';
+import TotalLayout from '@layouts/web/TotalLayout';
+import Schedule from '@pages/account/Schedule';
+import LostPassword from '@pages/login/LostPassword';
+import SurveyDeStress from '@pages/survey/SurveyDestress';
+import SurveyBefore from '@pages/survey/SurveyBefore';
+import Program from '@pages/program/Program';
+import BookProgram from '@pages/program/BookProgram';
+import ProgramInfo from '@pages/program/ProgramInfo';
+import ProgramList from '@pages/program/ProgramList';
+import ReservationList from '@pages/account/ReservationList';
+import Pain from '@pages/survey/Pain';
+import Tired from '@pages/survey/Tired';
+import Survey from '@pages/survey/Survey';
+import Join from '@pages/join/Join';
+import LostId from '@pages/login/LostId';
+import ISI from '@pages/survey/ISI';
+import NCCN from '@pages/survey/NCCN';
+import Account from '@pages/account/Account';
+import DeleteAccount from '@pages/account/DeleteAccount';
+import ForestList from '@pages/forest/ForestList';
+import ForestContent from '@pages/forest/ForestContent';
+import JoinModify from '@pages/login/JoinModify';
+import Modify from '@pages/account/Modify';
+import ModifyInformation from '@pages/account/ModifyInformation';
+import SurveyToday from '@pages/survey/SurveyToday';
+import PolicyTermOfService from '@pages/join/PolicyTermOfService';
+import Login from '@pages/login/Login';
 
 function Router() {
     const routes = [
@@ -294,7 +294,7 @@ function Router() {
             children: [
                 {
                     path: '',
-                    element: <Policy/>,
+                    element: <PolicyTermOfService/>,
                 },
             ],
         },

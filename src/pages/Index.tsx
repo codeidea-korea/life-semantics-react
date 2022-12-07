@@ -6,7 +6,7 @@ import { userState } from '@states/userState';
 
 const Index = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useRecoilState(userState);
+  const [, setUser] = useRecoilState(userState);
 
   useEffect(() => {
     setUser({userId:'', name: ''});
@@ -15,8 +15,6 @@ const Index = () => {
 
   return (
     <React.Fragment>
-      <WebLayout>
-      </WebLayout>
     </React.Fragment>
   );
 };

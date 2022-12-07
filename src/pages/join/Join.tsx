@@ -1,35 +1,17 @@
 import React, { useState } from "react";
-import { ErrorBoundary } from "react-error-boundary";
-import { useRecoilState } from "recoil";
 import TitleHeadComponent from "@components/head/TitleHeadComponent";
 import CircleComponent from "@components/CircleComponent";
 import TermsComponent from "@components/join/TermsComponent";
 import LostIdComponent from "@components/join/LostIdComponent";
 import MemberComponent from "@components/join/MemberComponent";
 import JoinCompleteComponent from "@components/join/JoinCompleteComponent";
-import { countState, sampleState } from "@states/sampleState";
 import WebLayout from "@layouts/web/WebLayout";
-import InputElement from "@components/elements/InputElement";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { surveyState } from "@states/surveyState";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const IndexPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [sample, setSample] = useRecoilState(sampleState);
-  const [survey, setSurvey] = useRecoilState(surveyState);
-  const [count, setCount] = useRecoilState(countState);
-  const [userListError, setUserListError] = useState(true);
   const [step, setStep] = useState(1);
-
-  const increase = () => setCount(count + 1);
-  const setTitle = () =>
-    setSample({
-      ...sample,
-      title: String(document.querySelector("input")?.value),
-    });
-
-
 
   const handleNextStep = () => {
     if (step !== 4) {
