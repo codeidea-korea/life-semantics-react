@@ -84,7 +84,7 @@ const LostIdComponent = ({next}: { next: Function }) => {
                             <button type="button" onClick={handleRequestAuth}>인증번호<br/>받기</button>
                         }
                         {!requiredPhoneNumber &&
-                            <button type="button">휴대폰 번호<br/>입력</button>
+                            <button type="button" className="doubleCheck green">인증번호<br/>받기</button>
                         }
                     </span>
                     <span className="CodeCheck">
@@ -94,7 +94,7 @@ const LostIdComponent = ({next}: { next: Function }) => {
                             <button type="button" onClick={handleSendAuth}>확인</button>
                         }
                         {!requiredAuthCode &&
-                            <button type="button">인증코드 입력</button>
+                            <button type="button" className="doubleCheck green">확인</button>
                         }
                     </span>
 
