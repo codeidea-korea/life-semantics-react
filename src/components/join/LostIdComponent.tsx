@@ -37,15 +37,22 @@ const LostIdComponent = ({next}: { next: Function }) => {
         setCode(reduceAuthCode);
     }
 
-    const handleCountDownPlaceHolder = () => {
+    /**
+     * 카운트다운 시간 설정, 기존 입력 코드 & 입력완료 플래그 초기화
+     * @param {number} minute 초기화 시 사용할 숫자타입의 분 값
+     * @param {number} second 초기화 시 사용할 숫자타입의 초 값
+     * @return 초기화된 state
+     */
+    const handleCountDownPlaceHolder = (minute: number, second: number) => {
         setCode('');
-        setMinutes(10);
-        setSeconds(0);
+        setRequiredAuthCode(false);
+        setMinutes(minute);
+        setSeconds(second);
     }
 
     const handleRequestAuth = () => {
         //TODO 인증 요청 로직 .then 후에 200 떨어진후 밑에 로직
-        handleCountDownPlaceHolder();
+        handleCountDownPlaceHolder(10,0);
     };
 
     const handleSendAuth = () => {
