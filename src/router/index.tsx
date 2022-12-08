@@ -1,7 +1,16 @@
 import React from 'react';
 import {useRoutes} from 'react-router-dom';
+
 import Index from '@/pages/Index';
 import TotalLayout from '@layouts/web/TotalLayout';
+import Login from '@pages/login/Login';
+import Join from '@pages/join/Join';
+import PolicyLifeRecord from "@pages/join/PolicyLifeRecord";
+import PolicyPersonalInformation from "@pages/join/PolicyPersonalInformation";
+import PolicyPrivacy from "@pages/join/PolicyPrivacy";
+import PolicyThirdPerson from "@pages/join/PolicyThirdPerson";
+import PolicyTermOfService from '@pages/join/PolicyTermOfService';
+
 import Schedule from '@pages/account/Schedule';
 import LostPassword from '@pages/login/LostPassword';
 import SurveyDeStress from '@pages/survey/SurveyDestress';
@@ -14,7 +23,7 @@ import ReservationList from '@pages/account/ReservationList';
 import Pain from '@pages/survey/Pain';
 import Tired from '@pages/survey/Tired';
 import Survey from '@pages/survey/Survey';
-import Join from '@pages/join/Join';
+
 import LostId from '@pages/login/LostId';
 import ISI from '@pages/survey/ISI';
 import NCCN from '@pages/survey/NCCN';
@@ -26,8 +35,7 @@ import JoinModify from '@pages/login/JoinModify';
 import Modify from '@pages/account/Modify';
 import ModifyInformation from '@pages/account/ModifyInformation';
 import SurveyToday from '@pages/survey/SurveyToday';
-import PolicyTermOfService from '@pages/join/PolicyTermOfService';
-import Login from '@pages/login/Login';
+
 
 function Router() {
     const routes = [
@@ -289,12 +297,52 @@ function Router() {
             ],
         },
         {
-            path: 'policy',
+            path: 'policyTermOfService',
             element: <TotalLayout/>,
             children: [
                 {
                     path: '',
                     element: <PolicyTermOfService/>,
+                },
+            ],
+        },
+        {
+            path: 'policyLifeRecord',
+            element: <TotalLayout/>,
+            children: [
+                {
+                    path: '',
+                    element: <PolicyLifeRecord/>,
+                },
+            ],
+        },
+        {
+            path: 'policyPersonalInfo',
+            element: <TotalLayout/>,
+            children: [
+                {
+                    path: '',
+                    element: <PolicyPersonalInformation/>,
+                },
+            ],
+        },
+        {
+            path: 'policyPrivacy',
+            element: <TotalLayout/>,
+            children: [
+                {
+                    path: '',
+                    element: <PolicyPrivacy/>,
+                },
+            ],
+        },
+        {
+            path: 'policyThirdPerson',
+            element: <TotalLayout/>,
+            children: [
+                {
+                    path: '',
+                    element: <PolicyThirdPerson/>,
                 },
             ],
         },

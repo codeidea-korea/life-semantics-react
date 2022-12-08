@@ -2,19 +2,19 @@ import React from 'react';
 import WebLayout from '@layouts/web/WebLayout';
 import {useNavigate} from 'react-router-dom';
 
-const PolicyLifeRecord = () => {
+const PolicyPrivacy = () => {
     const navigate = useNavigate();
     return (
         <WebLayout>
             <div className="HeaderFix policyHeader">
-                <h2>라이프 레코드 이용 동의</h2>
+                <h2>민감 정보 수집 및 이용 동의</h2>
                 <button type="button" onClick={() => navigate(-1)}>
                     <img src="images/close.svg"></img>
                 </button>
             </div>
             <div className='headerSpace'></div>
             <div className="policy">
-                <h3>라이프 레코드 이용 동의</h3>
+                <h3>민감 정보 수집 및 이용 동의</h3>
                 속에서 발휘하기 더운지라 용기가 가는 것이다. 소금이라 품에 사랑의 하여도
                 심장은 그들에게 온갖 만천하의 웅대한 것이다. 새가 인생의 하는 얼음
                 우리의 끝에 행복스럽고 듣기만 사랑의 황금시대다. 힘차게 것은 이상의
@@ -40,4 +40,4 @@ const PolicyLifeRecord = () => {
     );
 };
 
-export default PolicyLifeRecord;
+export default PolicyPrivacy;
