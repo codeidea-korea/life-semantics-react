@@ -3,6 +3,8 @@ import axios, { AxiosRequestHeaders } from 'axios';
 const useAxios = (headers?: AxiosRequestHeaders) => {
   axios.defaults.baseURL = import.meta.env.VITE_PUBLIC_API_SERVER_URL;
   axios.defaults.headers.common['accept'] = 'application/json; charset=UTF-8';
+  // axios.defaults.headers.common['Access-Control-Allow-Origin'] = import.meta.env.VITE_PUBLIC_API_SERVER_URL;
+  // axios.defaults.headers.common['Access-Control-Allow-Credentials'] = true;
   axios.defaults.headers.get['Content-Type'] = 'application/json; charset=UTF-8';
   axios.defaults.headers.post['Content-Type'] = 'application/json; charset=UTF-8';
   axios.defaults.headers.put['Content-Type'] = 'application/json; charset=UTF-8';

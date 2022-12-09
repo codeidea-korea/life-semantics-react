@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import InputElement from '../elements/InputElement';
 
 const LostIdComponent = ({next}: { next: Function }) => {
     const [requiredComplete, setRequiredComplete] = useState(false);
