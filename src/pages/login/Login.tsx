@@ -15,23 +15,38 @@ const Login = () => {
     const api = useAxios();
     const [buttonShow, setButtonShow] = useState<boolean>(false);
     const [modal, setModal] = useRecoilState(modalState);
-    const [user, setUser] = useRecoilState(userState);
+    const [, setUser] = useRecoilState(userState);
     const [loginParam, setLoginParam] = useState<LoginInterface>({
-        userPass: '',
-        userID: ''
+        userID: '',
+        userPass: ''
     });
 
     const handleLogin = () => {
         api
-            .post('/users/login', user)
+            .post('/users/login', loginParam)
             .then((res) => {
-                if (res.data.result === 'success') {
-                    setUser({userId: 'test', name: '김풀숲', accessToken: 'sdf8sjdfk1klaksdj18x8ds'})
-                    navigate('/main');
-                }
+                console.log(res);
+                // if (res.status === 'OK') {
+                    // handleAutoLogin();
+                    // const accessToken = res.data.body.jwt?.accessToken;
+                    // setUserInfo(accessToken);
+                    // setToken('accessToken', accessToken);
+                    // if (isUserLoginInput) {
+                    //     navigate('/healer');
+                    // } else {
+                    //     navigate('/admin');
+                    // }
+                // }
+                setUser({userId: 'test', name: '김풀숲', accessToken: 'sdf8sjdfk1klaksdj18x8ds'})
+                navigate('/main');
+
             })
             .catch((err) => {
                 console.log(err);
+            })
+            //TODO api CORS 오류로 인한 임시처리 나중에 삭제 필요함.
+            .finally(()=> {
+                navigate('/main');
             });
     };
 
