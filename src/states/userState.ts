@@ -6,8 +6,19 @@ const { persistAtom } = recoilPersist();
 const userState = atom<UserInterface>({
   key: 'userState',
   default: {
-    userId: '',
-    name: '',
+    userAuthority: '',
+    userBirth: '',
+    userEmail: '',
+    userEmailAgree: '',
+    userGender: '',
+    userID: '',
+    userName: '',
+    userNo: 0,
+    userPass: '',
+    userPhone: '',
+    userRegDate: '',
+    userSmsAgree: '',
+    accessToken: '',
   },
   effects_UNSTABLE: [ persistAtom ],
 });

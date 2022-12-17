@@ -9,10 +9,13 @@ import ModalComponent from '@components/modal/ModalComponent';
 import {useRecoilState} from 'recoil';
 import {modalState} from '@states/modalState';
 import {userState} from '@states/userState';
+import {useCookies} from "react-cookie";
 
 const Login = () => {
     const navigate = useNavigate();
     const api = useAxios();
+    const [userLoginInfo, setUserLoginInfo, removeUserLoginInfo] = useCookies(['userLoginInfo']);
+    const [, setToken, removeToken] = useCookies(['accessToken']);
     const [buttonShow, setButtonShow] = useState<boolean>(false);
     const [modal, setModal] = useRecoilState(modalState);
     const [, setUser] = useRecoilState(userState);
@@ -21,32 +24,45 @@ const Login = () => {
         userPass: ''
     });
 
+    const handleAutoLogin = () => {
+        const target = document.getElementById('autoLogin') as HTMLInputElement;
+        const isChecked = target.checked;
+        if (isChecked) {
+            setUserLoginInfo('userLoginInfo', loginParam);
+        } else {
+            removeUserLoginInfo('userLoginInfo');
+        }
+    };
+
+    const setUserInfo = (token: string) => {
+        api
+            .post('/users/info', null, {headers: {Authorization: `Bearer ${token}`}})
+            .then((res) => {
+                if (res.status === 200) {
+                    const payloadData = res.data.body;
+                    setUser({...payloadData, accessToken: `${token}`});
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
     const handleLogin = () => {
         api
             .post('/users/login', loginParam)
             .then((res) => {
                 console.log(res);
-                // if (res.status === 'OK') {
-                    // handleAutoLogin();
-                    // const accessToken = res.data.body.jwt?.accessToken;
-                    // setUserInfo(accessToken);
-                    // setToken('accessToken', accessToken);
-                    // if (isUserLoginInput) {
-                    //     navigate('/healer');
-                    // } else {
-                    //     navigate('/admin');
-                    // }
-                // }
-                setUser({userId: 'test', name: '김풀숲', accessToken: 'sdf8sjdfk1klaksdj18x8ds'})
-                navigate('/main');
-
+                if (res.status === 200) {
+                    handleAutoLogin();
+                    const accessToken = res.data.body.jwt?.accessToken;
+                    setUserInfo(accessToken);
+                    handleAutoLogin();
+                    navigate('/main');
+                }
             })
             .catch((err) => {
                 console.log(err);
-            })
-            //TODO api CORS 오류로 인한 임시처리 나중에 삭제 필요함.
-            .finally(()=> {
-                navigate('/main');
             });
     };
 
@@ -76,6 +92,16 @@ const Login = () => {
             confirmText: '확인'
         });
     };
+
+    useEffect(() => {
+        removeToken('accessToken');
+        const isStoredData = userLoginInfo['userLoginInfo'];
+        if (isStoredData) {
+            const target = document.getElementById('autoLogin') as HTMLInputElement;
+            target.checked = true;
+            setLoginParam({...loginParam, userID: isStoredData.userID, userPass: isStoredData.userPass});
+        }
+    }, []);
 
     useEffect(() => {
         let submitButtonShow = false;
@@ -114,8 +140,8 @@ const Login = () => {
                             onKeyPress={handleKeyPress}
                         />
                         <span className="LoginCheck">
-              <InputElement type="checkbox" id="login"/>
-              <label htmlFor='login'>자동 로그인</label>
+              <InputElement type="checkbox" id="autoLogin"/>
+              <label htmlFor='autoLogin'>자동 로그인</label>
             </span>
                         {buttonShow && (
                             <button
