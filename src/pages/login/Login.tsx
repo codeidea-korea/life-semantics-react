@@ -57,7 +57,6 @@ const Login = () => {
                     handleAutoLogin();
                     const accessToken = res.data.body.jwt?.accessToken;
                     setUserInfo(accessToken);
-                    handleAutoLogin();
                     navigate('/main');
                 }
             })
