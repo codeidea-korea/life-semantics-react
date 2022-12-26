@@ -9,7 +9,7 @@ const Index = () => {
   const [, setUser] = useRecoilState(userState);
 
   useEffect(() => {
-    setUser({userId:'', name: ''});
+    setUser({userID:'', userName: ''});
     navigate('/main');
   }, []);
 

@@ -38,8 +38,8 @@ const UserListComponent = () => {
               {data.list.map((item, index) =>
                 <tr key={index}>
                   <td>{index + 1}</td>
-                  <td>{item.userId}</td>
-                  <td>{item.name}</td>
+                  <td>{item?.userID}</td>
+                  <td>{item?.userName}</td>
                 </tr>,
               )}
               </tbody>
