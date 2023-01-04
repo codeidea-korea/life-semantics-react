@@ -29,7 +29,7 @@ const Program = () => {
             </div>
             <BannerComponent/>
             <div className="cancerProgram">
-                암생존자를 위한<br/>
+                암경험자를 위한<br/>
                 산림치유 프로그램
             </div>
             <BookComponent/>
