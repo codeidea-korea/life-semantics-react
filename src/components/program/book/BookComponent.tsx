@@ -19,9 +19,9 @@ const BookComponent = () => {
 
     const getProgramList = async () => {
         await api
-            .post("/programs/list", requestData)
+            .post("/usr/programs/list", requestData)
             .then((res) => {
-                if (res.data.result === "success") setPrograms(res.data.data);
+                if (res.data.result === "success") setPrograms(res.data.body);
             })
             .catch((err) => {
                 console.log(err);
