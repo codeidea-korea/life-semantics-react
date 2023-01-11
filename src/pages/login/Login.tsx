@@ -38,6 +38,7 @@ const Login = () => {
         api
             .post('/users/info', null, {headers: {Authorization: `Bearer ${token}`}})
             .then((res) => {
+                console.log(res)
                 if (res.status === 200) {
                     const payloadData = res.data.body;
                     setUser({...payloadData, accessToken: `${token}`});
@@ -61,6 +62,7 @@ const Login = () => {
                 }
             })
             .catch((err) => {
+                if (err.response.status === 401) handleLoginCheck();
                 console.log(err);
             });
     };
