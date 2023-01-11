@@ -1,6 +1,8 @@
+import useAxios from '@/hooks/useAxios';
 import React, {useEffect, useState} from 'react';
 
 const LostIdComponent = ({next}: { next: Function }) => {
+    const api = useAxios();
     const [requiredComplete, setRequiredComplete] = useState(false);
     const [requiredPhoneNumber, setRequiredPhoneNumber] = useState(false);
     const [requiredAuthCode, setRequiredAuthCode] = useState(false);
@@ -52,6 +54,14 @@ const LostIdComponent = ({next}: { next: Function }) => {
     const handleRequestAuth = () => {
         //TODO 인증 요청 로직 .then 후에 200 떨어진후 밑에 로직
         handleCountDownPlaceHolder(10,0);
+        api
+            .post(`/users/auth-number?phone=${num}&userId=''`)
+            .then((res) => {
+                console.log(res)
+            })
+            .catch((err) => {
+                console.log(err)
+            })
     };
 
     const handleSendAuth = () => {
