@@ -1,13 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import {userState} from '@states/userState';
+import { useRecoilValue } from "recoil";
 
 
 const BookProgram = () => {
+  const user = useRecoilValue(userState);
 
   return (
       <div className="bookProgram">
         <p>
-          <span>김풀숲님, </span>
+          <span>{user.userName}님, </span>
           오늘 설문은 하셨나요?
         </p>
         <Link to='/survey' className="surveyLink">
