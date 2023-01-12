@@ -1,13 +1,13 @@
-import React, {useState} from 'react';
-import {useEffect} from 'react';
-import MemberChk01 from './member/MemberChk01';
-import MemberChk02 from './member/MemberChk02';
-import MemberChk03 from './member/MemberChk03';
-import CircleComponent from '../CircleComponent';
-import {useNavigate} from 'react-router-dom';
-import $ from 'jquery';
+import React, { useState } from "react";
+import { useEffect } from "react";
+import MemberChk01 from "./member/MemberChk01";
+import MemberChk02 from "./member/MemberChk02";
+import MemberChk03 from "./member/MemberChk03";
+import CircleComponent from "../CircleComponent";
+import { useNavigate } from "react-router-dom";
+import $ from "jquery";
 
-const MemberComponent = ({joinLevelStep}: { joinLevelStep: Function }) => {
+const MemberComponent = ({ joinLevelStep }: { joinLevelStep: Function }) => {
     const [step, setStep] = useState(1);
 
     useEffect(() => {
@@ -27,23 +27,14 @@ const MemberComponent = ({joinLevelStep}: { joinLevelStep: Function }) => {
 
     return (
         <React.Fragment>
-            <div className="progressWrap">
-                <div className="progressBar step">
-                    <ul>
-                        <CircleComponent step="" active={step === 1}/>
-                        <CircleComponent step="" active={step === 2}/>
-                        <CircleComponent step="" active={step === 3}/>
-                    </ul>
-                </div>
-            </div>
-
             <div className="Step"></div>
 
             <div className="member">
                 <div className="">
-                    {step === 1 && <MemberChk01 nextStep={handleStep}/>}
-                    {step === 2 && <MemberChk02 nextStep={handleStep}/>}
-                    {step === 3 && <MemberChk03 nextStep={handleStep}/>}
+                    {step === 1 && <MemberChk01 nextStep={handleStep} />}
+                    {/* 회원정보 step 하나로 수정. */}
+                    {/* {step === 2 && <MemberChk02 nextStep={handleStep} />}
+                    {step === 3 && <MemberChk03 nextStep={handleStep} />} */}
                 </div>
             </div>
         </React.Fragment>
