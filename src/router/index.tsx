@@ -36,6 +36,7 @@ import Modify from "@pages/account/Modify";
 import ModifyInformation from "@pages/account/ModifyInformation";
 import SurveyToday from "@pages/survey/SurveyToday";
 import SurveyComplete from "@/pages/survey/SurveyComplete";
+import SurveyList from "@/pages/survey/SurveyList";
 
 function Router() {
     const routes = [
@@ -183,6 +184,16 @@ function Router() {
                 {
                     path: "",
                     element: <SurveyComplete />,
+                },
+            ],
+        },
+        {
+            path: "surveyList",
+            element: <TotalLayout />,
+            children: [
+                {
+                    path: "",
+                    element: <SurveyList />,
                 },
             ],
         },
