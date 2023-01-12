@@ -2819,6 +2819,14 @@ select {
                 padding-top: 15px;
             }
         }
+        .alert_text {
+            margin-top: 7px;
+            display: flex;
+            font-size: 13px;
+            color: #f00;
+            width: 100%;
+            justify-content: flex-end;
+        }
     }
 }
 .modifyList {
