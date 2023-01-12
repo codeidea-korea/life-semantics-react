@@ -1,9 +1,9 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import WebLayout from "@layouts/web/WebLayout";
 import HeaderComponent from "@components/head/Header";
 import ModalComponent from "@components/modal/ModalComponent";
-import {useRecoilState} from "recoil";
-import {modalState} from "@states/modalState";
+import { useRecoilState } from "recoil";
+import { modalState } from "@states/modalState";
 
 const Schedule = () => {
     const [modal, setModal] = useRecoilState(modalState);
@@ -34,29 +34,39 @@ const Schedule = () => {
 
     const handleChange = (index: number) => {
         let temp = displayMonth + index;
-        if(temp > 9 && temp < 13) setDisplayMonth(temp);
+        if (temp > 9 && temp < 13) setDisplayMonth(temp);
     };
 
     return (
         <WebLayout>
-            <HeaderComponent/>
+            <HeaderComponent />
             <div className="scheduleBox">
                 <p>일정관리</p>
                 <div className="schedulDate">
-                    <span className="fullYear">{todayYear}년</span>
+                    <select name="" id="" className="year selectBox">
+                        <option value="">2022년</option>
+                        <option value="">2021년</option>
+                        <option value="">2020년</option>
+                    </select>
+                    <select name="" id="" className="month selectBox">
+                        <option value="">8월</option>
+                        <option value="">7월</option>
+                        <option value="">6월</option>
+                    </select>
+                    {/* <span className="fullYear">{todayYear}년</span>
                     <div className="date">
-                        <button type="button" onClick={event => handleChange(-1)}></button>
+                        <button type="button" onClick={(event) => handleChange(-1)}></button>
                         <span className="month">{displayMonth}월</span>
-                        <button type="button" onClick={event => handleChange(1)}></button>
-                    </div>
+                        <button type="button" onClick={(event) => handleChange(1)}></button>
+                    </div> */}
                 </div>
                 <div className="programSchedul">
                     <div className="toDay">
-            <span>
-              {displayMonth}/{todayDate}
-                <br/>
-                {day}
-            </span>
+                        <span>
+                            {displayMonth}/{todayDate}
+                            <br />
+                            {day}
+                        </span>
                     </div>
                     <div className="programInfo">
                         <span className="name goodBye">굿바이 피로</span>
@@ -66,11 +76,11 @@ const Schedule = () => {
                 </div>
                 <div className="programSchedul ">
                     <div className="roundDate">
-            <span>
-              8/22
-              <br/>
-              (월)
-            </span>
+                        <span>
+                            8/22
+                            <br />
+                            (월)
+                        </span>
                     </div>
                     <div className="programInfo">
                         <span className="name goodBye">굿바이 피로</span>
@@ -80,12 +90,11 @@ const Schedule = () => {
                 </div>
                 <div className="programSchedul programType">
                     <div className="roundDate">
-            <span>
-              8/22
-              <br/>
-              (월)
-            </span>
-
+                        <span>
+                            8/22
+                            <br />
+                            (월)
+                        </span>
                     </div>
                     <div>
                         <div className="programInfo">
@@ -103,7 +112,7 @@ const Schedule = () => {
                 </div>
             </div>
             <button type="button" onClick={handleModal}></button>
-            <ModalComponent/>
+            <ModalComponent />
         </WebLayout>
     );
 };

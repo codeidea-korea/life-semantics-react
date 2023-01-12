@@ -115,6 +115,8 @@ const SurveyToday = () => {
         setTimeout(() => {
             setToast(false);
             handleTodaySurveyComplete();
+
+            navigate("/SurveyComplete");
         }, 3000);
     };
 

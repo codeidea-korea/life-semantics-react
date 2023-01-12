@@ -1,352 +1,362 @@
-import React from 'react';
-import {useRoutes} from 'react-router-dom';
+import React from "react";
+import { useRoutes } from "react-router-dom";
 
-import Index from '@/pages/Index';
-import TotalLayout from '@layouts/web/TotalLayout';
-import Login from '@pages/login/Login';
-import Join from '@pages/join/Join';
+import Index from "@/pages/Index";
+import TotalLayout from "@layouts/web/TotalLayout";
+import Login from "@pages/login/Login";
+import Join from "@pages/join/Join";
 import PolicyLifeRecord from "@pages/join/PolicyLifeRecord";
 import PolicyPersonalInformation from "@pages/join/PolicyPersonalInformation";
 import PolicyPrivacy from "@pages/join/PolicyPrivacy";
 import PolicyThirdPerson from "@pages/join/PolicyThirdPerson";
-import PolicyTermOfService from '@pages/join/PolicyTermOfService';
+import PolicyTermOfService from "@pages/join/PolicyTermOfService";
 
-import Schedule from '@pages/account/Schedule';
-import LostPassword from '@pages/login/LostPassword';
-import SurveyDeStress from '@pages/survey/SurveyDestress';
-import SurveyBefore from '@pages/survey/SurveyBefore';
-import Program from '@pages/program/Program';
-import BookProgram from '@pages/program/BookProgram';
-import ProgramInfo from '@pages/program/ProgramInfo';
-import ProgramList from '@pages/program/ProgramList';
-import ReservationList from '@pages/account/ReservationList';
-import Pain from '@pages/survey/Pain';
-import Tired from '@pages/survey/Tired';
-import Survey from '@pages/survey/Survey';
+import Schedule from "@pages/account/Schedule";
+import LostPassword from "@pages/login/LostPassword";
+import SurveyDeStress from "@pages/survey/SurveyDestress";
+import SurveyBefore from "@pages/survey/SurveyBefore";
+import Program from "@pages/program/Program";
+import BookProgram from "@pages/program/BookProgram";
+import ProgramInfo from "@pages/program/ProgramInfo";
+import ProgramList from "@pages/program/ProgramList";
+import ReservationList from "@pages/account/ReservationList";
+import Pain from "@pages/survey/Pain";
+import Tired from "@pages/survey/Tired";
+import Survey from "@pages/survey/Survey";
 
-import LostId from '@pages/login/LostId';
-import ISI from '@pages/survey/ISI';
-import NCCN from '@pages/survey/NCCN';
-import Account from '@pages/account/Account';
-import DeleteAccount from '@pages/account/DeleteAccount';
-import ForestList from '@pages/forest/ForestList';
-import ForestContent from '@pages/forest/ForestContent';
-import JoinModify from '@pages/login/JoinModify';
-import Modify from '@pages/account/Modify';
-import ModifyInformation from '@pages/account/ModifyInformation';
-import SurveyToday from '@pages/survey/SurveyToday';
-
+import LostId from "@pages/login/LostId";
+import ISI from "@pages/survey/ISI";
+import NCCN from "@pages/survey/NCCN";
+import Account from "@pages/account/Account";
+import DeleteAccount from "@pages/account/DeleteAccount";
+import ForestList from "@pages/forest/ForestList";
+import ForestContent from "@pages/forest/ForestContent";
+import JoinModify from "@pages/login/JoinModify";
+import Modify from "@pages/account/Modify";
+import ModifyInformation from "@pages/account/ModifyInformation";
+import SurveyToday from "@pages/survey/SurveyToday";
+import SurveyComplete from "@/pages/survey/SurveyComplete";
 
 function Router() {
     const routes = [
         {
-            path: '/',
+            path: "/",
             children: [
                 {
-                    path: '',
-                    element: <Index/>,
+                    path: "",
+                    element: <Index />,
                 },
             ],
         },
         {
-            path: 'login',
+            path: "login",
             children: [
                 {
-                    path: '',
-                    element: <Login/>,
+                    path: "",
+                    element: <Login />,
                 },
             ],
         },
         {
-            path: 'password',
+            path: "password",
             children: [
                 {
-                    path: '',
-                    element: <LostPassword/>,
+                    path: "",
+                    element: <LostPassword />,
                 },
             ],
         },
         {
-            path: 'joinModify',
-            element: <TotalLayout/>,
+            path: "joinModify",
+            element: <TotalLayout />,
             children: [
                 {
-                    path: '',
-                    element: <JoinModify/>,
+                    path: "",
+                    element: <JoinModify />,
                 },
             ],
         },
         {
-            path: 'modify',
-            element: <TotalLayout/>,
+            path: "modify",
+            element: <TotalLayout />,
             children: [
                 {
-                    path: '',
-                    element: <Modify/>,
+                    path: "",
+                    element: <Modify />,
                 },
             ],
         },
         {
-            path: 'myPage',
-            element: <TotalLayout/>,
+            path: "myPage",
+            element: <TotalLayout />,
             children: [
                 {
-                    path: '',
-                    element: <ModifyInformation/>,
+                    path: "",
+                    element: <ModifyInformation />,
                 },
             ],
         },
         {
-            path: 'main',
-            element: <TotalLayout/>,
+            path: "main",
+            element: <TotalLayout />,
             children: [
                 {
-                    path: '',
-                    element: <Program/>,
+                    path: "",
+                    element: <Program />,
                 },
             ],
         },
         {
-            path: 'program',
-            element: <TotalLayout/>,
+            path: "program",
+            element: <TotalLayout />,
             children: [
                 {
-                    path: '',
-                    element: <ProgramList/>,
+                    path: "",
+                    element: <ProgramList />,
                 },
             ],
         },
         {
-            path: 'programView',
-            element: <TotalLayout/>,
+            path: "programView",
+            element: <TotalLayout />,
             children: [
                 {
-                    path: '',
-                    element: <ProgramInfo/>,
+                    path: "",
+                    element: <ProgramInfo />,
                 },
             ],
         },
         {
-            path: 'forest',
-            element: <TotalLayout/>,
+            path: "forest",
+            element: <TotalLayout />,
             children: [
                 {
-                    path: '',
-                    element: <ForestList/>,
+                    path: "",
+                    element: <ForestList />,
                 },
             ],
         },
         {
-            path: 'forestView',
-            element: <TotalLayout/>,
+            path: "forestView",
+            element: <TotalLayout />,
             children: [
                 {
-                    path: '',
-                    element: <ForestContent/>,
+                    path: "",
+                    element: <ForestContent />,
                 },
             ],
         },
         {
-            path: 'survey',
-            element: <TotalLayout/>,
+            path: "survey",
+            element: <TotalLayout />,
             children: [
                 {
-                    path: '',
-                    element: <Survey/>,
+                    path: "",
+                    element: <Survey />,
                 },
             ],
         },
         {
-            path: 'surveyBefore',
-            element: <TotalLayout/>,
+            path: "surveyBefore",
+            element: <TotalLayout />,
             children: [
                 {
-                    path: '',
-                    element: <SurveyBefore/>,
+                    path: "",
+                    element: <SurveyBefore />,
                 },
             ],
         },
         {
-            path: 'surveyToday',
-            element: <TotalLayout/>,
+            path: "surveyToday",
+            element: <TotalLayout />,
             children: [
                 {
-                    path: '',
-                    element: <SurveyToday/>,
+                    path: "",
+                    element: <SurveyToday />,
                 },
             ],
         },
         {
-            path: 'deStress',
-            element: <TotalLayout/>,
+            path: "surveyComplete",
+            element: <TotalLayout />,
             children: [
                 {
-                    path: '',
-                    element: <SurveyDeStress/>,
+                    path: "",
+                    element: <SurveyComplete />,
                 },
             ],
         },
         {
-            path: 'pain',
-            element: <TotalLayout/>,
+            path: "deStress",
+            element: <TotalLayout />,
             children: [
                 {
-                    path: '',
-                    element: <Pain/>,
+                    path: "",
+                    element: <SurveyDeStress />,
                 },
             ],
         },
         {
-            path: 'tired',
-            element: <TotalLayout/>,
+            path: "pain",
+            element: <TotalLayout />,
             children: [
                 {
-                    path: '',
-                    element: <Tired/>,
+                    path: "",
+                    element: <Pain />,
                 },
             ],
         },
         {
-            path: 'schedule',
-            element: <TotalLayout/>,
+            path: "tired",
+            element: <TotalLayout />,
             children: [
                 {
-                    path: '',
-                    element: <Schedule/>,
+                    path: "",
+                    element: <Tired />,
                 },
             ],
         },
         {
-            path: 'bookProgram',
-            element: <TotalLayout/>,
+            path: "schedule",
+            element: <TotalLayout />,
             children: [
                 {
-                    path: '',
-                    element: <BookProgram/>,
+                    path: "",
+                    element: <Schedule />,
                 },
             ],
         },
         {
-            path: 'reservation',
-            element: <TotalLayout/>,
+            path: "bookProgram",
+            element: <TotalLayout />,
             children: [
                 {
-                    path: '',
-                    element: <ReservationList/>,
+                    path: "",
+                    element: <BookProgram />,
                 },
             ],
         },
         {
-            path: 'join',
-            element: <TotalLayout/>,
+            path: "reservation",
+            element: <TotalLayout />,
             children: [
                 {
-                    path: '',
-                    element: <Join/>,
+                    path: "",
+                    element: <ReservationList />,
                 },
             ],
         },
         {
-            path: 'lostId',
-            element: <TotalLayout/>,
+            path: "join",
+            element: <TotalLayout />,
             children: [
                 {
-                    path: '',
-                    element: <LostId/>,
+                    path: "",
+                    element: <Join />,
                 },
             ],
         },
         {
-            path: 'isi',
-            element: <TotalLayout/>,
+            path: "lostId",
+            element: <TotalLayout />,
             children: [
                 {
-                    path: '',
-                    element: <ISI/>,
+                    path: "",
+                    element: <LostId />,
                 },
             ],
         },
         {
-            path: 'nccn',
-            element: <TotalLayout/>,
+            path: "isi",
+            element: <TotalLayout />,
             children: [
                 {
-                    path: '',
-                    element: <NCCN/>,
+                    path: "",
+                    element: <ISI />,
                 },
             ],
         },
         {
-            path: 'account',
-            element: <TotalLayout/>,
+            path: "nccn",
+            element: <TotalLayout />,
             children: [
                 {
-                    path: '',
-                    element: <Account/>,
+                    path: "",
+                    element: <NCCN />,
                 },
             ],
         },
         {
-            path: 'deleteAccount',
-            element: <TotalLayout/>,
+            path: "account",
+            element: <TotalLayout />,
             children: [
                 {
-                    path: '',
-                    element: <DeleteAccount/>,
+                    path: "",
+                    element: <Account />,
                 },
             ],
         },
         {
-            path: 'policyTermOfService',
-            element: <TotalLayout/>,
+            path: "deleteAccount",
+            element: <TotalLayout />,
             children: [
                 {
-                    path: '',
-                    element: <PolicyTermOfService/>,
+                    path: "",
+                    element: <DeleteAccount />,
                 },
             ],
         },
         {
-            path: 'policyLifeRecord',
-            element: <TotalLayout/>,
+            path: "policyTermOfService",
+            element: <TotalLayout />,
             children: [
                 {
-                    path: '',
-                    element: <PolicyLifeRecord/>,
+                    path: "",
+                    element: <PolicyTermOfService />,
                 },
             ],
         },
         {
-            path: 'policyPersonalInfo',
-            element: <TotalLayout/>,
+            path: "policyLifeRecord",
+            element: <TotalLayout />,
             children: [
                 {
-                    path: '',
-                    element: <PolicyPersonalInformation/>,
+                    path: "",
+                    element: <PolicyLifeRecord />,
                 },
             ],
         },
         {
-            path: 'policyPrivacy',
-            element: <TotalLayout/>,
+            path: "policyPersonalInfo",
+            element: <TotalLayout />,
             children: [
                 {
-                    path: '',
-                    element: <PolicyPrivacy/>,
+                    path: "",
+                    element: <PolicyPersonalInformation />,
                 },
             ],
         },
         {
-            path: 'policyThirdPerson',
-            element: <TotalLayout/>,
+            path: "policyPrivacy",
+            element: <TotalLayout />,
             children: [
                 {
-                    path: '',
-                    element: <PolicyThirdPerson/>,
+                    path: "",
+                    element: <PolicyPrivacy />,
                 },
             ],
         },
-    ]
+        {
+            path: "policyThirdPerson",
+            element: <TotalLayout />,
+            children: [
+                {
+                    path: "",
+                    element: <PolicyThirdPerson />,
+                },
+            ],
+        },
+    ];
     return useRoutes(routes);
 }
 
