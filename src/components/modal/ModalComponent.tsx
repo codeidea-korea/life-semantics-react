@@ -4,7 +4,7 @@ import Modal from "react-bootstrap/Modal";
 import { useRecoilState } from "recoil";
 import { modalState } from "@/states/modalState";
 
-const ModalComponent = ({ id = "" }: { id?: string } ) => {
+const ModalComponent = ({ id = "" }: { id?: string }) => {
   const [modal, setModal] = useRecoilState(modalState);
   // const {
   //   show = false,
@@ -21,6 +21,7 @@ const ModalComponent = ({ id = "" }: { id?: string } ) => {
 
   const handleClose = () => {
     setModal({ ...modal, show: false });
+    modal.onCancelCallback();
   };
 
   const handleCallback = () => {
@@ -43,14 +44,14 @@ const ModalComponent = ({ id = "" }: { id?: string } ) => {
             </Button>
           )}
           {modal.callBackShow && (
-              <Button variant="" onClick={handleCallback}>
-                {modal.confirmText}
-              </Button>
+            <Button variant="" onClick={handleCallback}>
+              {modal.confirmText}
+            </Button>
           )}
           {!modal.callBackShow && (
-          <Button variant="" onClick={handleClose}>
-            {modal.confirmText}
-          </Button>
+            <Button variant="" onClick={handleClose}>
+              {modal.confirmText}
+            </Button>
           )}
         </Modal.Footer>
       </Modal>
