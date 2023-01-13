@@ -8,13 +8,14 @@ import {useRecoilValue} from "recoil";
 const BookComponent = () => {
     const navigate = useNavigate();
     const api = useAxios();
-    const [programs, setPrograms] = useState<ProgramInterface[]>();
+    const [programs, setPrograms] = useState<ProgramInterface[]>([]);
     const user = useRecoilValue(userState);
     const [requestData, setRequestData] = useState({
         pgType: "",
-        pgStatus: "",
-        order: "",
-        myStatus: "",
+        pgApply: "",
+        ing: 0,
+        userNo: 0,
+        orderBy: "",
     });
 
     const getProgramList = async () => {
@@ -69,29 +70,29 @@ const BookComponent = () => {
                     return (
                         <div className="prg prg-01" key={index}>
                             <div className="ready-prg">
-                                {item.type === "goodBye" && (
+                                {item.pgType === "goodBye" && (
                                     <div className="prg-head unBook unLog">
                                         {item.pgIsApply === "1" &&
                                         getMaker(item.pgSttDate, item.pgEndDate)}
                                         <p>{item.pgTitle}</p>
                                         {item.pgStatus === "applying" && (
                                             <span className="d-day">
-                        D-{getDayCount(item.pgAppEndDate)}
+                                                D-{getDayCount(item.pgAppEndDate)}
                                                 <span>예약마감까지</span>
-                      </span>
+                                            </span>
                                         )}
                                     </div>
                                 )}
-                                {item.type === "goodNight" && (
+                                {item.pgType === "goodNight" && (
                                     <div className="prg-head unBook sky">
                                         {item.pgIsApply === "1" &&
                                         getMaker(item.pgSttDate, item.pgEndDate)}
                                         <p>{item.pgTitle}</p>
                                         {item.pgStatus === "applying" && (
                                             <span className="d-day">
-                        D-{getDayCount(item.pgAppEndDate)}
+                                                D-{getDayCount(item.pgAppEndDate)}
                                                 <span>예약마감까지</span>
-                      </span>
+                                            </span>
                                         )}
                                     </div>
                                 )}
