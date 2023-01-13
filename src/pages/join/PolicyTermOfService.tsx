@@ -1,6 +1,7 @@
 import React from 'react';
 import WebLayout from '@layouts/web/WebLayout';
 import {useNavigate} from 'react-router-dom';
+import InputElement from '@/components/elements/InputElement';
 
 const PolicyTermOfService = () => {
     const navigate = useNavigate();
@@ -35,6 +36,13 @@ const PolicyTermOfService = () => {
                 것이다. 가슴에 풀이 부패를 우리는 사막이다. 불러 앞이 그들의 얼마나
                 무엇을 예가 이상의 것이 사막이다. 같이, 끓는 주며, 인생의 쓸쓸하랴?
                 할지라도 예가 청춘의 힘차게 힘차게 듣는다.
+                <div className="checkBox">
+                    <div className='checkAll'>
+                        <InputElement type="checkbox" className="ck" id="thirdPerson" name="thirdPerson"/>
+                        <label htmlFor={"thirdPerson"}>모든약관에 모두 확인, 동의합니다.</label>
+                    </div>
+                </div>
+                <button type="button" className="btn-02 active">확인</button>
             </div>
         </WebLayout>
     );
