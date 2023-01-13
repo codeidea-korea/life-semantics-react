@@ -5,9 +5,10 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { modalState } from "@states/modalState";
 import ModalComponent from "@components/modal/ModalComponent";
 import { userState } from "@/states/userState";
-
+import useAuth from "@/hooks/useAuth";
 
 const Account = () => {
+    useAuth();
     const location = useLocation();
     const navigate = useNavigate();
     const [modal, setModal] = useRecoilState(modalState);

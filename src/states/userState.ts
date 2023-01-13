@@ -20,7 +20,7 @@ const userState = atom<UserInterface>({
     userSmsAgree: '',
     accessToken: '',
   },
-  effects_UNSTABLE: [ persistAtom ],
+  effects_UNSTABLE: [persistAtom],
 });
 
 export { userState };

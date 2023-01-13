@@ -11,5 +11,5 @@ export interface UserInterface {
   userPhone?: string,
   userRegDate?: string,
   userSmsAgree?: string,
-  accessToken?: string,
+  accessToken?: string
 }
