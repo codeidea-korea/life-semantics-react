@@ -10,8 +10,11 @@ import { modalState } from "@states/modalState";
 import ToastPopup from "@components/modal/ToastPopup";
 import ModalComponent from "@components/modal/ModalComponent";
 import $ from "jquery";
+import { userState } from '@states/userState';
+import { useRecoilValue } from "recoil";
 
 const JoinModify = () => {
+    const user = useRecoilValue(userState);
     const location = useLocation();
     const navigate = useNavigate();
     const [modal, setModal] = useRecoilState(modalState);
