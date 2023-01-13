@@ -42,6 +42,7 @@ const Login = () => {
                 if (res.status === 200) {
                     const payloadData = res.data.body;
                     setUser({...payloadData, accessToken: `${token}`});
+                    navigate('/main');
                 }
             })
             .catch((err) => {
@@ -58,7 +59,6 @@ const Login = () => {
                     handleAutoLogin();
                     const accessToken = res.data.body.jwt?.accessToken;
                     setUserInfo(accessToken);
-                    navigate('/main');
                 }
             })
             .catch((err) => {
