@@ -27,8 +27,6 @@ const MemberComponent = ({ joinLevelStep }: { joinLevelStep: Function }) => {
 
     return (
         <React.Fragment>
-            <div className="Step"></div>
-
             <div className="member">
                 <div className="">
                     {step === 1 && <MemberChk01 nextStep={handleStep} />}
