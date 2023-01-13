@@ -10,8 +10,11 @@ import { modalState } from "@states/modalState";
 import ToastPopup from "@components/modal/ToastPopup";
 import ModalComponent from "@components/modal/ModalComponent";
 import $ from "jquery";
+import { userState } from '@states/userState';
+import { useRecoilValue } from "recoil";
 
 const JoinModify = () => {
+    const user = useRecoilValue(userState);
     const location = useLocation();
     const navigate = useNavigate();
     const [modal, setModal] = useRecoilState(modalState);
@@ -117,14 +120,7 @@ const JoinModify = () => {
                 {step === 1 && <ModifyCheck01 />}
                 {step === 2 && <ModifyCheck02 nextStep={handleNextStep} />}
                 {step === 3 && <ModifyCheck03 />}
-                <div className="fixBtn ">
-                    <button type="button" className="prev" onClick={handlePrevStep}>
-                        이전
-                    </button>
-                    <button type="button" className="next" onClick={handleNextStep}>
-                        다음
-                    </button>
-                </div>
+
             </div>
             <ToastPopup content={"수정되었습니다."} show={toast} />
             <ModalComponent id="flexModal" />

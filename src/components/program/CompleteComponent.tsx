@@ -7,10 +7,10 @@ import { UserInterface } from "@interfaces/userInterface";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const JoinCompleteComponent = () => {
-    const navigate = useNavigate();
-    const handleNavigate = (url: string) => {
-        navigate(url);
-    }
+  const navigate = useNavigate();
+  const handleNavigate = (url: string) => {
+    navigate(url);
+  }
   return (
     <React.Fragment>
       <div className="complete">

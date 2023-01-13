@@ -4,7 +4,7 @@ import Modal from "react-bootstrap/Modal";
 import { useRecoilState } from "recoil";
 import { modalState } from "@/states/modalState";
 
-const ModalComponent = ({ id = "" }: { id?: string } ) => {
+const ModalComponent = ({ id = "" }: { id?: string }) => {
   const [modal, setModal] = useRecoilState(modalState);
   // const {
   //   show = false,
@@ -21,11 +21,18 @@ const ModalComponent = ({ id = "" }: { id?: string } ) => {
 
   const handleClose = () => {
     setModal({ ...modal, show: false });
+
   };
+  const handleClose2 = () => {
+    setModal({ ...modal, show: false });
+    modal.onCancelCallback();
+  }
+
 
   const handleCallback = () => {
     // @ts-ignore
     modal.onConfirmCallback();
+
   }
 
   // @ts-ignore
@@ -38,19 +45,19 @@ const ModalComponent = ({ id = "" }: { id?: string } ) => {
         <Modal.Body>{modal.content}</Modal.Body>
         <Modal.Footer className="flex">
           {modal.cancelShow && (
-            <Button variant="" onClick={handleClose}>
+            <Button variant="" onClick={handleClose2}>
               {modal.cancelText}
             </Button>
           )}
           {modal.callBackShow && (
-              <Button variant="" onClick={handleCallback}>
-                {modal.confirmText}
-              </Button>
+            <Button variant="" onClick={handleCallback}>
+              {modal.confirmText}
+            </Button>
           )}
           {!modal.callBackShow && (
-          <Button variant="" onClick={handleClose}>
-            {modal.confirmText}
-          </Button>
+            <Button variant="" onClick={handleClose}>
+              {modal.confirmText}
+            </Button>
           )}
         </Modal.Footer>
       </Modal>

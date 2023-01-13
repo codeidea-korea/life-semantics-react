@@ -12,4 +12,5 @@ export interface ModalInterface {
   callBackShow?: boolean;
   cancelText?: React.ReactElement | string;
   onConfirmCallback?: Function;
+  onCancelCallback?: any;
 }
