@@ -8,13 +8,18 @@ import HeaderComponent from "@components/head/Header";
 import {userState} from '@states/userState';
 import {useRecoilState, useRecoilValue} from "recoil";
 import BannerComponent02 from "@/components/program/banner/BannerComponent02";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {joinPolicyAllReset, joinPolicyState} from "@states/joinPolicyState";
 
 const Program = () => {
+    const navigate = useNavigate();
     const user = useRecoilValue(userState);
     const [, setPolicy] = useRecoilState(joinPolicyState);
     const policyAllReset = useRecoilValue(joinPolicyAllReset);
+
+    const getMorePrograms = () => {
+        navigate('/program')
+    }
 
     useEffect(() => {
         setPolicy(policyAllReset);
@@ -33,7 +38,7 @@ const Program = () => {
                 산림치유 프로그램
             </div>
             <BookComponent/>
-            <button type="button" className="borderButton02">
+            <button type="button" className="borderButton02" onClick={getMorePrograms}>
                 프로그램 더보기
             </button>
             <BannerComponent02/>

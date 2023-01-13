@@ -4,6 +4,7 @@ import {ProgramInterface} from "@interfaces/programInterface";
 import {useNavigate} from "react-router-dom";
 import {userState} from '@states/userState';
 import {useRecoilValue} from "recoil";
+import ToastPopup from "@components/modal/ToastPopup";
 
 const BookComponent = () => {
     const navigate = useNavigate();
@@ -14,15 +15,20 @@ const BookComponent = () => {
         pgType: "",
         pgApply: "",
         ing: 0,
-        userNo: 0,
+        userNo: user.userNo || 0,
         orderBy: "",
+    });
+    const [toast, setToast] = useState({
+        flag: false,
+        message: "",
     });
 
     const getProgramList = async () => {
         await api
             .post("/usr/programs/list", requestData)
             .then((res) => {
-                if (res.data.result === "success") setPrograms(res.data.body);
+                console.log(res.data.body);
+                if (res.status === 200) setPrograms(res.data.body);
             })
             .catch((err) => {
                 console.log(err);
@@ -63,6 +69,44 @@ const BookComponent = () => {
         })();
     }, []);
 
+    const handleReserveProgram = (pgNo: number) => {
+        api
+            .post(`/usr/programs/apply?pgNo=${pgNo}&userNo=${user.userNo}`, null, {headers: {Authorization: `Bearer ${user.accessToken}`}})
+            .then((res) => {
+                console.log(res);
+                handlePopup('프로그램 예약이 완료됐습니다.');
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+
+    const handleCancelreservation = (pgNo: number) => {
+        api
+            .post(`/usr/programs/cancel?pgNo=${pgNo}&userNo=${user.userNo}`, null, {headers: {Authorization: `Bearer ${user.accessToken}`}})
+            .then((res) => {
+                console.log(res);
+                handlePopup('프로그램 예약이 취소됐습니다.');
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
+    const handlePopup = (message: string) => {
+        setToast({
+            ...toast,
+            flag: true,
+            message: message
+        });
+        setTimeout(() => {
+            setToast({
+                ...toast,
+                flag: false
+            });
+        }, 3000);
+    };
+
     return (
         <React.Fragment>
             <div className="program-wrap">
@@ -72,10 +116,10 @@ const BookComponent = () => {
                             <div className="ready-prg">
                                 {item.pgType === "goodBye" && (
                                     <div className="prg-head unBook unLog">
-                                        {item.pgIsApply === "1" &&
+                                        {(item.pgApply === "inOperApplied" || item.pgApply === "uncancellable" || item.pgApply === "cancellable") &&
                                         getMaker(item.pgSttDate, item.pgEndDate)}
                                         <p>{item.pgTitle}</p>
-                                        {item.pgStatus === "applying" && (
+                                        {(item.pgApply === "reservable" || item.pgApply === "cancellable") && (
                                             <span className="d-day">
                                                 D-{getDayCount(item.pgAppEndDate)}
                                                 <span>예약마감까지</span>
@@ -85,10 +129,10 @@ const BookComponent = () => {
                                 )}
                                 {item.pgType === "goodNight" && (
                                     <div className="prg-head unBook sky">
-                                        {item.pgIsApply === "1" &&
+                                        {(item.pgApply === "inOperApplied" || item.pgApply === "uncancellable" || item.pgApply === "cancellable") &&
                                         getMaker(item.pgSttDate, item.pgEndDate)}
                                         <p>{item.pgTitle}</p>
-                                        {item.pgStatus === "applying" && (
+                                        {(item.pgApply === "reservable" || item.pgApply === "cancellable") && (
                                             <span className="d-day">
                                                 D-{getDayCount(item.pgAppEndDate)}
                                                 <span>예약마감까지</span>
@@ -103,53 +147,53 @@ const BookComponent = () => {
                                     <li className="">
                                         진행기간: {item.pgSttDate} ~ {item.pgEndDate}
                                     </li>
-                                    {item.pgStatus === "inOper" && (
-                                        <li className="red">참여인원: {item.pgAppNow}명</li>
+                                    {(item.pgApply === "inOperNotApplied" || item.pgApply === "inOperApplied") && (
+                                        <li className="red">참여인원: {item.pgAppAll - item.pgLeftOver}명</li>
                                     )}
-                                    {item.pgStatus === "endApply" && (
-                                        <li className="red">참여인원: {item.pgAppNow}명</li>
+                                    {(item.pgApply === "endApply" || item.pgApply === "uncancellable") && (
+                                        <li className="red">참여인원: {item.pgAppAll - item.pgLeftOver}명</li>
                                     )}
-                                    {item.pgStatus === "applying" && (
+                                    {(item.pgApply === "reservable" || item.pgApply === "cancellable") && (
                                         <li className="red">
                                             잔여인원:{" "}
-                                            {parseInt(item.pgAppLimit) - parseInt(item.pgAppNow)}명
-                                            (모집인원: {item.pgAppLimit})
+                                            {item.pgLeftOver}명
+                                            (모집인원: {item.pgAppAll}명)
                                         </li>
                                     )}
-                                    <li className="">장소: {item.pgPlace}</li>
+                                    <li className="">장소: {item.pgPlace === "etc" ? item.pgPlaceText : item.pgPlace}</li>
                                 </ul>
                             </div>
                             {
                                 user.accessToken &&
                                 <React.Fragment>
-                                    {item.pgIsApply === "1" && item.pgStatus === "inOper" && (
+                                    {item.pgApply === "inOperApplied" && (
                                         <button type="button" className="btn-02 ">
                                             운영중
                                         </button>
                                     )}
-                                    {item.pgIsApply === "1" && item.pgStatus === "endApply" && (
+                                    {item.pgApply === "uncancellable" && (
                                         <button type="button" className="btn-02 gray-btn">
                                             취소불가
                                         </button>
                                     )}
-                                    {item.pgIsApply === "1" && item.pgStatus === "applying" && (
-                                        <button type="button" className="btn-02 active" onClick={(event) => moveProgramPage(item.pgIdx)}>
+                                    {item.pgApply === "cancellable" && (
+                                        <button type="button" className="btn-02 active" onClick={() => handleCancelreservation(item.pgNo)}>
                                             <span className="cancel">취소하기</span>
                                         </button>
                                     )}
-                                    {item.pgIsApply === "0" && item.pgStatus === "inOper" && (
+                                    {item.pgApply === "inOperNotApplied" && (
                                         <button type="button" className="btn-02 ">
                                             운영중
                                         </button>
                                     )}
-                                    {item.pgIsApply === "0" && item.pgStatus === "endApply" && (
+                                    {item.pgApply === "endApply" && (
                                         <button type="button" className="btn-02 gray-btn">
                                             예약마감
                                         </button>
                                     )}
-                                    {item.pgIsApply === "0" && item.pgStatus === "applying" && (
+                                    {item.pgApply === "reservable" && (
                                         <button type="button" className="btn-02 active"
-                                                onClick={(event) => moveProgramPage(item.pgIdx)}>
+                                                onClick={() => handleReserveProgram(item.pgNo)}>
                                             예약하기
                                         </button>
                                     )}
@@ -158,17 +202,17 @@ const BookComponent = () => {
                             {
                                 !user.accessToken &&
                                 <React.Fragment>
-                                    {item.pgStatus === "inOper" && (
+                                    {item.pgApply === "inOperNotApplied" && (
                                         <button type="button" className="btn-02 ">
                                             운영중
                                         </button>
                                     )}
-                                    {item.pgStatus === "endApply" && (
+                                    {item.pgApply === "endApply" && (
                                         <button type="button" className="btn-02 gray-btn">
                                             예약마감
                                         </button>
                                     )}
-                                    {item.pgStatus === "applying" && (
+                                    {item.pgApply === "reservable" && (
                                         <button type="button" className="btn-02 active"
                                                 onClick={moveLoginPage}>
                                             예약하기
@@ -180,6 +224,7 @@ const BookComponent = () => {
                     );
                 })}
             </div>
+            <ToastPopup content={toast.message} show={toast.flag} />
         </React.Fragment>
     );
 };
