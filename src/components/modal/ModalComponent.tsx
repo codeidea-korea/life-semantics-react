@@ -21,12 +21,18 @@ const ModalComponent = ({ id = "" }: { id?: string }) => {
 
   const handleClose = () => {
     setModal({ ...modal, show: false });
-    modal.onCancelCallback();
+
   };
+  const handleClose2 = () => {
+    setModal({ ...modal, show: false });
+    modal.onCancelCallback();
+  }
+
 
   const handleCallback = () => {
     // @ts-ignore
     modal.onConfirmCallback();
+
   }
 
   // @ts-ignore
@@ -39,7 +45,7 @@ const ModalComponent = ({ id = "" }: { id?: string }) => {
         <Modal.Body>{modal.content}</Modal.Body>
         <Modal.Footer className="flex">
           {modal.cancelShow && (
-            <Button variant="" onClick={handleClose}>
+            <Button variant="" onClick={handleClose2}>
               {modal.cancelText}
             </Button>
           )}

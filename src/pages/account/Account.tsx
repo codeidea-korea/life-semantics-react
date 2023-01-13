@@ -1,22 +1,24 @@
 import React from "react";
 import HeaderComponent from "@components/head/Header";
-import {Link, useLocation, useNavigate} from "react-router-dom";
-import {useRecoilState} from "recoil";
-import {modalState} from "@states/modalState";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { modalState } from "@states/modalState";
 import ModalComponent from "@components/modal/ModalComponent";
+import { userState } from "@/states/userState";
 
 
 const Account = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const [modal, setModal] = useRecoilState(modalState);
+    const user = useRecoilValue(userState);
 
     const handleDeleteAccount = () => {
         navigate('/deleteAccount');
     };
 
     const moveMain = () => {
-        setModal({...modal, show: false});
+        setModal({ ...modal, show: false });
         navigate('/');
     };
 
@@ -40,7 +42,7 @@ const Account = () => {
 
     return (
         <React.Fragment>
-            <HeaderComponent/>
+            <HeaderComponent />
             <div className="account">
                 <h2>계정관리</h2>
                 <div className="">
@@ -48,10 +50,10 @@ const Account = () => {
                     <div className="accountBox">
                         <div>
                             <span>현재 계정</span>
-                            <span>dhay123</span>
+                            <span>{user.userID}</span>
                         </div>
                         <p>
-                            <span>{""}</span>님, 환영합니다.
+                            <span>{user.userName}</span>님, 환영합니다.
                         </p>
                     </div>
                 </div>
@@ -60,7 +62,7 @@ const Account = () => {
                     <button type="button" onClick={handleConfirmLogout}>로그아웃</button>
                 </div>
             </div>
-            <ModalComponent id="flexModal"/>
+            <ModalComponent id="flexModal" />
         </React.Fragment>
     );
 };
