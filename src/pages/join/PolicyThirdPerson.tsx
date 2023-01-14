@@ -1,20 +1,21 @@
 import React from 'react';
 import WebLayout from '@layouts/web/WebLayout';
 import {useNavigate} from 'react-router-dom';
+import InputElement from '@/components/elements/InputElement';
 
 const PolicyThirdPerson = () => {
     const navigate = useNavigate();
     return (
         <WebLayout>
             <div className="HeaderFix policyHeader">
-                <h2>개인정보 제 3자 제공 동의</h2>
+                <h2>개인정보 수집 및 이용 동의</h2>
                 <button type="button" onClick={() => navigate(-1)}>
                     <img src="images/close.svg"></img>
                 </button>
             </div>
             <div className='headerSpace'></div>
             <div className="policy">
-                <h3>개인정보 제 3자 제공 동의</h3>
+                <h3>개인정보 수집 및 이용 동의</h3>
                 속에서 발휘하기 더운지라 용기가 가는 것이다. 소금이라 품에 사랑의 하여도
                 심장은 그들에게 온갖 만천하의 웅대한 것이다. 새가 인생의 하는 얼음
                 우리의 끝에 행복스럽고 듣기만 사랑의 황금시대다. 힘차게 것은 이상의
@@ -35,6 +36,13 @@ const PolicyThirdPerson = () => {
                 것이다. 가슴에 풀이 부패를 우리는 사막이다. 불러 앞이 그들의 얼마나
                 무엇을 예가 이상의 것이 사막이다. 같이, 끓는 주며, 인생의 쓸쓸하랴?
                 할지라도 예가 청춘의 힘차게 힘차게 듣는다.
+                <div className="checkBox">
+                    <div className='checkAll'>
+                        <InputElement type="checkbox" className="ck" id="thirdPerson" name="thirdPerson"/>
+                        <label htmlFor={"thirdPerson"}>모든약관에 모두 확인, 동의합니다.</label>
+                    </div>
+                </div>
+                <button type="button" className="btn-02 active">확인</button>
             </div>
         </WebLayout>
     );

@@ -81,18 +81,18 @@ const TermsComponent = ({next}: { next: Function }) => {
                             <Link to="/policyTermOfService"></Link>
                         </li>
                         <li>
-                            <InputElement type="checkbox" className="ck" id="lifeRecord" name="lifeRecord"
-                                          checked={policy.lifeRecord}
-                                          onChange={handleCheck}/>
-                            <label htmlFor={"lifeRecord"}>[필수] 라이프 레코드 이용 동의</label>
-                            <Link to="/policyLifeRecord"></Link>
-                        </li>
-                        <li>
                             <InputElement type="checkbox" className="ck" id="personalInfo" name="personalInfo"
                                           checked={policy.personalInfo}
                                           onChange={handleCheck}/>
                             <label htmlFor={"personalInfo"}>[필수] 개인정보 수집 및 이용 동의</label>
                             <Link to="/policyPersonalInfo"></Link>
+                        </li>
+                        <li>
+                            <InputElement type="checkbox" className="ck" id="thirdPerson" name="thirdPerson"
+                                          checked={policy.thirdPerson}
+                                          onChange={handleCheck}/>
+                            <label htmlFor={"thirdPerson"}>[선택] 개인정보 수집 및 이용 동의</label>
+                            <Link to="/policyThirdPerson"></Link>
                         </li>
                         <li>
                             <InputElement type="checkbox" className="ck" id="privacy" name="privacy"
@@ -101,13 +101,7 @@ const TermsComponent = ({next}: { next: Function }) => {
                             <label htmlFor={"privacy"}>[필수] 민감 정보 수집 및 이용 동의</label>
                             <Link to="/policyPrivacy"></Link>
                         </li>
-                        <li>
-                            <InputElement type="checkbox" className="ck" id="thirdPerson" name="thirdPerson"
-                                          checked={policy.thirdPerson}
-                                          onChange={handleCheck}/>
-                            <label htmlFor={"thirdPerson"}>[필수] 개인정보 제 3자 제공 동의</label>
-                            <Link to="/policyThirdPerson"></Link>
-                        </li>
+                        
                     </ul>
                 </div>
             </div>
