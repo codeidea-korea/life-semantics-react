@@ -32,11 +32,11 @@ const IndexPage = () => {
       show: true,
       title: "안내",
       cancelShow: false,
-      content: <div>이름 또는 전화번호를<br/> 다시 확인해 주세요</div>,
+      content: <div>이름 또는 전화번호를<br /> 다시 확인해 주세요</div>,
       confirmText: "확인",
     });
   };
-  
+
   const handleModal01 = () => {
     setModal({
       ...modal,
@@ -44,18 +44,18 @@ const IndexPage = () => {
       title: "안내",
       cancelShow: false,
       content:
-      <div>
-        ***님의 아이디는 <br/>
-        ___****입니다.<br/>
-        <Link to="" className="copy">아이디 복사</Link>
-      </div>,
+        <div>
+          ***님의 아이디는 <br />
+          ___****입니다.<br />
+          <Link to="" className="copy">아이디 복사</Link>
+        </div>,
       confirmText: "확인",
     });
   };
 
   const handlePopup = () => {
     setToast(true);
-    setTimeout(() =>{
+    setTimeout(() => {
       setToast(false);
     }, 3000)
   };
@@ -64,7 +64,7 @@ const IndexPage = () => {
     <WebLayout>
       <ModalComponent />
       <div className="Login">
-        <TitleHeadComponent name="아이디 찾기" targetUrl= ""/>
+        <TitleHeadComponent name="아이디 찾기" targetUrl="" />
         <div className="Container">
           <div className="LostId">
             <h3>회원 정보를 입력해 주세요.</h3>
@@ -83,7 +83,7 @@ const IndexPage = () => {
           아이디 찾기
         </button>
       </div>
-      
+
     </WebLayout>
   );
 };

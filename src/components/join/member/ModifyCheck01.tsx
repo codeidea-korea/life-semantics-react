@@ -5,43 +5,26 @@ import $ from "jquery";
 import { useNavigate } from "react-router-dom";
 import { userState } from '@states/userState';
 import { useRecoilValue } from "recoil";
+import ToastPopup from "@components/modal/ToastPopup";
 
 const ModifyCheck01 = () => {
   const navigate = useNavigate();
   const user = useRecoilValue(userState);
+  const [toast, setToast] = useState(false);
+
+  const handlePopup = () => {
+    setToast(true);
+    setTimeout(() => {
+      setToast(false);
+    }, 3000);
+  };
+
   let [alertState, setAlert] = useState<JSX.Element | null>(null);
   let modifyData = {
-    "userNo": 0,
-    "userID": "string",
     "userPass": "string",
-    "userName": "string",
-    "userBirth": "string",
-    "userPhone": "string",
     "userSmsAgree": "string",
-    "userGender": "string",
     "userEmail": "string",
-    "userEmailAgree": "string",
-    "userRegDate": "2023-01-13T05:43:44.104Z",
-    "piNo": 0,
-    "userIsSmoke": "string",
-    "userSmokeAmt": 0,
-    "userSmokeStartYear": 0,
-    "userSmokeEndYear": 0,
-    "userIsDrink": "string",
-    "userDrinkAmt": 0,
-    "userDrinkStartYear": 0,
-    "userDrinkEndYear": 0,
-    "userIsCaffeine": "string",
-    "ciNo": 0,
-    "userDiagnosis": "string",
-    "userDiagName": "string",
-    "userDiagDate": "string",
-    "userCureType": "string",
-    "userCureName": "string",
-    "userCureEndDate": "string",
-    "userDiagEtc": "string",
-    "userDiagEtcName": "string",
-    "userNowHealStat": "string"
+    "userEmailAgree": "string"
   };
 
 
@@ -59,51 +42,25 @@ const ModifyCheck01 = () => {
         return response.json();
       }).then((data) => {
         modifyData = {
-          "userNo": data.body.userNo,
-          "userID": data.body.userID,
           "userPass": data.body.userPass,
-          "userName": data.body.userName,
-          "userBirth": data.body.userBirth,
-          "userPhone": data.body.userPhone,
           "userSmsAgree": data.body.userSmsAgree,
-          "userGender": data.body.userGender,
           "userEmail": data.body.userEmail,
-          "userEmailAgree": data.body.userEmailAgree,
-          "userRegDate": data.body.userRegDate,
-          "piNo": data.body.piNo,
-          "userIsSmoke": data.body.userIsSmoke,
-          "userSmokeAmt": data.body.userSmokeAmt,
-          "userSmokeStartYear": data.body.userSmokeStartYear,
-          "userSmokeEndYear": data.body.userSmokeEndYear,
-          "userIsDrink": data.body.userIsDrink,
-          "userDrinkAmt": data.body.userDrinkAmt,
-          "userDrinkStartYear": data.body.userDrinkStartYear,
-          "userDrinkEndYear": data.body.userDrinkEndYear,
-          "userIsCaffeine": data.body.userIsCaffeine,
-          "ciNo": data.body.ciNo,
-          "userDiagnosis": data.body.userDiagnosis,
-          "userDiagName": data.body.userDiagName,
-          "userDiagDate": data.body.userDiagDate,
-          "userCureType": data.body.userCureType,
-          "userCureName": data.body.userCureName,
-          "userCureEndDate": data.body.userCureEndDate,
-          "userDiagEtc": data.body.userDiagEtc,
-          "userDiagEtcName": data.body.userDiagEtcName,
-          "userNowHealStat": data.body.userNowHealStat
+          "userEmailAgree": data.body.userEmailAgree
         }
         const inputElement1 = document.querySelector('#password_check1') as HTMLInputElement;
         const inputElement2 = document.querySelector('#password_check2') as HTMLInputElement;
         const radioAgree1 = document.querySelector('#agree') as HTMLInputElement;
         const radioAgree2 = document.querySelector('#agree03') as HTMLInputElement;
         const userEmail = document.querySelector('#user_email') as HTMLInputElement;
-        if (inputElement1.value === inputElement2.value) {
+
+        if (inputElement1.value.length > 0 && inputElement1.value === inputElement2.value) {
           modifyData.userPass = inputElement1.value;
           radioAgree1.checked == true ? (modifyData.userSmsAgree = "1") : (modifyData.userSmsAgree = "0")
           radioAgree2.checked == true ? (modifyData.userEmailAgree = "1") : (modifyData.userEmailAgree = "0")
           modifyData.userEmail = userEmail.value;
-          fetch(`https://api.life.codeidea.io/users/update`,
+          fetch(`https://api.life.codeidea.io/users/info`,
             {
-              method: 'POST',
+              method: 'PUT',
               body: JSON.stringify(modifyData),
               headers: {
                 Authorization: 'Bearer ' + user.accessToken,
@@ -113,11 +70,23 @@ const ModifyCheck01 = () => {
               return response.json();
             }).then((data) => {
               console.log(data);
+              if (data.result == "true") {
+                setToast(true);
+                setTimeout(() => {
+                  setToast(false);
+                }, 3000);
+              }
             }).catch((error) => {
               console.log(error)
             });
+        } else if (inputElement1.value.length == 0) {
+          setAlert(<span className="alert_text">비밀번호를 입력해주세요.</span>)
+          const scrolElement = document.querySelectorAll(".alert_text")[0] as any;
+          window.scrollTo(0, 0);
         } else {
           setAlert(<span className="alert_text">두 비밀번호가 일치하지 않습니다.</span>)
+          const scrolElement = document.querySelectorAll(".alert_text")[0] as any;
+          window.scrollTo(0, 0);
         }
       }).catch((error) => {
         console.log(error)
@@ -255,6 +224,8 @@ const ModifyCheck01 = () => {
           수정
         </button>
       </div>
+      <ToastPopup content={"입력하신 정보를 수정하였습니다."} show={toast} />
+
     </React.Fragment>
   );
 };
