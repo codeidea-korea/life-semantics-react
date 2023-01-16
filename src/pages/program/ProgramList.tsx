@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import BookComponent from "@components/program/book/BookComponent";
 import HeaderComponent from "@components/head/Header";
 import DropBoxComponent from "@components/program/DropBoxComponent";
@@ -9,6 +9,19 @@ import $ from "jquery";
 import { Link } from "react-router-dom";
 
 const ProgramList = () => {
+  const [programFilter, setProgramFilter] = useState({
+    type: '',
+    status: '',
+    orderBy: '',
+  })
+  
+  const handleFilter = (key: string, value: string) => {
+    setProgramFilter({
+      ...programFilter,
+      [key]: value
+    })
+  }
+
   useEffect(() => {
     $(".dropDown .selected span").click(function () {
       const options = $(this).parent().siblings(".options");
@@ -46,6 +59,7 @@ const ProgramList = () => {
       }
     }
   }, []);
+
   return (
     <React.Fragment>
       <HeaderComponent />
@@ -58,15 +72,15 @@ const ProgramList = () => {
           </div>
           <div className="options">
             <ul>
-              <li>
+              <li onClick={() => handleFilter('type', '')}>
                 전체
                 <div className="value"></div>
               </li>
-              <li>
+              <li onClick={() => handleFilter('type', 'goodBye')}>
                 굿바이 피로
                 <div className="value"></div>
               </li>
-              <li>
+              <li onClick={() => handleFilter('type', 'goodNight')}>
                 웰컴 굿잠
                 <div className="value"></div>
               </li>
@@ -79,21 +93,21 @@ const ProgramList = () => {
           </div>
           <div className="options">
             <ul>
-              <li>
+              <li onClick={() => handleFilter('status', '')}>
                 전체
                 <div className="value"></div>
               </li>
-              <li>
+              <li onClick={() => handleFilter('status', 'inApply')}>
                 예약 접수 중<div className="value"></div>
               </li>
-              <li>
+              <li onClick={() => handleFilter('status', 'endApply')}>
                 (운영 대기 중)
                 <div className="value"></div>
               </li>
-              <li>
+              <li onClick={() => handleFilter('status', 'inOper')}>
                 운영 중<div className="value"></div>
               </li>
-              <li>
+              <li onClick={() => handleFilter('status', 'inApply')}>
                 (종료)
                 <div className="value"></div>
               </li>
@@ -106,14 +120,14 @@ const ProgramList = () => {
           </div>
           <div className="options">
             <ul>
-              <li>
+              <li onClick={() => handleFilter('orderBy', '')}>
                 전체
                 <div className="value"></div>
               </li>
-              <li>
+              <li onClick={() => handleFilter('orderBy', 'pgAppEndDate')}>
                 마감 임박 순<div className="value"></div>
               </li>
-              <li>
+              <li onClick={() => handleFilter('orderBy', 'pgLeftOver')}>
                 잔여 인원 순<div className="value"></div>
               </li>
             </ul>
@@ -126,7 +140,7 @@ const ProgramList = () => {
           </span>
         </div>
       </div>
-      <BookComponent />
+      <BookComponent programFilter={programFilter}/>
       <div className="banner03">
         <a href="https://www.fowi.or.kr/user/program/programList.do?progrmSeCd=PS01">
           <img src="images/banner03.svg" />

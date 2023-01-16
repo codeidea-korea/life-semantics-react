@@ -1,15 +1,18 @@
 import React, {useEffect, useState} from "react";
 import useAxios from "@hooks/useAxios";
 import {ProgramInterface} from "@interfaces/programInterface";
+import { ProgramFilterInterface } from "@/interfaces/programFilterInterface";
 import {useNavigate} from "react-router-dom";
 import {userState} from '@states/userState';
 import {useRecoilValue} from "recoil";
 import ToastPopup from "@components/modal/ToastPopup";
+import { useQuery } from "react-query";
 
-const BookComponent = () => {
+const BookComponent = ({programFilter}: {programFilter?: ProgramFilterInterface}) => {
     const navigate = useNavigate();
     const api = useAxios();
     const [programs, setPrograms] = useState<ProgramInterface[]>([]);
+    const [programsOrigin, setProgramsOrigin] = useState<ProgramInterface[]>([]);
     const user = useRecoilValue(userState);
     const [requestData, setRequestData] = useState({
         pgType: "",
@@ -24,16 +27,22 @@ const BookComponent = () => {
     });
 
     const getProgramList = async () => {
+        console.log(requestData);
         await api
             .post("/usr/programs/list", requestData)
             .then((res) => {
                 console.log(res.data.body);
-                if (res.status === 200) setPrograms(res.data.body);
+                if (res.status === 200) {
+                    setPrograms(res.data.body);
+                    setProgramsOrigin(res.data.body);
+                }
             })
             .catch((err) => {
                 console.log(err);
             });
     };
+    const result = useQuery(['programList', requestData], () => getProgramList());
+    console.log(result);
 
     const getDayCount = (endDay: string) => {
         const nowDate = new Date();
@@ -55,8 +64,8 @@ const BookComponent = () => {
         }
     };
 
-    const moveProgramPage = (pgIdx: string) => {
-        navigate('/programView', {state: {pgIdx: pgIdx}});
+    const moveProgramPage = (pgNo: string) => {
+        navigate('/programView', {state: {pgNo: pgNo}});
     }
 
     const moveLoginPage = () => {
@@ -68,30 +77,61 @@ const BookComponent = () => {
             await getProgramList();
         })();
     }, []);
+    
 
-    const handleReserveProgram = (pgNo: number) => {
-        api
-            .post(`/usr/programs/apply?pgNo=${pgNo}&userNo=${user.userNo}`, null, {headers: {Authorization: `Bearer ${user.accessToken}`}})
-            .then((res) => {
-                console.log(res);
-                handlePopup('프로그램 예약이 완료됐습니다.');
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    };
+    useEffect(()=>{
+        setRequestData({
+            pgType: programFilter?.type || '',
+            pgApply: programFilter?.status || '',
+            ing: 0,
+            userNo: user.userNo || 0,
+            orderBy: programFilter?.orderBy || '',
+        });
 
-    const handleCancelreservation = (pgNo: number) => {
-        api
-            .post(`/usr/programs/cancel?pgNo=${pgNo}&userNo=${user.userNo}`, null, {headers: {Authorization: `Bearer ${user.accessToken}`}})
-            .then((res) => {
-                console.log(res);
-                handlePopup('프로그램 예약이 취소됐습니다.');
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    }
+        // for (const key in programFilter) {
+
+            // if (key === 'type') {
+            //     if (programFilter.type == '') setPrograms(programsOrigin);
+            //     else setPrograms(programsOrigin.filter(program => program.pgType === programFilter[key]));
+            // }
+            // else if (key === 'status') {
+            //     if (programFilter.status === '') setPrograms(programs);
+            //     else {
+            //         if (programFilter.status === 'reservable') setPrograms(programs.filter(program => program.pgApply === "reservable" || program.pgApply === "cancellable"));
+            //         else setPrograms(programs.filter(program => program.pgApply === "inOperNotApplied" || program.pgApply === "inOperApplied"));
+            //     }
+            // }
+            // else {
+
+            // }
+        // };
+    }, [programFilter]);
+
+    // 예약 api
+    // const handleReserveProgram = (pgNo: number) => {
+    //     api
+    //         .post(`/usr/programs/apply?pgNo=${pgNo}&userNo=${user.userNo}`, null, {headers: {Authorization: `Bearer ${user.accessToken}`}})
+    //         .then((res) => {
+    //             console.log(res);
+    //             handlePopup('프로그램 예약이 완료됐습니다.');
+    //         })
+    //         .catch((err) => {
+    //             console.log(err);
+    //         });
+    // };
+
+    // 취소 api
+    // const handleCancelreservation = (pgNo: number) => {
+    //     api
+    //         .post(`/usr/programs/cancel?pgNo=${pgNo}&userNo=${user.userNo}`, null, {headers: {Authorization: `Bearer ${user.accessToken}`}})
+    //         .then((res) => {
+    //             console.log(res);
+    //             handlePopup('프로그램 예약이 취소됐습니다.');
+    //         })
+    //         .catch((err) => {
+    //             console.log(err);
+    //         });
+    // }
 
     const handlePopup = (message: string) => {
         setToast({
@@ -177,7 +217,7 @@ const BookComponent = () => {
                                         </button>
                                     )}
                                     {item.pgApply === "cancellable" && (
-                                        <button type="button" className="btn-02 active" onClick={() => handleCancelreservation(item.pgNo)}>
+                                        <button type="button" className="btn-02 active" onClick={() => moveProgramPage(String(item.pgNo))}>
                                             <span className="cancel">취소하기</span>
                                         </button>
                                     )}
@@ -193,7 +233,7 @@ const BookComponent = () => {
                                     )}
                                     {item.pgApply === "reservable" && (
                                         <button type="button" className="btn-02 active"
-                                                onClick={() => handleReserveProgram(item.pgNo)}>
+                                                onClick={() => moveProgramPage(String(item.pgNo))}>
                                             예약하기
                                         </button>
                                     )}
