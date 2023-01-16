@@ -1,5 +1,5 @@
 export interface ViewInterface {
     state: {
-        pgIdx: string;
+        pgNo: string;
     }
 }

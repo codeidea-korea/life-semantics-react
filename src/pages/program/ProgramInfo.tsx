@@ -9,7 +9,8 @@ import useAxios from "@hooks/useAxios";
 import { ProgramInterface } from "@interfaces/programInterface";
 import ToastPopup from "@components/modal/ToastPopup";
 import { modalState } from "@states/modalState";
-import { useRecoilState } from "recoil";
+import {userState} from '@states/userState';
+import { useRecoilState, useRecoilValue } from "recoil";
 import ModalComponent from "@components/modal/ModalComponent";
 
 const ProgramInfo = () => {
@@ -21,12 +22,15 @@ const ProgramInfo = () => {
   const navigate = useNavigate();
   const api = useAxios();
   const [program, setProgram] = useState<ProgramInterface>();
+  const user = useRecoilValue(userState);
+  
 
   const getProgram = async () => {
     await api
-      .post("/programs/view", { pgIdx: state.pgIdx })
+      .post(`/usr/programs/view?pgNo=${state.pgNo}&userNo=${user.userNo}`)
       .then((res) => {
-        if (res.data.result === "success") setProgram(res.data.data);
+        console.log(res)
+        if (res.status === 200) setProgram(res.data.body);
       })
       .catch((err) => {
         console.log(err);
@@ -34,6 +38,17 @@ const ProgramInfo = () => {
   };
 
   const handleConfirmLogout = () => {
+    // 예약 api
+    api
+        .post(`/usr/programs/apply?pgNo=${state.pgNo}&userNo=${user.userNo}`, null, {headers: {Authorization: `Bearer ${user.accessToken}`}})
+        .then((res) => {
+            console.log(res);
+            // handlePopup('프로그램 예약이 완료됐습니다.');
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+
     setModal({
       ...modal,
       show: true,
@@ -72,7 +87,7 @@ const ProgramInfo = () => {
   useEffect(() => {
     (async () => {
       await getProgram();
-      if (state.pgIdx == "6") setReserve(false);
+      if (program?.pgApply === "cancellable") setReserve(false);
     })();
   }, []);
 
@@ -121,11 +136,11 @@ const ProgramInfo = () => {
             </li>
             <li>
               <span>모집인원</span>
-              <span>{program?.pgAppNow}명</span>
+              <span>{program?.pgAppAll}명</span>
             </li>
             <li>
               <span>진행장소</span>
-              <Link to="/forestView">{program?.pgPlace}</Link>
+              <Link to="/forestView">{program?.pgPlace === "etc" ? program?.pgPlaceText : program?.pgPlace}</Link>
             </li>
             <li>
               <span>진행방법</span>
