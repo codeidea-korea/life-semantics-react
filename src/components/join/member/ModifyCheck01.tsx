@@ -30,7 +30,6 @@ const ModifyCheck01 = () => {
 
 
   const handleSubmit = () => {
-
     fetch(`https://api.life.codeidea.io/users/view?userNo=${user.userNo}`,
       {
         method: 'POST',
