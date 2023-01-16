@@ -304,6 +304,14 @@ const ModifyCheck02 = ({ nextStep }: { nextStep: Function }) => {
                     </ul>
                 </div>
             </div>
+            <div className="fixBtn ">
+                <button type="button" className="prev">
+                    이전
+                </button>
+                <button type="button" className="next">
+                    다음
+                </button>
+            </div>
         </React.Fragment>
     );
 };
