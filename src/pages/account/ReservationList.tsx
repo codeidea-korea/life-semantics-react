@@ -4,10 +4,23 @@ import InputElement from "@components/elements/InputElement";
 import { modalState } from "@states/modalState";
 import ModalComponent from "@components/modal/ModalComponent";
 import ToastPopup from "@components/modal/ToastPopup";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import $, { each } from "jquery";
+import { userState } from "@/states/userState";
+import { useNavigate } from "react-router-dom";
 
 const ReservationList = () => {
+    interface Reservation {
+        pgNum: number;
+        pgTitle: string;
+        pgApply: string;
+        pgNo: number;
+    }
+    const navigate = useNavigate();
+    const user = useRecoilValue(userState);
+    let [listData, setListData] = useState<Reservation[]>([]);
+
+
     const [modal, setModal] = useRecoilState(modalState);
     const [toast, setToast] = useState(false);
 
@@ -18,10 +31,49 @@ const ReservationList = () => {
         { seq: 3, programTitle: '굿바이 피로 4기', status: 'R' },
     ])
 
+
+    //예약리스트
+    const getUserReservationList = (orderBy: string) => {
+        listData = [];
+        // pgAppSttDate -  최신 등록순
+        // inApply - 참여 우선 순
+        // inOper - 예약 우선 순
+        fetch(`https://api.life.codeidea.io/usr/programs/myList?paUserNo=${user.userNo}&orderBy=${orderBy}`,
+            {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + user.accessToken,
+                    'Content-Type': 'application/json'
+                },
+            }).then((response) => {
+                return response.json();
+            }).then((data) => {
+                console.log(data);
+                data.body.forEach((item: Reservation) => {
+                    setListData([...listData, item])
+                })
+            }).catch((error) => {
+                console.log(error)
+            });
+    }
+    useEffect(() => {
+
+        getUserReservationList("pgAppSttDate");
+    }, [])
+
+
+
     useEffect(() => {
         $(".dropDown .selected span").click(function () {
             const options = $(this).parent().siblings(".options");
             options.find("ul").show();
+            if (this.textContent == "최신 등록 순") {
+                getUserReservationList("pgAppSttDate");
+            } else if (this.textContent == "참여 우선 순") {
+                getUserReservationList("inApply");
+            } else if (this.textContent == "예약 우선 순") {
+                getUserReservationList("inOper");
+            }
         });
 
         $(".dropDown .options ul li ").click(function () {
@@ -106,18 +158,27 @@ const ReservationList = () => {
 
     const handleRemove = () => {
         const target = document.querySelectorAll('input:checked');
-        const sequences = new Array();
-        target.forEach(item => {
-            if (item instanceof HTMLElement) {
-                sequences.push(parseInt(item.dataset.seq as string));
-            }
-        });
-        let rows = [...dummy];
-        sequences.forEach(item => {
-            rows = rows.filter(data => data.seq !== item)
-        });
-        setDummy(rows);
-        setModal({ ...modal, show: false });
+        const selectedOrderByValue = document.querySelectorAll('.reservationList .tabelDropdown .dropDown .selected span')[0].textContent as string
+        let reqData = {}
+        fetch(`https://api.life.codeidea.io/usr/programs/cancel?pgNo=${target[0].getAttribute("pg-no")}&userNo=${user.userNo}`,
+            {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + user.accessToken,
+                    'Content-Type': 'application/json'
+                },
+            }).then((response) => {
+                return response.json();
+            }).then((data) => {
+                if (data.result == "true") {
+                    getUserReservationList(selectedOrderByValue);
+                    setModal({ ...modal, show: false });
+                }
+            }).catch((error) => {
+                console.log(error)
+            });
+
+
     };
 
     return (
@@ -159,19 +220,18 @@ const ReservationList = () => {
                                 <td>프로그램명</td>
                                 <td>현황</td>
                             </tr>
-                            {dummy.map((item, index) =>
-                                <tr key={index}>
+                            {
+                                listData.map((item: Reservation, idx) => <tr key={idx}>
                                     <td>
-                                        <InputElement type="checkbox" className="check" data-seq={item.seq}
-                                            value={item.seq} />
+                                        <InputElement type="checkbox" className="check" pg-no={item.pgNo} pg-num={item.pgNum} />
                                     </td>
-                                    <td>{item.programTitle}</td>
+                                    <td>{item.pgTitle}</td>
                                     <td>
-                                        {item?.status === 'R' && <span className="reserved">예약 중</span>}
-                                        {item?.status === 'J' && <span className="attend">참여 중</span>}
+                                        {item.pgApply === "inApply" && <span className="reserved">예약 중</span>}
+                                        {item.pgApply === 'inOper' && <span className="attend">참여 중</span>}
                                     </td>
-                                </tr>
-                            )}
+                                </tr>)
+                            }
                         </tbody>
                     </table>
                     <ToastPopup content={"선택하신 프로그램을 취소했습니다."} show={toast} />
