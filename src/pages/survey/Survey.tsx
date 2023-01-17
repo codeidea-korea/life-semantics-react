@@ -202,6 +202,7 @@ const Survey = () => {
         console.log(beforeSurveyInfo);
     }, [beforeSurveyInfo]);
 
+
     return (
         <React.Fragment>
             <TitleHeadComponent name="설문 작성" targetUrl="/main" />
@@ -522,9 +523,10 @@ const Survey = () => {
                                     </div>
 
                                     <label>
-                                        <span>암 종(진단명)</span>
+                                        <span>암 종(진단명) <i className="plusBtn">+</i></span>
                                         <button type="button" className="plus"></button>
                                     </label>
+                                    <p className="pointGreen">다른 암도 재발되었나요?<br/>그러면 해당 암 종도 추가해주세요.</p>
                                     <div>
                                         <div className="selectBox">
                                             <select onChange={handleCancerNameChange}>
@@ -562,23 +564,35 @@ const Survey = () => {
                                             placeholder="예) 2015년 01월"
                                             id="cancer_end"
                                         />
-                                        <label htmlFor="woman">여</label>
-                                    </span>
-                                </div>
-
-                                <label>
-                                    <span>암 종(진단명) <i className="plusBtn">+</i></span>
-                                    <button type="button" className="plus"></button>
-                                </label>
-                                <p className="pointGreen">다른 암도 재발되었나요?<br/>그러면 해당 암 종도 추가해주세요.</p>
-                                <div>
-                                    <div className="selectBox">
-                                        <select onChange={handleCancerNameChange}>
-                                            <option>암 종 선택</option>
-                                            <option>구체적으로 입력</option>
-                                            <option>직접입력</option>
-                                        </select>
                                     </div>
+                                    {/* 추가되는 영역 : S */}
+                                    <label>
+                                        <span>암 종(진단명)</span>
+                                    </label>
+                                    <InputElement
+                                        type="text"
+                                        placeholder="구체적으로 입력"
+                                        id="cancer_type"
+                                    />
+                                    <div className="plusItem">
+                                        <label htmlFor="cancer_type">
+                                            <span>진단시기</span>
+                                        </label>
+                                        <InputElement
+                                            type="text"
+                                            placeholder="예) 2015년 01월"
+                                            id="cancer_type_start"
+                                        />
+                                        <label htmlFor="cancer_type_start">
+                                            <span>치료종료 시기</span>
+                                        </label>
+                                        <InputElement
+                                            type="text"
+                                            placeholder="예) 2015년 01월"
+                                            id="cancer_type_end"
+                                        />
+                                    </div>
+                                    {/* 추가되는 영역 : E */}
 
                                     <label>
                                         <span>치료유형(중복선택 가능)</span>
@@ -675,32 +689,9 @@ const Survey = () => {
                                             </li>
                                         </ul>
                                     </div>
-                                    <label>
-                                        <span>암 종(진단명)</span>
-                                    </label>
-                                    <InputElement
-                                        type="text"
-                                        placeholder="구체적으로 입력"
-                                        id="cancer_type"
-                                    />
-                                    <label htmlFor="cancer_type">
-                                        <span>진단시기</span>
-                                    </label>
-                                    <InputElement
-                                        type="text"
-                                        placeholder="예) 2015년 01월"
-                                        id="cancer_type_start"
-                                    />
-                                    <label htmlFor="cancer_type_start">
-                                        <span>치료종료 시기</span>
-                                    </label>
-                                    <InputElement
-                                        type="text"
-                                        placeholder="예) 2015년 01월"
-                                        id="cancer_type_end"
-                                    />
+                                    
                                     <label className="labelType" htmlFor="cancer_type_end">
-                                        <span> 암 이외의 진단받고 치료 중인 질환</span>
+                                        <span>암 이외의 질환</span>
                                         (해당질환 모두 선택)
                                     </label>
                                     <div className="chk_list disease checkContents">
@@ -778,237 +769,27 @@ const Survey = () => {
                                         <InputElement type="text" placeholder="직접 작성" />
                                     </div>
                                 </div>
-                                {/* 추가되는 영역 : S */}
-                                <label>
-                                    <span>암 종(진단명)</span>
-                                </label>
-                                <InputElement
-                                    type="text"
-                                    placeholder="구체적으로 입력"
-                                    id="cancer_type"
-                                />
-                                <div className="plusItem">
-                                    <label htmlFor="cancer_type">
-                                        <span>진단시기</span>
-                                    </label>
-                                    <InputElement
-                                        type="text"
-                                        placeholder="예) 2015년 01월"
-                                        id="cancer_type_start"
-                                    />
-                                    <label htmlFor="cancer_type_start">
-                                        <span>치료종료 시기</span>
-                                    </label>
-                                    <InputElement
-                                        type="text"
-                                        placeholder="예) 2015년 01월"
-                                        id="cancer_type_end"
-                                    />
-                                </div>
-                                {/* 추가되는 영역 : E */}
-
-                                <label>
-                                    <span>치료유형(중복선택 가능)</span>
-                                </label>
-                                <div className="chk_list treatment-type checkContents">
-                                    <ul>
-                                        <li>
-                                            <InputElement
-                                                type="checkbox"
-                                                id="surgery"
-                                                className="check02"
-                                            />
-                                            <label htmlFor="surgery">수술</label>
-                                        </li>
-                                        <li>
-                                            <InputElement
-                                                type="checkbox"
-                                                id="cancer_treatment"
-                                                className="check02"
-                                            />
-                                            <label htmlFor="cancer_treatment">항암치료</label>
-                                        </li>
-                                        <li>
-                                            <InputElement
-                                                type="checkbox"
-                                                id="radiation_treatment"
-                                                className="check02"
-                                            />
-                                            <label htmlFor="radiation_treatment">방사선치료</label>
-                                        </li>
-                                        <li>
-                                            <InputElement
-                                                type="checkbox"
-                                                id="hormone_treatment"
-                                                className="check02"
-                                            />
-                                            <label htmlFor="hormone_treatment">호르몬치료</label>
-                                        </li>
-                                        <li>
-                                            <InputElement
-                                                type="checkbox"
-                                                id="etc_treatment"
-                                                className="check02"
-                                            />
-                                            <label htmlFor="etc_treatment">기타</label>
-                                        </li>
-                                    </ul>
-                                    <InputElement
-                                        type="text"
-                                        placeholder="구체적으로 입력"
-                                        id="detail_treatment"
-                                    />
-                                </div>
-                                <label>
-                                    <span>현재 건강상태</span>
-                                </label>
-                                <div className="radioCheck checkContents">
-                                    <ul>
-                                        <li>
-                                            <InputElement
-                                                type="radio"
-                                                value="매우 건강하지 않다."
-                                                name="chk_info"
-                                                id="radio01"
-                                            />
-                                            <label htmlFor="radio01">매우 건강하지 않다.</label>
-                                        </li>
-                                        <li>
-                                            <InputElement
-                                                type="radio"
-                                                value="건강하지 않다."
-                                                name="chk_info"
-                                                id="radio02"
-                                            />
-                                            <label htmlFor="radio02">건강하지 않다.</label>
-                                        </li>
-                                        <li>
-                                            <InputElement
-                                                type="radio"
-                                                value="건강하다."
-                                                name="chk_info"
-                                                id="radio03"
-                                            />
-                                            <label htmlFor="radio03">건강하다.</label>
-                                        </li>
-                                        <li>
-                                            <InputElement
-                                                type="radio"
-                                                value="매우 건강하다."
-                                                name="chk_info"
-                                                id="radio04"
-                                            />
-                                            <label htmlFor="radio04">매우 건강하다.</label>
-                                        </li>
-                                    </ul>
-                                </div>
-                                
-                                <label className="labelType" htmlFor="cancer_type_end">
-                                    <span>암 이외의 질환</span>
-                                    (해당질환 모두 선택)
-                                </label>
-                                <div className="chk_list disease checkContents">
-                                    <ul>
-                                        <li>
-                                            <InputElement
-                                                type="checkbox"
-                                                value=""
-                                                className=""
-                                                id="empty"
-                                            />
-                                            <label htmlFor="empty">없음</label>
-                                        </li>
-                                        <li>
-                                            <InputElement
-                                                type="checkbox"
-                                                value="고혈압"
-                                                id="hypertension"
-                                            />
-                                            <label htmlFor="hypertension">고혈압</label>
-                                        </li>
-                                        <li>
-                                            <InputElement
-                                                type="checkbox"
-                                                value="당뇨병"
-                                                id="diabetic"
-                                            />
-                                            <label htmlFor="diabetic">당뇨병</label>
-                                        </li>
-                                        <li>
-                                            <InputElement
-                                                type="checkbox"
-                                                value="뇌혈관질환"
-                                                id="cerebrovascular"
-                                            />
-                                            <label htmlFor="cerebrovascular">뇌혈관질환</label>
-                                        </li>
-                                        <li>
-                                            <InputElement
-                                                type="checkbox"
-                                                value="호흡기질환"
-                                                id="respiratory"
-                                            />
-                                            <label htmlFor="respiratory">호흡기질환</label>
-                                        </li>
-                                        <li>
-                                            <InputElement
-                                                type="checkbox"
-                                                value="심장질환"
-                                                id="cardiac"
-                                            />
-                                            <label htmlFor="cardiac">심장질환</label>
-                                        </li>
-                                        <li>
-                                            <InputElement
-                                                type="checkbox"
-                                                value="우울증"
-                                                id="blues"
-                                            />
-                                            <label htmlFor="blues">우울증</label>
-                                        </li>
-                                        <li>
-                                            <InputElement
-                                                type="checkbox"
-                                                value="관련 질환"
-                                                id="related"
-                                            />
-                                            <label htmlFor="related">관련 질환</label>
-                                        </li>
-                                        <li>
-                                            <InputElement type="checkbox" value="기타" id="etc" />
-                                            <label htmlFor="etc">기타</label>
-                                        </li>
-                                    </ul>
-                                    <InputElement type="text" placeholder="직접 작성" />
-                                </div>
-                            </div>
-                            <button type="button" className="BtnActive" onClick={handlePopupEnd}>
-                                다음
-                            </button>
-                            {endPopup && (
-                                <>
-                                    <div className="fade modal-backdrop show"></div>
-                                    <div
-                                        role="dialog"
-                                        aria-modal="true"
-                                        className="fade modal modal show"
-                                        style={{ display: "block" }}
-                                    >
-                                        <div id="" className="modal-dialog">
-                                            <div className="modal-content">
-                                                <div className="modal-header">
-                                                    <div className="modal-title h4"></div>
-                                                    <button
-                                                        type="button"
-                                                        className="btn-close"
-                                                        aria-label="Close"
-                                                    ></button>
-                                                </div>
-                                                <div className="modal-body">
-                                                    <div>
-                                                        해당 정보
-                                                        <br />
-                                                        작성을 완료했습니다.
+                                <button type="button" className="BtnActive" onClick={handlePopupEnd}>
+                                    다음
+                                </button>
+                                {endPopup && (
+                                    <>
+                                        <div className="fade modal-backdrop show"></div>
+                                        <div
+                                            role="dialog"
+                                            aria-modal="true"
+                                            className="fade modal modal show"
+                                            style={{ display: "block" }}
+                                        >
+                                            <div id="" className="modal-dialog">
+                                                <div className="modal-content">
+                                                    <div className="modal-header">
+                                                        <div className="modal-title h4"></div>
+                                                        <button
+                                                            type="button"
+                                                            className="btn-close"
+                                                            aria-label="Close"
+                                                        ></button>
                                                     </div>
                                                     <div className="modal-body">
                                                         <div>
@@ -1032,7 +813,7 @@ const Survey = () => {
                         )}
                     </div>
                 </div>
-            )}
+            )}    
         </React.Fragment>
     );
 };
