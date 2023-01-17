@@ -5,3 +5,9 @@ export interface SurveyInterface {
   day: number;
   after: number;
 }
+
+export interface BeforeSurveyInfoInterface {
+  state: {
+    isBeforeSurveyInfo : boolean
+  }
+}
