@@ -17,6 +17,65 @@ const ModifyCheck03 = () => {
               <span>나이</span>
             </li>
             <li>
+            <label>
+              <span>성별</span>
+              </label>
+              <div className="chk_radio02">
+                  <span className="isCheck">
+                      <InputElement
+                          type="radio"
+                          value="남"
+                          name="gender"
+                          id="man"
+                      />
+                      <label htmlFor="man">남</label>
+                  </span>
+                  <span>
+                      <InputElement
+                          type="radio"
+                          value="여"
+                          name="gender"
+                          id="woman"
+                      />
+                      <label htmlFor="woman">여</label>
+                  </span>
+              </div>
+            </li>
+            <li>
+              <label>
+                <span>암 종(진단명) <i className="plusBtn">+</i></span>
+              </label>
+              <p className="pointGreen">다른 암도 재발되었나요?<br/>그러면 해당 암 종도 추가해주세요.</p>
+              <div className="selectBox">
+                <select name="cancer">
+                  <option>암 종(진단명)</option>
+                  <option></option>
+                  <option></option>
+                </select>
+              </div>
+            </li>
+            <li className="pl-20">
+              <label>
+                <span>진단시기</span>
+              </label>
+              <InputElement
+                type="text"
+                placeholder="예) 2015년 01월"
+                id="cancer_start"
+              />
+            </li>
+            <li className="pl-20">
+              <label>
+                <span>치료종료 시기</span>
+              </label>
+              <InputElement
+                type="text"
+                placeholder="예) 2015년 01월"
+                id="cancer_end"
+              />
+            </li>
+            {/* +버튼 클릭시 추가되는 곳 : S */}
+            <li>
               <label>
                 <span>암 종(진단명)</span>
               </label>
@@ -28,7 +87,7 @@ const ModifyCheck03 = () => {
                 </select>
               </div>
             </li>
-            <li>
+            <li className="pl-20">
               <label>
                 <span>진단시기</span>
               </label>
@@ -38,7 +97,7 @@ const ModifyCheck03 = () => {
                 id="cancer_start"
               />
             </li>
-            <li>
+            <li className="pl-20">
               <label>
                 <span>치료종료 시기</span>
               </label>
@@ -48,6 +107,8 @@ const ModifyCheck03 = () => {
                 id="cancer_end"
               />
             </li>
+            {/* +버튼 클릭시 추가되는 곳 : E */}
+            <li></li>
             <li>
               <label>
                 <span>치료유형(중복선택 가능)</span>
@@ -145,7 +206,7 @@ const ModifyCheck03 = () => {
             </li>
             <li>
               <label className="labelType">
-                <span> 암 이외의 진단받고 치료 중인 질환</span>
+                <span>암 이외의 질환</span>
                 (해당질환 모두 선택)
               </label>
               <div className="chk_list disease">

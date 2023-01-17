@@ -43,14 +43,14 @@ const ModalComponent = ({ id = "" }: { id?: string }) => {
           <Modal.Title>{modal.title}</Modal.Title>
         </Modal.Header>
         <Modal.Body>{modal.content}</Modal.Body>
-        <Modal.Footer className="flex">
+        <Modal.Footer className="flex modalFooter">
           {modal.cancelShow && (
             <Button variant="" onClick={handleClose2}>
               {modal.cancelText}
             </Button>
           )}
           {modal.callBackShow && (
-            <Button variant="" onClick={handleCallback}>
+            <Button variant="" onClick={handleCallback} className="confirmBtn">
               {modal.confirmText}
             </Button>
           )}

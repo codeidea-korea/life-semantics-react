@@ -429,9 +429,10 @@ const Survey = () => {
                                 </div>
 
                                 <label>
-                                    <span>암 종(진단명)</span>
+                                    <span>암 종(진단명) <i className="plusBtn">+</i></span>
                                     <button type="button" className="plus"></button>
                                 </label>
+                                <p className="pointGreen">다른 암도 재발되었나요?<br/>그러면 해당 암 종도 추가해주세요.</p>
                                 <div>
                                     <div className="selectBox">
                                         <select onChange={handleCancerNameChange}>
@@ -470,6 +471,34 @@ const Survey = () => {
                                         id="cancer_end"
                                     />
                                 </div>
+                                {/* 추가되는 영역 : S */}
+                                <label>
+                                    <span>암 종(진단명)</span>
+                                </label>
+                                <InputElement
+                                    type="text"
+                                    placeholder="구체적으로 입력"
+                                    id="cancer_type"
+                                />
+                                <div className="plusItem">
+                                    <label htmlFor="cancer_type">
+                                        <span>진단시기</span>
+                                    </label>
+                                    <InputElement
+                                        type="text"
+                                        placeholder="예) 2015년 01월"
+                                        id="cancer_type_start"
+                                    />
+                                    <label htmlFor="cancer_type_start">
+                                        <span>치료종료 시기</span>
+                                    </label>
+                                    <InputElement
+                                        type="text"
+                                        placeholder="예) 2015년 01월"
+                                        id="cancer_type_end"
+                                    />
+                                </div>
+                                {/* 추가되는 영역 : E */}
 
                                 <label>
                                     <span>치료유형(중복선택 가능)</span>
@@ -566,32 +595,9 @@ const Survey = () => {
                                         </li>
                                     </ul>
                                 </div>
-                                <label>
-                                    <span>암 종(진단명)</span>
-                                </label>
-                                <InputElement
-                                    type="text"
-                                    placeholder="구체적으로 입력"
-                                    id="cancer_type"
-                                />
-                                <label htmlFor="cancer_type">
-                                    <span>진단시기</span>
-                                </label>
-                                <InputElement
-                                    type="text"
-                                    placeholder="예) 2015년 01월"
-                                    id="cancer_type_start"
-                                />
-                                <label htmlFor="cancer_type_start">
-                                    <span>치료종료 시기</span>
-                                </label>
-                                <InputElement
-                                    type="text"
-                                    placeholder="예) 2015년 01월"
-                                    id="cancer_type_end"
-                                />
+                                
                                 <label className="labelType" htmlFor="cancer_type_end">
-                                    <span> 암 이외의 진단받고 치료 중인 질환</span>
+                                    <span>암 이외의 질환</span>
                                     (해당질환 모두 선택)
                                 </label>
                                 <div className="chk_list disease checkContents">
