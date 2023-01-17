@@ -1,3 +1,5 @@
+import { ProgramNumberDetailInterface } from "./programNumberDetailInterface";
+
 export interface ProgramInterface {
   pgPlaceText: string,
   pgType: string,
@@ -13,6 +15,15 @@ export interface ProgramInterface {
   pgAppAll: number,
   pgEndDate: string,
   pgLeftOver: number,
+  pgOrgan: string,
+  pgContact: string,
+  pgTarget: string,
+  pgTakenTimes: string,
+  pgProcWay: string,
+  pgMainAct: string,
+  pgExpect: string,
+  roundList: ProgramNumberDetailInterface[],
+
   // pgIdx: string,
   // type: string,
   // pgTitle: string,

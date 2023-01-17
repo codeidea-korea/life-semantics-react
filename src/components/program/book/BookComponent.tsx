@@ -1,39 +1,42 @@
 import React, {useEffect, useState} from "react";
 import useAxios from "@hooks/useAxios";
 import {ProgramInterface} from "@interfaces/programInterface";
+import { ProgramFilterInterface } from "@/interfaces/programFilterInterface";
 import {useNavigate} from "react-router-dom";
 import {userState} from '@states/userState';
 import {useRecoilValue} from "recoil";
-import ToastPopup from "@components/modal/ToastPopup";
+import { useQuery } from "react-query";
 
-const BookComponent = () => {
+const BookComponent = ({programFilter}: {programFilter?: ProgramFilterInterface}) => {
     const navigate = useNavigate();
     const api = useAxios();
     const [programs, setPrograms] = useState<ProgramInterface[]>([]);
+    const [programsOrigin, setProgramsOrigin] = useState<ProgramInterface[]>([]);
     const user = useRecoilValue(userState);
     const [requestData, setRequestData] = useState({
-        pgType: "",
+        pgType: programFilter?.type,
         pgApply: "",
         ing: 0,
         userNo: user.userNo || 0,
         orderBy: "",
     });
-    const [toast, setToast] = useState({
-        flag: false,
-        message: "",
-    });
 
     const getProgramList = async () => {
+        console.log(requestData);
         await api
             .post("/usr/programs/list", requestData)
             .then((res) => {
                 console.log(res.data.body);
-                if (res.status === 200) setPrograms(res.data.body);
+                if (res.status === 200) {
+                    setPrograms(res.data.body);
+                    setProgramsOrigin(res.data.body);
+                }
             })
             .catch((err) => {
                 console.log(err);
             });
     };
+    const result = useQuery(['programList', requestData], () => getProgramList());
 
     const getDayCount = (endDay: string) => {
         const nowDate = new Date();
@@ -55,8 +58,8 @@ const BookComponent = () => {
         }
     };
 
-    const moveProgramPage = (pgIdx: string) => {
-        navigate('/programView', {state: {pgIdx: pgIdx}});
+    const moveProgramPage = (pgNo: string) => {
+        navigate('/programView', {state: {pgNo: pgNo}});
     }
 
     const moveLoginPage = () => {
@@ -68,44 +71,16 @@ const BookComponent = () => {
             await getProgramList();
         })();
     }, []);
-
-    const handleReserveProgram = (pgNo: number) => {
-        api
-            .post(`/usr/programs/apply?pgNo=${pgNo}&userNo=${user.userNo}`, null, {headers: {Authorization: `Bearer ${user.accessToken}`}})
-            .then((res) => {
-                console.log(res);
-                handlePopup('프로그램 예약이 완료됐습니다.');
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    };
-
-    const handleCancelreservation = (pgNo: number) => {
-        api
-            .post(`/usr/programs/cancel?pgNo=${pgNo}&userNo=${user.userNo}`, null, {headers: {Authorization: `Bearer ${user.accessToken}`}})
-            .then((res) => {
-                console.log(res);
-                handlePopup('프로그램 예약이 취소됐습니다.');
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    }
-
-    const handlePopup = (message: string) => {
-        setToast({
-            ...toast,
-            flag: true,
-            message: message
+    
+    useEffect(()=>{
+        setRequestData({
+            pgType: programFilter?.type || '',
+            pgApply: programFilter?.status || '',
+            ing: programFilter?.ing || 0,
+            userNo: user.userNo || 0,
+            orderBy: programFilter?.orderBy || '',
         });
-        setTimeout(() => {
-            setToast({
-                ...toast,
-                flag: false
-            });
-        }, 3000);
-    };
+    }, [programFilter]);
 
     return (
         <React.Fragment>
@@ -166,24 +141,19 @@ const BookComponent = () => {
                             {
                                 user.accessToken &&
                                 <React.Fragment>
-                                    {item.pgApply === "inOperApplied" && (
-                                        <button type="button" className="btn-02 ">
+                                    {(item.pgApply === "inOperApplied" || item.pgApply === "inOperNotApplied") && (
+                                        <button type="button" className="btn-02 " onClick={() => moveProgramPage(String(item.pgNo))}>
                                             운영중
                                         </button>
                                     )}
                                     {item.pgApply === "uncancellable" && (
-                                        <button type="button" className="btn-02 gray-btn">
+                                        <button type="button" className="btn-02 gray-btn" onClick={() => moveProgramPage(String(item.pgNo))}>
                                             취소불가
                                         </button>
                                     )}
                                     {item.pgApply === "cancellable" && (
-                                        <button type="button" className="btn-02 active" onClick={() => handleCancelreservation(item.pgNo)}>
+                                        <button type="button" className="btn-02 active" onClick={() => moveProgramPage(String(item.pgNo))}>
                                             <span className="cancel">취소하기</span>
-                                        </button>
-                                    )}
-                                    {item.pgApply === "inOperNotApplied" && (
-                                        <button type="button" className="btn-02 ">
-                                            운영중
                                         </button>
                                     )}
                                     {item.pgApply === "endApply" && (
@@ -193,7 +163,7 @@ const BookComponent = () => {
                                     )}
                                     {item.pgApply === "reservable" && (
                                         <button type="button" className="btn-02 active"
-                                                onClick={() => handleReserveProgram(item.pgNo)}>
+                                                onClick={() => moveProgramPage(String(item.pgNo))}>
                                             예약하기
                                         </button>
                                     )}
@@ -203,7 +173,7 @@ const BookComponent = () => {
                                 !user.accessToken &&
                                 <React.Fragment>
                                     {item.pgApply === "inOperNotApplied" && (
-                                        <button type="button" className="btn-02 ">
+                                        <button type="button" className="btn-02 " onClick={moveLoginPage}>
                                             운영중
                                         </button>
                                     )}
@@ -224,7 +194,6 @@ const BookComponent = () => {
                     );
                 })}
             </div>
-            <ToastPopup content={toast.message} show={toast.flag} />
         </React.Fragment>
     );
 };

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import BookComponent from "@components/program/book/BookComponent";
 import HeaderComponent from "@components/head/Header";
 import DropBoxComponent from "@components/program/DropBoxComponent";
@@ -6,10 +6,40 @@ import ToastPopup from "@components/modal/ToastPopup";
 import InputElement from "@components/elements/InputElement";
 import BannerComponent02 from "@/components/program/banner/BannerComponent02";
 import $ from "jquery";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { PgTypeFilterInterface } from "@/interfaces/programFilterInterface";
 
 const ProgramList = () => {
+  const { state } = useLocation() as PgTypeFilterInterface;
+  const typeSelectedText = useRef<HTMLSpanElement>(null);
+  
+  const [programFilter, setProgramFilter] = useState({
+    type: state?.pgType || '',
+    status: '',
+    orderBy: '',
+    ing: 0,
+  })
+  
+  const handleFilter = (key: string, value: string) => {
+    setProgramFilter({
+      ...programFilter,
+      [key]: value
+    })
+  }
+
   useEffect(() => {
+    console.log(state)
+    {state?.pgType && 
+      setProgramFilter({
+        ...programFilter,
+        ['type']: state.pgType
+      });
+    }
+
+    if (state?.pgType && typeSelectedText.current) {
+      typeSelectedText.current.innerText = state?.pgType === 'goodBye' ? '굿바이 피로' : '웰컴 굿잠';
+    }
+
     $(".dropDown .selected span").click(function () {
       const options = $(this).parent().siblings(".options");
       options.find("ul").show();
@@ -46,6 +76,7 @@ const ProgramList = () => {
       }
     }
   }, []);
+
   return (
     <React.Fragment>
       <HeaderComponent />
@@ -53,20 +84,20 @@ const ProgramList = () => {
       <div className="dropBox">
         <h2>프로그램 목록</h2>
         <div className="dropDown">
-          <div className="selected">
-            <span>개요 프로그램 구분</span>
+          <div className="selected" >
+            <span ref={typeSelectedText}>개요 프로그램 구분</span>
           </div>
           <div className="options">
             <ul>
-              <li>
+              <li onClick={() => handleFilter('type', '')}>
                 전체
                 <div className="value"></div>
               </li>
-              <li>
+              <li onClick={() => handleFilter('type', 'goodBye')}>
                 굿바이 피로
                 <div className="value"></div>
               </li>
-              <li>
+              <li onClick={() => handleFilter('type', 'goodNight')}>
                 웰컴 굿잠
                 <div className="value"></div>
               </li>
@@ -79,21 +110,21 @@ const ProgramList = () => {
           </div>
           <div className="options">
             <ul>
-              <li>
+              <li onClick={() => handleFilter('status', '')}>
                 전체
                 <div className="value"></div>
               </li>
-              <li>
+              <li onClick={() => handleFilter('status', 'inApply')}>
                 예약 접수 중<div className="value"></div>
               </li>
-              <li>
+              <li onClick={() => handleFilter('status', 'endApply')}>
                 (운영 대기 중)
                 <div className="value"></div>
               </li>
-              <li>
+              <li onClick={() => handleFilter('status', 'inOper')}>
                 운영 중<div className="value"></div>
               </li>
-              <li>
+              <li onClick={() => handleFilter('status', 'inApply')}>
                 (종료)
                 <div className="value"></div>
               </li>
@@ -106,14 +137,14 @@ const ProgramList = () => {
           </div>
           <div className="options">
             <ul>
-              <li>
+              <li onClick={() => handleFilter('orderBy', '')}>
                 전체
                 <div className="value"></div>
               </li>
-              <li>
+              <li onClick={() => handleFilter('orderBy', 'pgAppEndDate')}>
                 마감 임박 순<div className="value"></div>
               </li>
-              <li>
+              <li onClick={() => handleFilter('orderBy', 'pgLeftOver')}>
                 잔여 인원 순<div className="value"></div>
               </li>
             </ul>
@@ -121,12 +152,12 @@ const ProgramList = () => {
         </div>
         <div className="checkBox" id="checkBox">
           <span className="inputCheckType01">
-            <InputElement type="checkbox" className="check" id="agree" />
+            <InputElement type="checkbox" className="check" id="agree" onClick={() => setProgramFilter({...programFilter, ing: 1-programFilter.ing})}/>
             <label>예약/참여 중</label>
           </span>
         </div>
       </div>
-      <BookComponent />
+      <BookComponent programFilter={programFilter}/>
       <div className="banner03">
         <a href="https://www.fowi.or.kr/user/program/programList.do?progrmSeCd=PS01">
           <img src="images/banner03.svg" />
