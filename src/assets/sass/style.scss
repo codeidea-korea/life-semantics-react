@@ -3879,3 +3879,135 @@ button[type="button"] {
         }
     }
 }
+.surveyBefore_popup {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    overflow-y: auto;
+    background-color: #fff;
+    .popupTitle {
+        position: relative;
+        width: 100%;
+        height: 65px;
+        line-height: 65px;
+        text-align: center;
+        z-index: 100;
+        border-bottom: 0.5px solid #000;
+        h2 {
+            position: absolute;
+            margin: 0;
+            font-weight: 400;
+            font-size: 20px;
+            color: #000;
+            left: 50%;
+            transform: translate3d(-50%, -50%, 0);
+            top: 50%;
+        }
+        button {
+            position: absolute;
+            right: 35px;
+            top: 50%;
+            transform: translateY(-50%) rotate(90deg);
+            width: 23px;
+            height: 23px;
+            background: url("/images/close.svg") no-repeat center center / contain;
+        }
+    }
+    .popupMain {
+        padding: 20px 20px;
+        .BtnActive {
+            position: relative;
+            width: 100%;
+        }
+        .info {
+            padding: 20px;
+            background-color: #ececec;
+            border-radius: 10px;
+            color: #f30909;
+        }
+        .check {
+            .MemberChk {
+                padding-bottom: 80px;
+            }
+            padding: 50px 20px 0;
+            .title {
+                font-weight: 700;
+                font-size: 20px;
+                margin-bottom: 0;
+            }
+            .desc {
+                margin: 20px 0;
+                &:after {
+                    display: none;
+                }
+            }
+            ul {
+                padding-left: 0;
+            }
+            .plusItem {
+                padding-left: 20px;
+            }
+            .chk_radio03 {
+                display: flex;
+                overflow: hidden;
+
+                span {
+                    width: calc(50% - 10px);
+                    height: 60px;
+                    margin-bottom: 20px;
+                    input {
+                        display: none;
+                    }
+                    label {
+                        width: 100%;
+                        height: 100%;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        background-color: #ddd;
+                        color: #666666;
+                        border-radius: 5px;
+                    }
+                    input:checked + label {
+                        background-color: #fff;
+                        border: 1px solid #41b946;
+                        color: #41b946;
+                    }
+                }
+                span:nth-of-type(2n) {
+                    margin-left: 20px;
+                }
+            }
+        }
+    }
+    input[type="number"] {
+        width: 100px;
+    }
+    input {
+        width: 100%;
+        height: 45px;
+        padding: 10px;
+        font-size: 16px;
+        border-radius: 5px;
+        border: 0.5px solid #8f8f8f;
+    }
+    .end_btn {
+        width: 50px;
+        height: 50px;
+        background: url("/images/big-check.svg") no-repeat center center / contain;
+    }
+}
+.surveyComplete {
+    display: flex;
+    width: 100%;
+    height: calc(100vh - 165px);
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    a {
+        color: #777777;
+    }
+}
