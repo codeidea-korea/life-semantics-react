@@ -165,14 +165,13 @@ const Survey = () => {
                 setBeforeSurveyInfo({
                     ...beforeSurveyInfo,
                     [name]: value,
-                    ['userWasSmoke']: '',
                     ['userSmokeAmt']: '',
                     ['userSmokeStartYear']: '',
                     ['userSmokeEndYear']: '',
                 });
             }
         }
-        else if (name === "userIsSmoke") {
+        else if (name === "userIsDrink") {
             if (value === "음주") {
                 setBeforeSurveyInfo({
                     ...beforeSurveyInfo,
@@ -184,7 +183,6 @@ const Survey = () => {
                 setBeforeSurveyInfo({
                     ...beforeSurveyInfo,
                     [name]: value,
-                    ['userWasSmoke']: '',
                     ['userDrinkAmt']: '',
                     ['userDrinkStartYear']: '',
                     ['userDrinkEndYear']: '',
@@ -371,7 +369,7 @@ const Survey = () => {
                                                     <InputElement
                                                         type="radio"
                                                         value="음주"
-                                                        name="check_drink"
+                                                        name="userIsDrink"
                                                         id="drink"
                                                         onChange={handleDrink}
                                                     />
@@ -382,7 +380,7 @@ const Survey = () => {
                                                         type="radio"
                                                         value="금주"
                                                         id="stopDrink"
-                                                        name="check_drink"
+                                                        name="userIsDrink"
                                                         onChange={handleDrink}
                                                     />
                                                     <label htmlFor="stopDrink">아니오</label>
@@ -396,7 +394,8 @@ const Survey = () => {
                                             >
                                                 <span>종류</span>
                                                 <span className="detail">
-                                                    <InputElement type="number" id="drinking_rate" />
+                                                    <InputElement type="number" id="drinking_rate" name="userDrinkAmt" value={beforeSurveyInfo.userDrinkAmt}
+                                                            onChange={handleSetInfo} />
                                                     <label>병/일</label>
                                                 </span>
                                                 <span className="point">
@@ -409,6 +408,9 @@ const Survey = () => {
                                                             type="number"
                                                             placeholder="시작"
                                                             id="drinking_start"
+                                                            name="userDrinkStartYear"
+                                                            value={beforeSurveyInfo.userDrinkStartYear}
+                                                            onChange={handleSetInfo}
                                                         />
                                                         <label>년</label>
                                                         <b>~</b>
@@ -416,6 +418,9 @@ const Survey = () => {
                                                             type="number"
                                                             placeholder="마지막"
                                                             id="drinking_end"
+                                                            name="userDrinkEndYear"
+                                                            value={beforeSurveyInfo.userDrinkEndYear}
+                                                            onChange={handleSetInfo}
                                                         />
                                                         <label>년</label>
                                                     </span>
@@ -435,8 +440,9 @@ const Survey = () => {
                                                         <InputElement
                                                             type="radio"
                                                             value="네"
-                                                            name="before_check_drink"
+                                                            name="userWasDrink"
                                                             id="before_drink"
+                                                            onChange={handleSetInfo}
                                                         />
                                                         <label htmlFor="before_drink">네</label>
                                                     </span>
@@ -444,8 +450,9 @@ const Survey = () => {
                                                         <InputElement
                                                             type="radio"
                                                             value="아니오"
-                                                            name="before_check_drink"
+                                                            name="userWasDrink"
                                                             id="before_no_drink"
+                                                            onChange={handleSetInfo}
                                                         />
                                                         <label htmlFor="before_no_drink">아니오</label>
                                                     </span>
@@ -464,8 +471,9 @@ const Survey = () => {
                                                     <InputElement
                                                         type="radio"
                                                         value="카페인"
-                                                        name="checkCaffeine"
+                                                        name="userIsCaffeine"
                                                         id="Caffeine"
+                                                        onChange={handleSetInfo}
                                                     />
                                                     <label htmlFor="Caffeine">네</label>
                                                 </span>
@@ -473,8 +481,9 @@ const Survey = () => {
                                                     <InputElement
                                                         type="radio"
                                                         value="디카페인"
-                                                        name="checkCaffeine"
+                                                        name="userIsCaffeine"
                                                         id="stopCaffeine"
+                                                        onChange={handleSetInfo}
                                                     />
                                                     <label htmlFor="stopCaffeine">아니오</label>
                                                 </span>
