@@ -7,7 +7,6 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ViewInterface } from "@interfaces/viewInterface";
 import useAxios from "@hooks/useAxios";
 import { ProgramInterface } from "@interfaces/programInterface";
-import ToastPopup from "@components/modal/ToastPopup";
 import { modalState } from "@states/modalState";
 import {userState} from '@states/userState';
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -15,9 +14,6 @@ import ModalComponent from "@components/modal/ModalComponent";
 
 const ProgramInfo = () => {
   const { state } = useLocation() as ViewInterface;
-  const [toastCancel, setToastCancel] = useState(false);
-  const [toastComplete, setToastComplete] = useState(false);
-  const [isReserve, setReserve] = useState(true);
   const [modal, setModal] = useRecoilState(modalState);
   const navigate = useNavigate();
   const api = useAxios();
@@ -37,60 +33,93 @@ const ProgramInfo = () => {
       });
   };
 
-  const handleConfirmLogout = () => {
-    // 예약 api
-    api
-        .post(`/usr/programs/apply?pgNo=${state.pgNo}&userNo=${user.userNo}`, null, {headers: {Authorization: `Bearer ${user.accessToken}`}})
-        .then((res) => {
-            console.log(res);
-            // handlePopup('프로그램 예약이 완료됐습니다.');
-        })
-        .catch((err) => {
-            console.log(err);
-        });
-
+  const handleMakeReservation = () => {
     setModal({
       ...modal,
       show: true,
       title: "",
       cancelShow: true,
       callBackShow: true,
-      content: <div>예약이 완료되었습니다.</div>,
+      content: <div>프로그램을 예약하시겠습니까?</div>,
       confirmText: "확인",
       cancelText: "취소",
 
-      onConfirmCallback: handleMoveReservation,
+      onConfirmCallback: requestMakeReservation,
+      onCancelCallback: handleCancelModal
     });
+  }
+
+  const handleCancelReservation = () => {
+    setModal({
+      ...modal,
+      show: true,
+      title: "",
+      cancelShow: true,
+      callBackShow: true,
+      content: <div>프로그램을 취소하시겠습니까?</div>,
+      confirmText: "확인",
+      cancelText: "취소",
+
+      onConfirmCallback: requestCancelReservation,
+      onCancelCallback: handleCancelModal
+    });
+  }
+  
+  const requestMakeReservation = () => {
+    api
+        .post(`/usr/programs/apply?pgNo=${program?.pgNo}&userNo=${user.userNo}`, null, {headers: {Authorization: `Bearer ${user.accessToken}`}})
+        .then((res) => {
+          console.log(res);
+          setModal({
+            ...modal,
+            show: true,
+            callBackShow: true,
+            content: <div>프로그램 예약이 완료됐습니다.</div>,
+            confirmText: "확인",
+
+            onConfirmCallback: handleMoveReservation
+          });
+        })
+        .catch((err) => {
+            console.log(err);
+        });
   };
+
+  const requestCancelReservation = () => {
+    api
+        .patch(`/usr/programs/cancel?pgNoList=${program?.pgNo}`, null, {headers: {Authorization: `Bearer ${user.accessToken}`}})
+        .then((res) => {
+          console.log(res);
+          setModal({
+            ...modal,
+            show: true,
+            callBackShow: true,
+            content: <div>프로그램 취소가 완료됐습니다.</div>,
+            confirmText: "확인",
+
+            onConfirmCallback: handleMoveReservation
+          });
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+  }
 
   const handleMoveReservation = () => {
     setModal({ ...modal, show: false });
     navigate("/reservation");
   };
 
-  const handleReserveToast = () => {
-    setToastComplete(true);
-    setReserve(!isReserve);
-    setTimeout(() => {
-      setToastComplete(false);
-    }, 3000);
-  };
-
-  const handleCancelToast = () => {
-    setToastCancel(true);
-    setReserve(!isReserve);
-    setTimeout(() => {
-      setToastCancel(false);
-    }, 3000);
-  };
+  const handleCancelModal = () => {
+    setModal({ ...modal, show: false });
+  }
 
   useEffect(() => {
     (async () => {
       await getProgram();
-      if (program?.pgApply === "cancellable") setReserve(false);
     })();
   }, []);
-
+  
   return (
     <React.Fragment>
       <HeaderComponent />
@@ -158,7 +187,7 @@ const ProgramInfo = () => {
         </div>
         {/*<ProgramDetailComponent/>*/}
         <DownLoadComponent />
-        <ProgramNumberComponent />
+        <ProgramNumberComponent roundList={program?.roundList || []}/>
         <div>
           <h3>기타정보</h3>
           <span>• 주의 사항</span>
@@ -176,40 +205,56 @@ const ProgramInfo = () => {
         </div>
       </div>
 
-      {isReserve && (
+      {program?.pgApply === "reservable" && (
         <React.Fragment>
           <div className="fixBtn">
             <button
               type="button"
               className="btn-02 active "
-              onClick={handleConfirmLogout}
+              onClick={handleMakeReservation}
             >
               예약하기
             </button>
           </div>
         </React.Fragment>
       )}
-      {!isReserve && (
+      {program?.pgApply === "cancellable" && (
         <React.Fragment>
           <div className="fixBtn">
             <button
               type="button"
               className="btn-02 active"
-              onClick={handleCancelToast}
+              onClick={handleCancelReservation}
             >
               <span className="cancel">취소하기</span>
             </button>
           </div>
         </React.Fragment>
       )}
-      <ToastPopup
-        content={"프로그램 예약이 취소됐습니다."}
-        show={toastCancel}
-      />
-      <ToastPopup
-        content={"프로그램 예약이 완료됐습니다."}
-        show={toastComplete}
-      />
+      {(program?.pgApply === "inOperApplied" || program?.pgApply === "inOperNotApplied") && (
+        <React.Fragment>
+          <div className="fixBtn">
+            <button
+              type="button"
+              className="btn-02"
+            >
+              운영중
+            </button>
+          </div>
+        </React.Fragment>
+      )}
+      {program?.pgApply === "uncancellable" && (
+        <React.Fragment>
+          <div className="fixBtn">
+            <button
+              type="button"
+              className="btn-02 gray-btn"
+            >
+              취소불가
+            </button>
+          </div>
+        </React.Fragment>
+      )}
       <ModalComponent id="flexModal"/>
     </React.Fragment>
   );

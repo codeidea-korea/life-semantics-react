@@ -3,16 +3,21 @@ import ProgramNumberDetailComponent from './ProgramNumberDetailComponent';
 import useUserHttp from '@hooks/queries/useUserQuery';
 import { ListInterface } from '@interfaces/listInterface';
 import { UserInterface } from '@interfaces/userInterface';
+import { ProgramNumberDetailInterface } from "@/interfaces/programNumberDetailInterface";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 
-const RoundComponent = () => {
-  const [roundDetails, setRoundDetails] = useState<number[]>([]);
-
+const RoundComponent = ({roundList}: {roundList: ProgramNumberDetailInterface[]}) => {
+  const [roundDetails, setRoundDetails] = useState<ProgramNumberDetailInterface[]>([]);
+  
   useEffect(() => {
     const totalRound = document.querySelector('.roundNumber') as HTMLDivElement;
     totalRound.click();
   }, []);
+
+  useEffect(()=>{
+    setRoundDetails([...roundList]);
+  },[roundList])
 
   const setDetail = (
     event: React.MouseEvent<HTMLElement>,
@@ -33,7 +38,7 @@ const RoundComponent = () => {
     target.style.backgroundColor = backgroundColor;
     target.style.color = color;
 
-    setRoundDetails(roundNumber === 0 ? [1, 2, 3, 4, 5, 6] : [roundNumber]);
+    setRoundDetails(roundNumber === 0 ? [...roundList] : [roundList[roundNumber-1]]);
   };
 
   return (
@@ -50,45 +55,19 @@ const RoundComponent = () => {
         >
           전체
         </SwiperSlide>
-        <SwiperSlide
-          className="roundNumber"
-          onClick={(event) => setDetail(event, 1, '#41b946', '#fff')}
-        >
-          1회기
-        </SwiperSlide>
-        <SwiperSlide
-          className="roundNumber"
-          onClick={(event) => setDetail(event, 2, '#41b946', '#fff')}
-        >
-          2회기
-        </SwiperSlide>
-        <SwiperSlide
-          className="roundNumber"
-          onClick={(event) => setDetail(event, 3, '#41b946', '#fff')}
-        >
-          3회기
-        </SwiperSlide>
-        <SwiperSlide
-          className="roundNumber"
-          onClick={(event) => setDetail(event, 4, '#41b946', '#fff')}
-        >
-          4회기
-        </SwiperSlide>
-        <SwiperSlide
-          className="roundNumber"
-          onClick={(event) => setDetail(event, 5, '#41b946', '#fff')}
-        >
-          5회기
-        </SwiperSlide>
-        <SwiperSlide
-          className="roundNumber"
-          onClick={(event) => setDetail(event, 6, '#41b946', '#fff')}
-        >
-          6회기
-        </SwiperSlide>
+        
+        {roundList.map((round) => (
+          <SwiperSlide
+            className="roundNumber"
+            onClick={(event) => setDetail(event, round.prNum, '#41b946', '#fff')}
+            key={round.prNum}
+          >
+            {round.prNum}회기
+          </SwiperSlide> 
+        ))}
       </Swiper>
 
-      {roundDetails.map(round => <ProgramNumberDetailComponent roundDetail={round} />)}
+      {roundDetails && roundDetails.map(round => <ProgramNumberDetailComponent roundDetail={round} key={round.prNum}/>)}
     </React.Fragment>
   );
 };
