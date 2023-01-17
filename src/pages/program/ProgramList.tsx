@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import BookComponent from "@components/program/book/BookComponent";
 import HeaderComponent from "@components/head/Header";
 import DropBoxComponent from "@components/program/DropBoxComponent";
@@ -6,13 +6,18 @@ import ToastPopup from "@components/modal/ToastPopup";
 import InputElement from "@components/elements/InputElement";
 import BannerComponent02 from "@/components/program/banner/BannerComponent02";
 import $ from "jquery";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { PgTypeFilterInterface } from "@/interfaces/programFilterInterface";
 
 const ProgramList = () => {
+  const { state } = useLocation() as PgTypeFilterInterface;
+  const typeSelectedText = useRef<HTMLSpanElement>(null);
+  
   const [programFilter, setProgramFilter] = useState({
     type: '',
     status: '',
     orderBy: '',
+    ing: 0,
   })
   
   const handleFilter = (key: string, value: string) => {
@@ -23,6 +28,18 @@ const ProgramList = () => {
   }
 
   useEffect(() => {
+    console.log(state)
+    {state?.pgType && 
+      setProgramFilter({
+        ...programFilter,
+        ['type']: state.pgType
+      });
+    }
+
+    if (state?.pgType && typeSelectedText.current) {
+      typeSelectedText.current.innerText = state?.pgType === 'goodBye' ? '굿바이 피로' : '웰컴 굿잠';
+    }
+
     $(".dropDown .selected span").click(function () {
       const options = $(this).parent().siblings(".options");
       options.find("ul").show();
@@ -67,8 +84,8 @@ const ProgramList = () => {
       <div className="dropBox">
         <h2>프로그램 목록</h2>
         <div className="dropDown">
-          <div className="selected">
-            <span>개요 프로그램 구분</span>
+          <div className="selected" >
+            <span ref={typeSelectedText}>개요 프로그램 구분</span>
           </div>
           <div className="options">
             <ul>
@@ -135,7 +152,7 @@ const ProgramList = () => {
         </div>
         <div className="checkBox" id="checkBox">
           <span className="inputCheckType01">
-            <InputElement type="checkbox" className="check" id="agree" />
+            <InputElement type="checkbox" className="check" id="agree" onClick={() => setProgramFilter({...programFilter, ing: 1-programFilter.ing})}/>
             <label>예약/참여 중</label>
           </span>
         </div>

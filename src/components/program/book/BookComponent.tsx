@@ -5,7 +5,6 @@ import { ProgramFilterInterface } from "@/interfaces/programFilterInterface";
 import {useNavigate} from "react-router-dom";
 import {userState} from '@states/userState';
 import {useRecoilValue} from "recoil";
-import ToastPopup from "@components/modal/ToastPopup";
 import { useQuery } from "react-query";
 
 const BookComponent = ({programFilter}: {programFilter?: ProgramFilterInterface}) => {
@@ -15,15 +14,11 @@ const BookComponent = ({programFilter}: {programFilter?: ProgramFilterInterface}
     const [programsOrigin, setProgramsOrigin] = useState<ProgramInterface[]>([]);
     const user = useRecoilValue(userState);
     const [requestData, setRequestData] = useState({
-        pgType: "",
+        pgType: programFilter?.type || "",
         pgApply: "",
         ing: 0,
         userNo: user.userNo || 0,
         orderBy: "",
-    });
-    const [toast, setToast] = useState({
-        flag: false,
-        message: "",
     });
 
     const getProgramList = async () => {
@@ -42,7 +37,6 @@ const BookComponent = ({programFilter}: {programFilter?: ProgramFilterInterface}
             });
     };
     const result = useQuery(['programList', requestData], () => getProgramList());
-    console.log(result);
 
     const getDayCount = (endDay: string) => {
         const nowDate = new Date();
@@ -78,74 +72,15 @@ const BookComponent = ({programFilter}: {programFilter?: ProgramFilterInterface}
         })();
     }, []);
     
-
     useEffect(()=>{
         setRequestData({
             pgType: programFilter?.type || '',
             pgApply: programFilter?.status || '',
-            ing: 0,
+            ing: programFilter?.ing || 0,
             userNo: user.userNo || 0,
             orderBy: programFilter?.orderBy || '',
         });
-
-        // for (const key in programFilter) {
-
-            // if (key === 'type') {
-            //     if (programFilter.type == '') setPrograms(programsOrigin);
-            //     else setPrograms(programsOrigin.filter(program => program.pgType === programFilter[key]));
-            // }
-            // else if (key === 'status') {
-            //     if (programFilter.status === '') setPrograms(programs);
-            //     else {
-            //         if (programFilter.status === 'reservable') setPrograms(programs.filter(program => program.pgApply === "reservable" || program.pgApply === "cancellable"));
-            //         else setPrograms(programs.filter(program => program.pgApply === "inOperNotApplied" || program.pgApply === "inOperApplied"));
-            //     }
-            // }
-            // else {
-
-            // }
-        // };
     }, [programFilter]);
-
-    // 예약 api
-    // const handleReserveProgram = (pgNo: number) => {
-    //     api
-    //         .post(`/usr/programs/apply?pgNo=${pgNo}&userNo=${user.userNo}`, null, {headers: {Authorization: `Bearer ${user.accessToken}`}})
-    //         .then((res) => {
-    //             console.log(res);
-    //             handlePopup('프로그램 예약이 완료됐습니다.');
-    //         })
-    //         .catch((err) => {
-    //             console.log(err);
-    //         });
-    // };
-
-    // 취소 api
-    // const handleCancelreservation = (pgNo: number) => {
-    //     api
-    //         .post(`/usr/programs/cancel?pgNo=${pgNo}&userNo=${user.userNo}`, null, {headers: {Authorization: `Bearer ${user.accessToken}`}})
-    //         .then((res) => {
-    //             console.log(res);
-    //             handlePopup('프로그램 예약이 취소됐습니다.');
-    //         })
-    //         .catch((err) => {
-    //             console.log(err);
-    //         });
-    // }
-
-    const handlePopup = (message: string) => {
-        setToast({
-            ...toast,
-            flag: true,
-            message: message
-        });
-        setTimeout(() => {
-            setToast({
-                ...toast,
-                flag: false
-            });
-        }, 3000);
-    };
 
     return (
         <React.Fragment>
@@ -206,24 +141,19 @@ const BookComponent = ({programFilter}: {programFilter?: ProgramFilterInterface}
                             {
                                 user.accessToken &&
                                 <React.Fragment>
-                                    {item.pgApply === "inOperApplied" && (
-                                        <button type="button" className="btn-02 ">
+                                    {(item.pgApply === "inOperApplied" || item.pgApply === "inOperNotApplied") && (
+                                        <button type="button" className="btn-02 " onClick={() => moveProgramPage(String(item.pgNo))}>
                                             운영중
                                         </button>
                                     )}
                                     {item.pgApply === "uncancellable" && (
-                                        <button type="button" className="btn-02 gray-btn">
+                                        <button type="button" className="btn-02 gray-btn" onClick={() => moveProgramPage(String(item.pgNo))}>
                                             취소불가
                                         </button>
                                     )}
                                     {item.pgApply === "cancellable" && (
                                         <button type="button" className="btn-02 active" onClick={() => moveProgramPage(String(item.pgNo))}>
                                             <span className="cancel">취소하기</span>
-                                        </button>
-                                    )}
-                                    {item.pgApply === "inOperNotApplied" && (
-                                        <button type="button" className="btn-02 ">
-                                            운영중
                                         </button>
                                     )}
                                     {item.pgApply === "endApply" && (
@@ -243,7 +173,7 @@ const BookComponent = ({programFilter}: {programFilter?: ProgramFilterInterface}
                                 !user.accessToken &&
                                 <React.Fragment>
                                     {item.pgApply === "inOperNotApplied" && (
-                                        <button type="button" className="btn-02 ">
+                                        <button type="button" className="btn-02 " onClick={moveLoginPage}>
                                             운영중
                                         </button>
                                     )}
@@ -264,7 +194,6 @@ const BookComponent = ({programFilter}: {programFilter?: ProgramFilterInterface}
                     );
                 })}
             </div>
-            <ToastPopup content={toast.message} show={toast.flag} />
         </React.Fragment>
     );
 };
