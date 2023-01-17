@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import TitleHeadComponent from "@components/head/TitleHeadComponent";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { modalState } from "@states/modalState";
 import ModalComponent from "@components/modal/ModalComponent";
 import { useRecoilState } from "recoil";
 import useAxios from "@hooks/useAxios";
 import { SurveyListInterface } from "@interfaces/surveyListInterface";
 import InputElement from "@/components/elements/InputElement";
+import { BeforeSurveyInfoInterface } from "@/interfaces/surveyInterface";
 
 const Survey = () => {
     const [modal, setModal] = useRecoilState(modalState);
@@ -14,6 +15,7 @@ const Survey = () => {
     const [isShow, setShow] = useState<boolean>(false);
     const [, setSurvey] = useState<SurveyListInterface[]>();
     const [popup, setPopup] = useState(true);
+    const {state} = useLocation() as BeforeSurveyInfoInterface;
 
     const handleToolTip = () => {
         setShow(!isShow);
@@ -58,6 +60,7 @@ const Survey = () => {
     };
 
     useEffect(() => {
+        console.log(state.isBeforeSurveyInfo);
         (async () => {
             await getSurvey();
         })();
@@ -73,11 +76,13 @@ const Survey = () => {
         const target = event.target;
         if (target.value === "흡연") {
             setIsSmoke(true);
+            handleSetInfo(event);
         } else {
             setIsSmoke(false);
         }
         if (target.value === "금연") {
             setBeforeSmoke(true);
+            handleSetInfo(event);
         } else {
             setBeforeSmoke(false);
         }
@@ -87,11 +92,13 @@ const Survey = () => {
         const target = event.target;
         if (target.value === "음주") {
             setIsDrink(true);
+            handleSetInfo(event);
         } else {
             setIsDrink(false);
         }
         if (target.value === "금주") {
             setBeforeDrink(true);
+            handleSetInfo(event);
         } else {
             setBeforeDrink(false);
         }
@@ -118,6 +125,82 @@ const Survey = () => {
             setIsCustomCanerName(false);
         }
     };
+
+    const [beforeSurveyInfo, setBeforeSurveyInfo] = useState({
+        userIsSmoke: "",
+        userWasSmoke: "",
+        userSmokeAmt: "",
+        userSmokeStartYear: "",
+        userSmokeEndYear: "",
+        userIsDrink: "",
+        userWasDrink: "",
+        userDrinkAmt: "",
+        userDrinkStartYear: "",
+        userDrinkEndYear: "",
+        userIsCaffeine: "",
+        userDiagnosis: "",
+        userDiagName: "",
+        userDiagDate: "",
+        userCureType: "",
+        userCureName: "",
+        userCureEndDate: "",
+        userDiagEtc: "",
+        userDiagEtcName: "",
+        userNowHealStat: "",
+        userGender: ""
+    });
+    const handleSetInfo = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const {name, value} = event.target;
+        console.log(name, value)
+
+        if (name === "userIsSmoke") {
+            if (value === "흡연") {
+                setBeforeSurveyInfo({
+                    ...beforeSurveyInfo,
+                    [name]: value,
+                    ['userWasSmoke']: '',
+                });
+            }
+            else if (value === "금연") {
+                setBeforeSurveyInfo({
+                    ...beforeSurveyInfo,
+                    [name]: value,
+                    ['userWasSmoke']: '',
+                    ['userSmokeAmt']: '',
+                    ['userSmokeStartYear']: '',
+                    ['userSmokeEndYear']: '',
+                });
+            }
+        }
+        else if (name === "userIsSmoke") {
+            if (value === "음주") {
+                setBeforeSurveyInfo({
+                    ...beforeSurveyInfo,
+                    [name]: value,
+                    ['userWasDrink']: '',
+                });
+            }
+            else if (value === "금주") {
+                setBeforeSurveyInfo({
+                    ...beforeSurveyInfo,
+                    [name]: value,
+                    ['userWasSmoke']: '',
+                    ['userDrinkAmt']: '',
+                    ['userDrinkStartYear']: '',
+                    ['userDrinkEndYear']: '',
+                });
+            }
+        }
+        else {
+            setBeforeSurveyInfo({
+                ...beforeSurveyInfo,
+                [name]: value,
+            })
+        }
+    }
+    useEffect(()=>{
+        console.log(beforeSurveyInfo);
+    }, [beforeSurveyInfo]);
 
     return (
         <React.Fragment>
@@ -162,267 +245,322 @@ const Survey = () => {
             <ModalComponent />
 
             {/* 팝업 추가 - 임시로 이곳에 추가해둠. */}
-            <div className="surveyBefore_popup" style={{ display: popup ? "blocik" : "none" }}>
-                <div className="popupTitle">
-                    <h2>설문 전 작성정보</h2>
-                    <button type="button" className="close" onClick={handlePopup}></button>
-                </div>
-                <div className="popupMain">
-                    <div className="info">
-                        앗! 잠깐만요!
-                        <br />
-                        설문 전, 아래의 사항들을 입력해주셔야 돼요!
+            {state.isBeforeSurveyInfo && (
+                <div className="surveyBefore_popup" style={{ display: popup ? "blocik" : "none" }}>
+                    <div className="popupTitle">
+                        <h2>설문 전 작성정보</h2>
+                        <button type="button" className="close" onClick={handlePopup}></button>
                     </div>
-                    {popupStep === 0 && (
-                        <div className="check">
-                            <p className="title">건강정보 입력</p>
+                    <div className="popupMain">
+                        <div className="info">
+                            앗! 잠깐만요!
+                            <br />
+                            설문 전, 아래의 사항들을 입력해주셔야 돼요!
+                        </div>
+                        {popupStep === 0 && (
+                            <div className="check">
+                                <p className="title">건강정보 입력</p>
 
-                            <div className="MemberChk MemberChk01">
-                                <ul>
-                                    <li>
-                                        <label>
-                                            <span className="title">1) 흡연</span>
-                                            <span className="desc">지금도 흡연 하고 계신가요?</span>
-                                        </label>
-                                        <div className="chk_radio03">
-                                            <span className="isCheck">
-                                                <InputElement
-                                                    type="radio"
-                                                    value="흡연"
-                                                    name="checkSmoking"
-                                                    id="smoking"
-                                                    onChange={handleSmoke}
-                                                />
-                                                <label htmlFor="smoking">네</label>
-                                            </span>
-                                            <span>
-                                                <InputElement
-                                                    type="radio"
-                                                    value="금연"
-                                                    name="checkSmoking"
-                                                    id="stopSmoking"
-                                                    onChange={handleSmoke}
-                                                />
-                                                <label htmlFor="stopSmoking">아니오</label>
-                                            </span>
-                                        </div>
-                                        <div
-                                            className="input_detail"
-                                            style={{ display: isSmoke ? "block" : "none" }}
-                                        >
-                                            <span>양</span>
-                                            <span className="detail">
-                                                <InputElement type="number" id="drinking_rate" />
-                                                <label>갑/일</label>
-                                            </span>
-                                            <span className="point">
-                                                보통의 하루 평균적인 흡연 양을 적어주세요.
-                                            </span>
-                                            <span className="term">
-                                                <span>기간</span>
-                                                <span className="termDate">
-                                                    <InputElement
-                                                        type="number"
-                                                        placeholder="시작"
-                                                        id="drinking_start"
-                                                    />
-                                                    <label>년</label>
-                                                    <b>~</b>
-                                                    <InputElement
-                                                        type="number"
-                                                        placeholder="마지막"
-                                                        id="drinking_end"
-                                                    />
-                                                    <label>년</label>
-                                                </span>
-                                            </span>
-                                        </div>
-                                        <div style={{ display: beforeSmoke ? "block" : "none" }}>
+                                <div className="MemberChk MemberChk01">
+                                    <ul>
+                                        <li>
                                             <label>
-                                                <span className="desc">
-                                                    그러면 과거에는 흡연하셨나요?
-                                                </span>
+                                                <span className="title">1) 흡연</span>
+                                                <span className="desc">지금도 흡연 하고 계신가요?</span>
                                             </label>
                                             <div className="chk_radio03">
                                                 <span className="isCheck">
                                                     <InputElement
                                                         type="radio"
                                                         value="흡연"
-                                                        name="beforecheckSmoking"
-                                                        id="beforesmoking"
+                                                        name="userIsSmoke"
+                                                        id="smoking"
+                                                        onChange={handleSmoke}
                                                     />
-                                                    <label htmlFor="beforesmoking">네</label>
+                                                    <label htmlFor="smoking">네</label>
                                                 </span>
                                                 <span>
                                                     <InputElement
                                                         type="radio"
                                                         value="금연"
-                                                        name="beforecheckSmoking"
-                                                        id="beforestopSmoking"
+                                                        name="userIsSmoke"
+                                                        id="stopSmoking"
+                                                        onChange={handleSmoke}
                                                     />
-                                                    <label htmlFor="beforestopSmoking">
-                                                        아니오
-                                                    </label>
+                                                    <label htmlFor="stopSmoking">아니오</label>
                                                 </span>
                                             </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <label>
-                                            <span className="title">2) 음주</span>
-                                            <span className="desc">지금도 음주 하고 계신가요?</span>
-                                        </label>
-                                        <div className="chk_radio03">
-                                            <span>
-                                                <InputElement
-                                                    type="radio"
-                                                    value="음주"
-                                                    name="check_drink"
-                                                    id="drink"
-                                                    onChange={handleDrink}
-                                                />
-                                                <label htmlFor="drink">네</label>
-                                            </span>
-                                            <span>
-                                                <InputElement
-                                                    type="radio"
-                                                    value="금주"
-                                                    id="stopDrink"
-                                                    name="check_drink"
-                                                    onChange={handleDrink}
-                                                />
-                                                <label htmlFor="stopDrink">아니오</label>
-                                            </span>
-                                        </div>
-
-                                        <div
-                                            className="input_detail"
-                                            id="stopDrink"
-                                            style={{ display: isDrink ? "block" : "none" }}
-                                        >
-                                            <span>종류</span>
-                                            <span className="detail">
-                                                <InputElement type="number" id="drinking_rate" />
-                                                <label>병/일</label>
-                                            </span>
-                                            <span className="point">
-                                                보통의 하루 평균적인 음주 양을 적어주세요.
-                                            </span>
-                                            <span className="term">
-                                                <span>기간</span>
-                                                <span className="termDate">
-                                                    <InputElement
-                                                        type="number"
-                                                        placeholder="시작"
-                                                        id="drinking_start"
-                                                    />
-                                                    <label>년</label>
-                                                    <b>~</b>
-                                                    <InputElement
-                                                        type="number"
-                                                        placeholder="마지막"
-                                                        id="drinking_end"
-                                                    />
-                                                    <label>년</label>
+                                            <div
+                                                className="input_detail"
+                                                style={{ display: isSmoke ? "block" : "none" }}
+                                            >
+                                                <span>양</span>
+                                                <span className="detail">
+                                                    <InputElement type="number" id="drinking_rate" name="userSmokeAmt" value={beforeSurveyInfo.userSmokeAmt}
+                                                            onChange={handleSetInfo}/>
+                                                    <label>갑/일</label>
                                                 </span>
-                                            </span>
-                                        </div>
-                                        <div
-                                            id="stopDrink"
-                                            style={{ display: beforeDrink ? "block" : "none" }}
-                                        >
+                                                <span className="point">
+                                                    보통의 하루 평균적인 흡연 양을 적어주세요.
+                                                </span>
+                                                <span className="term">
+                                                    <span>기간</span>
+                                                    <span className="termDate">
+                                                        <InputElement
+                                                            type="number"
+                                                            placeholder="시작"
+                                                            id="drinking_start"
+                                                            name="userSmokeStartYear"
+                                                            value={beforeSurveyInfo.userSmokeStartYear}
+                                                            onChange={handleSetInfo}
+                                                        />
+                                                        <label>년</label>
+                                                        <b>~</b>
+                                                        <InputElement
+                                                            type="number"
+                                                            placeholder="마지막"
+                                                            id="drinking_end"
+                                                            name="userSmokeEndYear"
+                                                            value={beforeSurveyInfo.userSmokeEndYear}
+                                                            onChange={handleSetInfo}
+                                                        />
+                                                        <label>년</label>
+                                                    </span>
+                                                </span>
+                                            </div>
+                                            <div style={{ display: beforeSmoke ? "block" : "none" }}>
+                                                <label>
+                                                    <span className="desc">
+                                                        그러면 과거에는 흡연하셨나요?
+                                                    </span>
+                                                </label>
+                                                <div className="chk_radio03">
+                                                    <span className="isCheck">
+                                                        <InputElement
+                                                            type="radio"
+                                                            value="흡연"
+                                                            name="userWasSmoke"
+                                                            id="beforesmoking"
+                                                            onChange={handleSetInfo}
+                                                        />
+                                                        <label htmlFor="beforesmoking">네</label>
+                                                    </span>
+                                                    <span>
+                                                        <InputElement
+                                                            type="radio"
+                                                            value="금연"
+                                                            name="userWasSmoke"
+                                                            id="beforestopSmoking"
+                                                            onChange={handleSetInfo}
+                                                        />
+                                                        <label htmlFor="beforestopSmoking">
+                                                            아니오
+                                                        </label>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
                                             <label>
+                                                <span className="title">2) 음주</span>
+                                                <span className="desc">지금도 음주 하고 계신가요?</span>
+                                            </label>
+                                            <div className="chk_radio03">
+                                                <span>
+                                                    <InputElement
+                                                        type="radio"
+                                                        value="음주"
+                                                        name="check_drink"
+                                                        id="drink"
+                                                        onChange={handleDrink}
+                                                    />
+                                                    <label htmlFor="drink">네</label>
+                                                </span>
+                                                <span>
+                                                    <InputElement
+                                                        type="radio"
+                                                        value="금주"
+                                                        id="stopDrink"
+                                                        name="check_drink"
+                                                        onChange={handleDrink}
+                                                    />
+                                                    <label htmlFor="stopDrink">아니오</label>
+                                                </span>
+                                            </div>
+
+                                            <div
+                                                className="input_detail"
+                                                id="stopDrink"
+                                                style={{ display: isDrink ? "block" : "none" }}
+                                            >
+                                                <span>종류</span>
+                                                <span className="detail">
+                                                    <InputElement type="number" id="drinking_rate" />
+                                                    <label>병/일</label>
+                                                </span>
+                                                <span className="point">
+                                                    보통의 하루 평균적인 음주 양을 적어주세요.
+                                                </span>
+                                                <span className="term">
+                                                    <span>기간</span>
+                                                    <span className="termDate">
+                                                        <InputElement
+                                                            type="number"
+                                                            placeholder="시작"
+                                                            id="drinking_start"
+                                                        />
+                                                        <label>년</label>
+                                                        <b>~</b>
+                                                        <InputElement
+                                                            type="number"
+                                                            placeholder="마지막"
+                                                            id="drinking_end"
+                                                        />
+                                                        <label>년</label>
+                                                    </span>
+                                                </span>
+                                            </div>
+                                            <div
+                                                id="stopDrink"
+                                                style={{ display: beforeDrink ? "block" : "none" }}
+                                            >
+                                                <label>
+                                                    <span className="desc">
+                                                        그러면 과거에는 음주하셨나요?
+                                                    </span>
+                                                </label>
+                                                <div className="chk_radio03">
+                                                    <span className="isCheck">
+                                                        <InputElement
+                                                            type="radio"
+                                                            value="네"
+                                                            name="before_check_drink"
+                                                            id="before_drink"
+                                                        />
+                                                        <label htmlFor="before_drink">네</label>
+                                                    </span>
+                                                    <span>
+                                                        <InputElement
+                                                            type="radio"
+                                                            value="아니오"
+                                                            name="before_check_drink"
+                                                            id="before_no_drink"
+                                                        />
+                                                        <label htmlFor="before_no_drink">아니오</label>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <label>
+                                                <span className="title">3) 카페인</span>
                                                 <span className="desc">
-                                                    그러면 과거에는 음주하셨나요?
+                                                    요새 카페인(커피나 녹차)을 드시곤 하나요?
                                                 </span>
                                             </label>
                                             <div className="chk_radio03">
                                                 <span className="isCheck">
                                                     <InputElement
                                                         type="radio"
-                                                        value="네"
-                                                        name="before_check_drink"
-                                                        id="before_drink"
+                                                        value="카페인"
+                                                        name="checkCaffeine"
+                                                        id="Caffeine"
                                                     />
-                                                    <label htmlFor="before_drink">네</label>
+                                                    <label htmlFor="Caffeine">네</label>
                                                 </span>
                                                 <span>
                                                     <InputElement
                                                         type="radio"
-                                                        value="아니오"
-                                                        name="before_check_drink"
-                                                        id="before_no_drink"
+                                                        value="디카페인"
+                                                        name="checkCaffeine"
+                                                        id="stopCaffeine"
                                                     />
-                                                    <label htmlFor="before_no_drink">아니오</label>
+                                                    <label htmlFor="stopCaffeine">아니오</label>
                                                 </span>
                                             </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <label>
-                                            <span className="title">3) 카페인</span>
-                                            <span className="desc">
-                                                요새 카페인(커피나 녹차)을 드시곤 하나요?
-                                            </span>
-                                        </label>
-                                        <div className="chk_radio03">
-                                            <span className="isCheck">
-                                                <InputElement
-                                                    type="radio"
-                                                    value="카페인"
-                                                    name="checkCaffeine"
-                                                    id="Caffeine"
-                                                />
-                                                <label htmlFor="Caffeine">네</label>
-                                            </span>
-                                            <span>
-                                                <InputElement
-                                                    type="radio"
-                                                    value="디카페인"
-                                                    name="checkCaffeine"
-                                                    id="stopCaffeine"
-                                                />
-                                                <label htmlFor="stopCaffeine">아니오</label>
-                                            </span>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                            <button type="button" className="BtnActive" onClick={handlePopupStep}>
-                                다음
-                            </button>
-                        </div>
-                    )}
-                    {popupStep === 1 && (
-                        <div className="check">
-                            <p className="title">암 건강정보 입력</p>
-                            <div className="MemberChk MemberChk02">
-                                <div className="">
-                                    <label>
-                                        <span>나이</span>
-                                    </label>
-                                    <span className="age">나이</span>
+                                        </li>
+                                    </ul>
                                 </div>
+                                <button type="button" className="BtnActive" onClick={handlePopupStep}>
+                                    다음
+                                </button>
+                            </div>
+                        )}
+                        {popupStep === 1 && (
+                            <div className="check">
+                                <p className="title">암 건강정보 입력</p>
+                                <div className="MemberChk MemberChk02">
+                                    <div className="">
+                                        <label>
+                                            <span>나이</span>
+                                        </label>
+                                        <span className="age">나이</span>
+                                    </div>
 
-                                <label>
-                                    <span>성별</span>
-                                </label>
-                                <div className="chk_radio02">
-                                    <span className="isCheck">
+                                    <label>
+                                        <span>성별</span>
+                                    </label>
+                                    <div className="chk_radio02">
+                                        <span className="isCheck">
+                                            <InputElement
+                                                type="radio"
+                                                value="남"
+                                                name="gender"
+                                                id="man"
+                                            />
+                                            <label htmlFor="man">남</label>
+                                        </span>
+                                        <span>
+                                            <InputElement
+                                                type="radio"
+                                                value="여"
+                                                name="gender"
+                                                id="woman"
+                                            />
+                                            <label htmlFor="woman">여</label>
+                                        </span>
+                                    </div>
+
+                                    <label>
+                                        <span>암 종(진단명)</span>
+                                        <button type="button" className="plus"></button>
+                                    </label>
+                                    <div>
+                                        <div className="selectBox">
+                                            <select onChange={handleCancerNameChange}>
+                                                <option>암 종 선택</option>
+                                                <option>구체적으로 입력</option>
+                                                <option>직접입력</option>
+                                            </select>
+                                        </div>
+
+                                        {isCustomCancerName && (
+                                            <div className="manualInput">
+                                                <label>직접입력</label>
+                                                <InputElement
+                                                    type="text"
+                                                    placeholder="직접입력"
+                                                    id="custom_cancer_name"
+                                                />
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="plusItem">
+                                        <label>
+                                            <span>진단시기</span>
+                                        </label>
                                         <InputElement
-                                            type="radio"
-                                            value="남"
-                                            name="gender"
-                                            id="man"
+                                            type="text"
+                                            placeholder="예) 2015년 01월"
+                                            id="cancer_start"
                                         />
-                                        <label htmlFor="man">남</label>
-                                    </span>
-                                    <span>
+                                        <label>
+                                            <span>치료종료 시기</span>
+                                        </label>
                                         <InputElement
-                                            type="radio"
-                                            value="여"
-                                            name="gender"
-                                            id="woman"
+                                            type="text"
+                                            placeholder="예) 2015년 01월"
+                                            id="cancer_end"
                                         />
                                         <label htmlFor="woman">여</label>
                                     </span>
@@ -442,34 +580,203 @@ const Survey = () => {
                                         </select>
                                     </div>
 
-                                    {isCustomCancerName && (
-                                        <div className="manualInput">
-                                            <label>직접입력</label>
-                                            <InputElement
-                                                type="text"
-                                                placeholder="직접입력"
-                                                id="custom_cancer_name"
-                                            />
-                                        </div>
-                                    )}
-                                </div>
-                                <div className="plusItem">
                                     <label>
+                                        <span>치료유형(중복선택 가능)</span>
+                                    </label>
+                                    <div className="chk_list treatment-type checkContents">
+                                        <ul>
+                                            <li>
+                                                <InputElement
+                                                    type="checkbox"
+                                                    id="surgery"
+                                                    className="check02"
+                                                />
+                                                <label htmlFor="surgery">수술</label>
+                                            </li>
+                                            <li>
+                                                <InputElement
+                                                    type="checkbox"
+                                                    id="cancer_treatment"
+                                                    className="check02"
+                                                />
+                                                <label htmlFor="cancer_treatment">항암치료</label>
+                                            </li>
+                                            <li>
+                                                <InputElement
+                                                    type="checkbox"
+                                                    id="radiation_treatment"
+                                                    className="check02"
+                                                />
+                                                <label htmlFor="radiation_treatment">방사선치료</label>
+                                            </li>
+                                            <li>
+                                                <InputElement
+                                                    type="checkbox"
+                                                    id="hormone_treatment"
+                                                    className="check02"
+                                                />
+                                                <label htmlFor="hormone_treatment">호르몬치료</label>
+                                            </li>
+                                            <li>
+                                                <InputElement
+                                                    type="checkbox"
+                                                    id="etc_treatment"
+                                                    className="check02"
+                                                />
+                                                <label htmlFor="etc_treatment">기타</label>
+                                            </li>
+                                        </ul>
+                                        <InputElement
+                                            type="text"
+                                            placeholder="구체적으로 입력"
+                                            id="detail_treatment"
+                                        />
+                                    </div>
+                                    <label>
+                                        <span>현재 건강상태</span>
+                                    </label>
+                                    <div className="radioCheck checkContents">
+                                        <ul>
+                                            <li>
+                                                <InputElement
+                                                    type="radio"
+                                                    value="매우 건강하지 않다."
+                                                    name="chk_info"
+                                                    id="radio01"
+                                                />
+                                                <label htmlFor="radio01">매우 건강하지 않다.</label>
+                                            </li>
+                                            <li>
+                                                <InputElement
+                                                    type="radio"
+                                                    value="건강하지 않다."
+                                                    name="chk_info"
+                                                    id="radio02"
+                                                />
+                                                <label htmlFor="radio02">건강하지 않다.</label>
+                                            </li>
+                                            <li>
+                                                <InputElement
+                                                    type="radio"
+                                                    value="건강하다."
+                                                    name="chk_info"
+                                                    id="radio03"
+                                                />
+                                                <label htmlFor="radio03">건강하다.</label>
+                                            </li>
+                                            <li>
+                                                <InputElement
+                                                    type="radio"
+                                                    value="매우 건강하다."
+                                                    name="chk_info"
+                                                    id="radio04"
+                                                />
+                                                <label htmlFor="radio04">매우 건강하다.</label>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <label>
+                                        <span>암 종(진단명)</span>
+                                    </label>
+                                    <InputElement
+                                        type="text"
+                                        placeholder="구체적으로 입력"
+                                        id="cancer_type"
+                                    />
+                                    <label htmlFor="cancer_type">
                                         <span>진단시기</span>
                                     </label>
                                     <InputElement
                                         type="text"
                                         placeholder="예) 2015년 01월"
-                                        id="cancer_start"
+                                        id="cancer_type_start"
                                     />
-                                    <label>
+                                    <label htmlFor="cancer_type_start">
                                         <span>치료종료 시기</span>
                                     </label>
                                     <InputElement
                                         type="text"
                                         placeholder="예) 2015년 01월"
-                                        id="cancer_end"
+                                        id="cancer_type_end"
                                     />
+                                    <label className="labelType" htmlFor="cancer_type_end">
+                                        <span> 암 이외의 진단받고 치료 중인 질환</span>
+                                        (해당질환 모두 선택)
+                                    </label>
+                                    <div className="chk_list disease checkContents">
+                                        <ul>
+                                            <li>
+                                                <InputElement
+                                                    type="checkbox"
+                                                    value=""
+                                                    className=""
+                                                    id="empty"
+                                                />
+                                                <label htmlFor="empty">없음</label>
+                                            </li>
+                                            <li>
+                                                <InputElement
+                                                    type="checkbox"
+                                                    value="고혈압"
+                                                    id="hypertension"
+                                                />
+                                                <label htmlFor="hypertension">고혈압</label>
+                                            </li>
+                                            <li>
+                                                <InputElement
+                                                    type="checkbox"
+                                                    value="당뇨병"
+                                                    id="diabetic"
+                                                />
+                                                <label htmlFor="diabetic">당뇨병</label>
+                                            </li>
+                                            <li>
+                                                <InputElement
+                                                    type="checkbox"
+                                                    value="뇌혈관질환"
+                                                    id="cerebrovascular"
+                                                />
+                                                <label htmlFor="cerebrovascular">뇌혈관질환</label>
+                                            </li>
+                                            <li>
+                                                <InputElement
+                                                    type="checkbox"
+                                                    value="호흡기질환"
+                                                    id="respiratory"
+                                                />
+                                                <label htmlFor="respiratory">호흡기질환</label>
+                                            </li>
+                                            <li>
+                                                <InputElement
+                                                    type="checkbox"
+                                                    value="심장질환"
+                                                    id="cardiac"
+                                                />
+                                                <label htmlFor="cardiac">심장질환</label>
+                                            </li>
+                                            <li>
+                                                <InputElement
+                                                    type="checkbox"
+                                                    value="우울증"
+                                                    id="blues"
+                                                />
+                                                <label htmlFor="blues">우울증</label>
+                                            </li>
+                                            <li>
+                                                <InputElement
+                                                    type="checkbox"
+                                                    value="관련 질환"
+                                                    id="related"
+                                                />
+                                                <label htmlFor="related">관련 질환</label>
+                                            </li>
+                                            <li>
+                                                <InputElement type="checkbox" value="기타" id="etc" />
+                                                <label htmlFor="etc">기타</label>
+                                            </li>
+                                        </ul>
+                                        <InputElement type="text" placeholder="직접 작성" />
+                                    </div>
                                 </div>
                                 {/* 추가되는 영역 : S */}
                                 <label>
@@ -703,22 +1010,29 @@ const Survey = () => {
                                                         <br />
                                                         작성을 완료했습니다.
                                                     </div>
-                                                </div>
-                                                <div className="flex modal-footer">
-                                                    <button
-                                                        type="button"
-                                                        className="end_btn"
-                                                    ></button>
+                                                    <div className="modal-body">
+                                                        <div>
+                                                            해당 정보
+                                                            <br />
+                                                            작성을 완료했습니다.
+                                                        </div>
+                                                    </div>
+                                                    <div className="flex modal-footer">
+                                                        <button
+                                                            type="button"
+                                                            className="end_btn"
+                                                        ></button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </>
-                            )}
-                        </div>
-                    )}
+                                    </>
+                                )}
+                            </div>
+                        )}
+                    </div>
                 </div>
-            </div>
+            )}
         </React.Fragment>
     );
 };
