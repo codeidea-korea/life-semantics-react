@@ -14,7 +14,7 @@ const BookComponent = ({programFilter}: {programFilter?: ProgramFilterInterface}
     const [programsOrigin, setProgramsOrigin] = useState<ProgramInterface[]>([]);
     const user = useRecoilValue(userState);
     const [requestData, setRequestData] = useState({
-        pgType: programFilter?.type || "",
+        pgType: programFilter?.type,
         pgApply: "",
         ing: 0,
         userNo: user.userNo || 0,

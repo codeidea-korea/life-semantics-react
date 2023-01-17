@@ -14,7 +14,7 @@ const ProgramList = () => {
   const typeSelectedText = useRef<HTMLSpanElement>(null);
   
   const [programFilter, setProgramFilter] = useState({
-    type: '',
+    type: state?.pgType || '',
     status: '',
     orderBy: '',
     ing: 0,
