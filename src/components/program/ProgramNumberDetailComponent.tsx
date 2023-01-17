@@ -1,27 +1,28 @@
 import React from "react";
+import { ProgramNumberDetailInterface } from "@/interfaces/programNumberDetailInterface";
 
-const ProgramNumberDetailComponent = ({roundDetail}:{roundDetail: number}) => {
+const ProgramNumberDetailComponent = ({roundDetail}: {roundDetail: ProgramNumberDetailInterface}) => {
+  const [, month, day] = roundDetail.prDate.split('T')[0].split('-');
+  const week = ['일', '월', '화', '수', '목', '금', '토'];
+  const weekDay = week[new Date(roundDetail.prDate).getDay()];
+
   return (
     <React.Fragment>
       <div className="round">
         <div className="roundItem">
-          <p>{roundDetail}회기 헬로우 피로</p>
+          <p>{roundDetail.prTitle}</p>
           <ul>
             <li>
-              일시 : <span>8/15 월 10:00~12:00</span>
+              일시 : <span>{month[0] === '0' ? month[1] : month}/{day} {weekDay} {roundDetail.prSttTime}~{roundDetail.prEndTime}</span>
             </li>
             <li>
-              장소 : <span>서울 안산도시자연공원</span>
+              장소 : <span>{roundDetail.prPlace === "etc" ? roundDetail.prPlaceText : roundDetail.prPlace}</span>
             </li>
             <li>
-              세부활동 :
-              <span>
-                숲 만나기, 내 몸 지도 그리기, 자연이름 만들기, 숲길 걷기, 나무
-                스트레칭, 숲 나누기
-              </span>
+              세부활동 : <span>{roundDetail.prActs}</span>
             </li>
             <li>
-              준비물 : <span>필기구, 수첩(몸 지도), 명찰 카드</span>
+              준비물 : <span>{roundDetail.prMaterials}</span>
             </li>
           </ul>
         </div>
