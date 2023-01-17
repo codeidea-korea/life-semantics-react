@@ -518,7 +518,7 @@ const ModifyCheck02 = ({ nextStep }: { nextStep: Function }) => {
                     </ul>
                 </div>
             </div>
-            <div className="fixBtn ">
+            <div className="fixBtn">
                 <button onClick={() => navigate(-1)} type="button" className="prev" >
                     이전
                 </button>
@@ -527,6 +527,7 @@ const ModifyCheck02 = ({ nextStep }: { nextStep: Function }) => {
                 </button>
             </div>
             <ToastPopup content={"입력하신 정보를 수정하였습니다."} show={toast} />
+
         </React.Fragment>
     );
 };
