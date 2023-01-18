@@ -2832,12 +2832,12 @@ select {
 }
 
 .alert_text {
-    margin-top: 7px;
     display: flex;
-    font-size: 13px;
-    color: #f00;
+    font-size: 14px;
+    font-weight: 400;
+    color: $red;
     width: 100%;
-    justify-content: flex-end;
+    justify-content: flex-start;
 }
 
 .modifyList {

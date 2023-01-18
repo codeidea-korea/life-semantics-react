@@ -436,7 +436,7 @@ const Survey = () => {
                                                     <InputElement
                                                         type="radio"
                                                         value="음주"
-                                                        name="userIsDrink"
+                                                        name="userdIsDrink"
                                                         id="drink"
                                                         onChange={handleDrink}
                                                     />
@@ -609,7 +609,17 @@ const Survey = () => {
                                         <div className="selectBox">
                                             <select onChange={handleCancerNameChange}>
                                                 <option>암 종 선택</option>
-                                                <option>구체적으로 입력</option>
+                                                <option>간암</option>
+                                                <option>갑상선암</option>
+                                                <option>담낭암</option>
+                                                <option>담도암</option>
+                                                <option>대장암</option>
+                                                <option>신장암</option>
+                                                <option>위암</option>
+                                                <option>유방암</option>
+                                                <option>전립선암</option>
+                                                <option>췌장암</option>
+                                                <option>폐암</option>
                                                 <option>직접입력</option>
                                             </select>
                                         </div>
@@ -653,11 +663,21 @@ const Survey = () => {
                                     <label>
                                         <span>암 종(진단명)</span>
                                     </label>
-                                    <InputElement
-                                        type="text"
-                                        placeholder="구체적으로 입력"
-                                        id="cancer_type"
-                                    />
+                                    <select onChange={handleCancerNameChange}>
+                                        <option>암 종 선택</option>
+                                        <option>간암</option>
+                                        <option>갑상선암</option>
+                                        <option>담낭암</option>
+                                        <option>담도암</option>
+                                        <option>대장암</option>
+                                        <option>신장암</option>
+                                        <option>위암</option>
+                                        <option>유방암</option>
+                                        <option>전립선암</option>
+                                        <option>췌장암</option>
+                                        <option>폐암</option>
+                                        <option>직접입력</option>
+                                    </select>
                                     <div className="plusItem">
                                         <label htmlFor="cancer_type">
                                             <span>진단시기</span>
