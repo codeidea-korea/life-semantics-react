@@ -1,5 +1,7 @@
 import useAxios from '@/hooks/useAxios';
 import React, {useEffect, useState} from 'react';
+import { useRecoilState } from "recoil";
+import { joinState } from "@states/joinState";
 
 const LostIdComponent = ({next}: { next: Function }) => {
     const api = useAxios();
@@ -12,7 +14,9 @@ const LostIdComponent = ({next}: { next: Function }) => {
     const [timePlaceHolder, setTimePlaceHolder] = useState('인증번호 입력(10분 안에)');
     const [minutes, setMinutes] = useState(0);
     const [seconds, setSeconds] = useState(0);
+    const [joinParam, setJoinParam] = useRecoilState(joinState);
     const moveNextStep = () => {
+        setJoinParam({...joinParam, ["userPhone"]: num})
         next();
     };
 
