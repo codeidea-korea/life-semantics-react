@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { countState, sampleState } from "@states/sampleState";
 import ProgressComponent from "@components/ProgressComponent";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -11,18 +11,92 @@ import TiredSurveyComponent01 from "@components/survey/surveylist/tired/TiredSur
 import TiredSurveyComponent02 from "@components/survey/surveylist/tired/TiredSurveyComponent02";
 import TiredSurveyComponent03 from "@components/survey/surveylist/tired/TiredSurveyComponent03";
 import ModalComponent from "@components/modal/ModalComponent";
+import { userState } from "@/states/userState";
+
+function getToday() {
+  var date = new Date();
+  var year = date.getFullYear();
+  var month = ("0" + (1 + date.getMonth())).slice(-2);
+  var day = ("0" + date.getDate()).slice(-2);
+  return year + "-" + month + "-" + day;
+}
+
+interface reqObj {
+  saSvNo: number;
+  saQst: number;
+  saAnsList: unknown[];
+  saAns: unknown;
+  saEtcAns: string;
+  saRegDate: string;
+}
+interface ReqData {
+  svNo: Number,
+  svPgNo: Number,
+  svUserNo: unknown,
+  svType1: string,
+  svType2: string,
+  svStatus: string,
+  svRegDate: string,
+  userSurveysAnswersDTO: reqObj[]
+}
+
+const reqData: ReqData = {
+  "svNo": 0,
+  "svPgNo": 8,
+  "svUserNo": 0,
+  "svType1": "pre",
+  "svType2": "fatigue",
+  "svStatus": "set",
+  "svRegDate": getToday(),
+  "userSurveysAnswersDTO": []
+}
+for (let i = 0; i < 15; i++) {
+  reqData.userSurveysAnswersDTO.push(
+    {
+      "saSvNo": 0,
+      "saQst": 0,
+      "saAnsList": [
+
+      ],
+      "saAns": 0,
+      "saEtcAns": "string",
+      "saRegDate": getToday(),
+    }
+  )
+}
 
 const Tired = () => {
+  const user = useRecoilValue(userState);
+  reqData.svUserNo = user.userNo;
   const location = useLocation();
   const navigate = useNavigate();
   const [modal, setModal] = useRecoilState(modalState);
   const [userListError, setUserListError] = useState(true);
   const [toast, setToast] = useState(false);
+  const [toast2, setToast2] = useState(false);
   const [step, setStep] = useState(1);
 
+  const dataSet = (qnaLength: number) => {
+    const checkedElementArray = document.querySelectorAll('.surveyList input:checked');
+    for (let i = 0; i < qnaLength; i++) {
+      const index = Number(document.querySelectorAll('.surveyContent p')[i].textContent?.split(".")[0]);
+      reqData.userSurveysAnswersDTO[index - 1].saAnsList = [];
+      reqData.userSurveysAnswersDTO[index - 1].saQst = index;
+      reqData.userSurveysAnswersDTO[index - 1].saAnsList.push(Number(checkedElementArray[i].getAttribute("value")))
+    }
+  }
+
   const handleNextStep = () => {
-    if (step < 3) {
-      setStep(step + 1);
+    if (Number(document.querySelectorAll('.surveyList input:checked').length) === Number(document.querySelectorAll('.surveyContent').length)) {
+      dataSet(Number(document.querySelectorAll('.surveyContent').length))
+      if (step < 3) {
+        setStep(step + 1);
+      }
+    } else {
+      setToast2(true)
+      setTimeout(() => {
+        setToast2(false)
+      }, 3000);
     }
   };
 
@@ -32,21 +106,63 @@ const Tired = () => {
     }
   };
 
+  const moveSurveyMain = () => {
+    setModal({ ...modal, show: false });
+    navigate('/surveyBefore');
+  };
+
   const handleTiredSurveyComplete = () => {
-    setModal({
-      ...modal,
-      show: true,
-      title: "",
-      cancelShow: false,
-      content: (
-        <div>
-          피로 설문을
-          <br />
-          완료하셨습니다.
-        </div>
-      ),
-      confirmText: "확인",
-    });
+    const dataSet = (qnaLength: number) => {
+      const checkedElementArray = document.querySelectorAll('.surveyList input:checked');
+      for (let i = 0; i < qnaLength; i++) {
+        const index = Number(document.querySelectorAll('.surveyContent p')[i].textContent?.split(".")[0]);
+        reqData.userSurveysAnswersDTO[index - 1].saAnsList = [];
+        reqData.userSurveysAnswersDTO[index - 1].saQst = index;
+        reqData.userSurveysAnswersDTO[index - 1].saAnsList.push(Number(checkedElementArray[i].getAttribute("value")))
+      }
+    }
+
+    if (Number(document.querySelectorAll('.surveyList input:checked').length) === Number(document.querySelectorAll('.surveyContent').length)) {
+      dataSet(Number(document.querySelectorAll('.surveyContent').length))
+      console.log(reqData);
+      fetch(`https://api.life.codeidea.io/usr/surveys`,
+        {
+          method: 'POST',
+          body: JSON.stringify(reqData),
+          headers: {
+            Authorization: 'Bearer ' + user.accessToken,
+            'Content-Type': 'application/json'
+          },
+        }).then((response) => {
+          return response.json();
+        }).then((data) => {
+          if (data.result == "true") {
+            setModal({
+              ...modal,
+              show: true,
+              title: "",
+              cancelShow: false,
+              callBackShow: true,
+              content: (
+                <div>
+                  피로 설문을
+                  <br />
+                  완료하셨습니다.
+                </div>
+              ),
+              confirmText: "확인",
+              onConfirmCallback: moveSurveyMain
+            });
+          }
+        }).catch((error) => {
+          console.log(error)
+        });
+    } else {
+      setToast2(true)
+      setTimeout(() => {
+        setToast2(false)
+      }, 3000);
+    }
   };
 
   useEffect(() => {
@@ -55,7 +171,6 @@ const Tired = () => {
 
     $(window).on("scroll", function () {
       const height = $(document).scrollTop();
-      console.log(height);
       if (this.scrollY > 300) {
         $(".Step").addClass("fixed");
       } else {
@@ -76,7 +191,7 @@ const Tired = () => {
 
   return (
     <React.Fragment>
-      <TitleHeadComponent name="피로" targetUrl= ""/>
+      <TitleHeadComponent name="피로" targetUrl="" />
       <div className="tired painBox">
         <div className="Step">
           <ul>
@@ -89,23 +204,23 @@ const Tired = () => {
         {step === 2 && <TiredSurveyComponent02 />}
         {step === 3 && <TiredSurveyComponent03 />}
         <ToastPopup
-        content={
-          <span>
-            이번 페이지까지는 <br />
-            <b>설문</b>을 <b>완료</b>하여주세요.
-          </span>
-        }
-        show={toast}
-      />
-      <ToastPopup
-        content={
-          <span>
-            완료하시면 <b>수정</b>이 <b>불가</b>합니다.<br />
-            내용을 확인해주세요.
-          </span>
-        }
-        show={toast}
-      />
+          content={
+            <span>
+              이번 페이지까지는 <br />
+              <b>설문</b>을 <b>완료</b>하여주세요.
+            </span>
+          }
+          show={toast2}
+        />
+        <ToastPopup
+          content={
+            <span>
+              완료하시면 <b>수정</b>이 <b>불가</b>합니다.<br />
+              내용을 확인해주세요.
+            </span>
+          }
+          show={toast}
+        />
 
       </div>
       <div className="fixBtn">
@@ -127,7 +242,7 @@ const Tired = () => {
           </button>
         )}
       </div>
-      
+
       <ModalComponent />
     </React.Fragment>
   );

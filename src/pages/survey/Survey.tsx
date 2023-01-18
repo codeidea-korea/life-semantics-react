@@ -78,103 +78,39 @@ const Survey = () => {
 
     const handleSmoke = (event: React.ChangeEvent<HTMLInputElement>) => {
         const target = event.target;
-        if (target.value === "흡연") {
+        if (target.value === "1") {
             setIsSmoke(true);
+            setBeforeSmoke(false);
             handleUpdateHealthInfo(event);
         } else {
-            setIsSmoke(false);
         }
-        if (target.value === "금연") {
+        if (target.value === "0") {
+            setIsSmoke(false);
             setBeforeSmoke(true);
             handleUpdateHealthInfo(event);
-        } else {
-            setBeforeSmoke(false);
         }
     };
 
     const handleDrink = (event: React.ChangeEvent<HTMLInputElement>) => {
         const target = event.target;
-        if (target.value === "음주") {
+        if (target.value === "1") {
             setIsDrink(true);
+            setBeforeDrink(false);
             handleUpdateHealthInfo(event);
-        } else {
-            setIsDrink(false);
         }
-        if (target.value === "금주") {
+        else if (target.value === "0") {
+            setIsDrink(false);
             setBeforeDrink(true);
             handleUpdateHealthInfo(event);
-        } else {
-            setBeforeDrink(false);
         }
     };
     //팝업 페이지 넘기기위한 코드
     const [popupStep, setPopupStep] = useState(0);
     const [endPopup, setEndPopup] = useState(false);
-
-    const handlePopupStep = () => {
-    
-        if (beforeSurveyInfo.userIsSmoke === "") {
-            moveScroll(healthInfoRef.current[0])
-            return
-        }
-        else if (beforeSurveyInfo.userIsSmoke === "흡연") {
-            if (beforeSurveyInfo.userSmokeAmt === "") {
-                moveScroll(healthInfoRef.current[1])
-                return
-            }
-            else if (beforeSurveyInfo.userSmokeStartYear === "" || beforeSurveyInfo.userSmokeEndYear === "") {
-                moveScroll(healthInfoRef.current[2])
-                return
-            }
-        }
-        else if (beforeSurveyInfo.userIsSmoke === "금연" && beforeSurveyInfo.userWasSmoke === "") {
-            moveScroll(healthInfoRef.current[3])
-            return
-        }
-
-        if (beforeSurveyInfo.userIsDrink === "") {
-            moveScroll(healthInfoRef.current[4])
-            return
-        }
-        else if (beforeSurveyInfo.userIsDrink === "음주") {
-            if (beforeSurveyInfo.userDrinkAmt === "") {
-                moveScroll(healthInfoRef.current[5])
-                return
-            }
-            else if (beforeSurveyInfo.userDrinkStartYear === "" || beforeSurveyInfo.userDrinkEndYear === "") {
-                moveScroll(healthInfoRef.current[6])
-                return
-            }
-        }
-        else if (beforeSurveyInfo.userIsDrink === "금주" && beforeSurveyInfo.userWasDrink === "") {
-            moveScroll(healthInfoRef.current[7])
-            return
-        }
-
-        if (beforeSurveyInfo.userIsCaffeine === "") {
-            moveScroll(healthInfoRef.current[8])
-            return
-        }
-
-        moveScroll(beforeSurveyHeaderRef.current as HTMLDivElement);
-        setPopupStep(1);
-    };
-
-    const handlePopupEnd = () => {
-        setEndPopup(true);
-    };
-
-    const [isCustomCancerName, setIsCustomCanerName] = useState(false);
-    const handleCancerNameChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        const target = event.target;
-        const selectedOption = target.selectedOptions[0];
-        if (selectedOption.textContent === "직접입력") {
-            setIsCustomCanerName(true);
-        } else {
-            setIsCustomCanerName(false);
-        }
-    };
-
+    const healthInfoRef = useRef<HTMLSpanElement[]>([]);
+    const cancerInfoRef = useRef<HTMLSpanElement[]>([]);
+    const beforeSurveyHeaderRef = useRef<null | HTMLDivElement>(null);
+    const checkBoxRef = useRef<HTMLInputElement[]>([]);
     const [beforeSurveyInfo, setBeforeSurveyInfo] = useState({
         userIsSmoke: "",
         userWasSmoke: "",
@@ -198,18 +134,148 @@ const Survey = () => {
         userNowHealStat: "",
         userGender: ""
     });
+
+    const handlePopupStep = () => {
+    
+        if (beforeSurveyInfo.userIsSmoke === "") {
+            moveScroll(healthInfoRef.current[0])
+            return
+        }
+        else if (beforeSurveyInfo.userIsSmoke === "1") {
+            if (beforeSurveyInfo.userSmokeAmt === "") {
+                moveScroll(healthInfoRef.current[1])
+                return
+            }
+            else if (beforeSurveyInfo.userSmokeStartYear === "" || beforeSurveyInfo.userSmokeEndYear === "") {
+                moveScroll(healthInfoRef.current[2])
+                return
+            }
+        }
+        else if (beforeSurveyInfo.userIsSmoke === "0" && beforeSurveyInfo.userWasSmoke === "") {
+            moveScroll(healthInfoRef.current[3])
+            return
+        }
+
+        if (beforeSurveyInfo.userIsDrink === "") {
+            moveScroll(healthInfoRef.current[4])
+            return
+        }
+        else if (beforeSurveyInfo.userIsDrink === "1") {
+            if (beforeSurveyInfo.userDrinkAmt === "") {
+                moveScroll(healthInfoRef.current[5])
+                return
+            }
+            else if (beforeSurveyInfo.userDrinkStartYear === "" || beforeSurveyInfo.userDrinkEndYear === "") {
+                moveScroll(healthInfoRef.current[6])
+                return
+            }
+        }
+        else if (beforeSurveyInfo.userIsDrink === "0" && beforeSurveyInfo.userWasDrink === "") {
+            moveScroll(healthInfoRef.current[7])
+            return
+        }
+
+        if (beforeSurveyInfo.userIsCaffeine === "") {
+            moveScroll(healthInfoRef.current[8])
+            return
+        }
+
+        moveScroll(beforeSurveyHeaderRef.current as HTMLDivElement);
+        setPopupStep(1);
+    };
+
+    const handlePopupEnd = () => {
+        if (!beforeSurveyInfo.userGender) {
+            moveScroll(cancerInfoRef.current[0])
+            return
+        }
+        else if (beforeSurveyInfo.userDiagnosis !== 'etc' && !beforeSurveyInfo.userDiagnosis) {
+            moveScroll(cancerInfoRef.current[1])
+            return
+        }
+        else if (beforeSurveyInfo.userDiagnosis === 'etc' && !beforeSurveyInfo.userDiagName) {
+            moveScroll(cancerInfoRef.current[1])
+            return
+        }
+        else if (!beforeSurveyInfo.userDiagDate || !beforeSurveyInfo.userCureEndDate) {
+            moveScroll(cancerInfoRef.current[1])
+            return
+        }
+        else if (!beforeSurveyInfo.userCureType) {
+            moveScroll(cancerInfoRef.current[2])
+            return
+        }
+        else if (!beforeSurveyInfo.userNowHealStat) {
+            moveScroll(cancerInfoRef.current[3])
+            return
+        }
+        else if (!beforeSurveyInfo.userDiagEtc) {
+            moveScroll(cancerInfoRef.current[4])
+            return
+        }
+        
+        requestRegBeforeSurveyInfo();
+    };
+
+    const requestRegBeforeSurveyInfo = () => {
+        const newUserDiagDate = beforeSurveyInfo.userDiagDate.slice(0, 4) + '-' + beforeSurveyInfo.userDiagDate.slice(6, 8);
+        const newUserCureEndDate = beforeSurveyInfo.userCureEndDate.slice(0, 4) + '-' + beforeSurveyInfo.userCureEndDate.slice(6, 8);
+        let requestBody = {
+            ...beforeSurveyInfo,
+            ['userSmokeAmt']: Number(['userSmokeAmt']) || 0,
+            ['userSmokeStartYear']: Number(['userSmokeAmt']) || 0,
+            ['userSmokeEndYear']: Number(['userSmokeAmt']) || 0,
+            ['userDrinkAmt']: Number(['userSmokeAmt']) || 0,
+            ['userDrinkStartYear']: Number(['userSmokeAmt']) || 0,
+            ['userDrinkEndYear']: Number(['userSmokeAmt']) || 0,
+            ['userDiagDate']: newUserDiagDate,
+            ['userCureEndDate']: newUserCureEndDate,
+        };
+        
+        api
+            .post('/users/health-and-cancer', requestBody, {headers: {Authorization: `Bearer ${user.accessToken}`}})
+            .then((res) => {
+                console.log(res);
+                if (res.status === 200) {
+                    setEndPopup(true);
+                    setTimeout(() => {
+                        setEndPopup(false);
+                        state.isBeforeSurveyInfo = true;
+                    }, 3000);
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    }
+
+    const [isCustomCancerName, setIsCustomCanerName] = useState(false);
+    const handleCancerNameChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const target = event.target;
+        const selectedOption = target.selectedOptions[0];
+        if (selectedOption.textContent === "직접입력") {
+            setIsCustomCanerName(true);
+        } else {
+            setIsCustomCanerName(false);
+        }
+        
+        setBeforeSurveyInfo({
+            ...beforeSurveyInfo,
+            [target.name]: target.value,
+        })
+    };
+
     const handleUpdateHealthInfo = (event: React.ChangeEvent<HTMLInputElement>) => {
         const {name, value} = event.target;
 
         if (name === "userIsSmoke") {
-            if (value === "흡연") {
+            if (value === "1") {
                 setBeforeSurveyInfo({
                     ...beforeSurveyInfo,
                     [name]: value,
-                    ['userWasSmoke']: '',
                 });
             }
-            else if (value === "금연") {
+            else if (value === "0") {
                 setBeforeSurveyInfo({
                     ...beforeSurveyInfo,
                     [name]: value,
@@ -220,14 +286,13 @@ const Survey = () => {
             }
         }
         else if (name === "userIsDrink") {
-            if (value === "음주") {
+            if (value === "1") {
                 setBeforeSurveyInfo({
                     ...beforeSurveyInfo,
                     [name]: value,
-                    ['userWasDrink']: '',
                 });
             }
-            else if (value === "금주") {
+            else if (value === "0") {
                 setBeforeSurveyInfo({
                     ...beforeSurveyInfo,
                     [name]: value,
@@ -247,12 +312,10 @@ const Survey = () => {
     
     useEffect(()=>{
         console.log(beforeSurveyInfo);
+        console.log(beforeSurveyInfo.userDiagEtc);
         const now = new Date();
         const age = Number(now.getFullYear()) - Number(user.userBirth?.substr(0,4)) + 1
     }, [beforeSurveyInfo]);
-    
-    const healthInfoRef = useRef<HTMLSpanElement[]>([]);
-    const beforeSurveyHeaderRef = useRef<null | HTMLDivElement>(null);
     
     const moveScroll = (dom: HTMLSpanElement) => {
         dom.scrollIntoView({behavior: "smooth"});
@@ -261,10 +324,68 @@ const Survey = () => {
     const handleUpdateCancerInfo = (event: React.ChangeEvent<HTMLInputElement>) => {
         const {name, value} = event.target;
 
-        setBeforeSurveyInfo({
-            ...beforeSurveyInfo,
-            [name]: value,
-        })
+        if (name === 'userCureType') {
+            let cureTypeList: string[] = [];
+
+            if (beforeSurveyInfo.userCureType.length) {
+                cureTypeList = beforeSurveyInfo.userCureType.split(',');
+                const idx = cureTypeList.indexOf(value);
+                if (idx !== -1) {
+                    cureTypeList.splice(idx, 1);
+                }
+                else cureTypeList.push(value);
+            }
+            else {
+                cureTypeList = beforeSurveyInfo.userCureType.split('');
+                cureTypeList.push(value);
+            }
+
+            setBeforeSurveyInfo({
+                ...beforeSurveyInfo,
+                ['userCureType']: cureTypeList.join(','),
+            })
+        }
+        else if (name === 'userDiagEtc') {
+            if (value !== "1") {
+                checkBoxRef.current[0].checked = false;
+                let diagEtcList: string[] = [];
+    
+                if (beforeSurveyInfo.userDiagEtc.length) {
+                    diagEtcList = beforeSurveyInfo.userDiagEtc.split(',');
+                    const idx = diagEtcList.indexOf(value);
+                    if (idx !== -1) {
+                        diagEtcList.splice(idx, 1);
+                    }
+                    else diagEtcList.push(value);
+                }
+                else {
+                    diagEtcList = beforeSurveyInfo.userDiagEtc.split('');
+                    diagEtcList.push(value);
+                }
+    
+                setBeforeSurveyInfo({
+                    ...beforeSurveyInfo,
+                    ['userDiagEtc']: diagEtcList.join(','),
+                })
+            }
+            else {
+                checkBoxRef.current.forEach((elem, idx) => {
+                    if (idx && elem.checked && checkBoxRef.current[0].checked) elem.checked = false;
+                })
+                
+                setBeforeSurveyInfo({
+                    ...beforeSurveyInfo,
+                    ['userDiagEtc']: '1',
+                    ['userDiagEtcName']: '',
+                })
+            }
+        }
+        else {
+            setBeforeSurveyInfo({
+                ...beforeSurveyInfo,
+                [name]: value,
+            })
+        }
     }
 
     return (
@@ -310,8 +431,8 @@ const Survey = () => {
             <ModalComponent />
 
             {/* 팝업 추가 - 임시로 이곳에 추가해둠. */}
-            {state.isBeforeSurveyInfo && (
-                <div className="surveyBefore_popup" style={{ display: popup ? "blocik" : "none" }}>
+            {state.isBeforeSurveyInfo || (
+                <div className="surveyBefore_popup" style={{ display: popup ? "block" : "none" }}>
                     <div className="popupTitle" ref={beforeSurveyHeaderRef}>
                         <h2>설문 전 작성정보</h2>
                         <button type="button" className="close" onClick={handlePopup}></button>
@@ -337,7 +458,7 @@ const Survey = () => {
                                                 <span className="isCheck">
                                                     <InputElement
                                                         type="radio"
-                                                        value="흡연"
+                                                        value="1"
                                                         name="userIsSmoke"
                                                         id="smoking"
                                                         onChange={handleSmoke}
@@ -347,7 +468,7 @@ const Survey = () => {
                                                 <span>
                                                     <InputElement
                                                         type="radio"
-                                                        value="금연"
+                                                        value="0"
                                                         name="userIsSmoke"
                                                         id="stopSmoking"
                                                         onChange={handleSmoke}
@@ -404,7 +525,7 @@ const Survey = () => {
                                                     <span className="isCheck">
                                                         <InputElement
                                                             type="radio"
-                                                            value="흡연"
+                                                            value="1"
                                                             name="userWasSmoke"
                                                             id="beforesmoking"
                                                             onChange={handleUpdateHealthInfo}
@@ -414,7 +535,7 @@ const Survey = () => {
                                                     <span>
                                                         <InputElement
                                                             type="radio"
-                                                            value="금연"
+                                                            value="0"
                                                             name="userWasSmoke"
                                                             id="beforestopSmoking"
                                                             onChange={handleUpdateHealthInfo}
@@ -435,8 +556,8 @@ const Survey = () => {
                                                 <span>
                                                     <InputElement
                                                         type="radio"
-                                                        value="음주"
-                                                        name="userdIsDrink"
+                                                        value="1"
+                                                        name="userIsDrink"
                                                         id="drink"
                                                         onChange={handleDrink}
                                                     />
@@ -445,7 +566,7 @@ const Survey = () => {
                                                 <span>
                                                     <InputElement
                                                         type="radio"
-                                                        value="금주"
+                                                        value="0"
                                                         id="stopDrink"
                                                         name="userIsDrink"
                                                         onChange={handleDrink}
@@ -506,7 +627,7 @@ const Survey = () => {
                                                     <span className="isCheck">
                                                         <InputElement
                                                             type="radio"
-                                                            value="네"
+                                                            value="1"
                                                             name="userWasDrink"
                                                             id="before_drink"
                                                             onChange={handleUpdateHealthInfo}
@@ -516,7 +637,7 @@ const Survey = () => {
                                                     <span>
                                                         <InputElement
                                                             type="radio"
-                                                            value="아니오"
+                                                            value="0"
                                                             name="userWasDrink"
                                                             id="before_no_drink"
                                                             onChange={handleUpdateHealthInfo}
@@ -537,7 +658,7 @@ const Survey = () => {
                                                 <span className="isCheck">
                                                     <InputElement
                                                         type="radio"
-                                                        value="카페인"
+                                                        value="1"
                                                         name="userIsCaffeine"
                                                         id="Caffeine"
                                                         onChange={handleUpdateHealthInfo}
@@ -547,7 +668,7 @@ const Survey = () => {
                                                 <span>
                                                     <InputElement
                                                         type="radio"
-                                                        value="디카페인"
+                                                        value="0"
                                                         name="userIsCaffeine"
                                                         id="stopCaffeine"
                                                         onChange={handleUpdateHealthInfo}
@@ -575,13 +696,13 @@ const Survey = () => {
                                     </div>
 
                                     <label>
-                                        <span>성별</span>
+                                        <span ref={(element) => (cancerInfoRef.current[0] = element as HTMLSpanElement)}>성별</span>
                                     </label>
                                     <div className="chk_radio02">
                                         <span className="isCheck">
                                             <InputElement
                                                 type="radio"
-                                                value="남"
+                                                value="m"
                                                 name="userGender"
                                                 id="man"
                                                 onChange={handleUpdateCancerInfo}
@@ -591,7 +712,7 @@ const Survey = () => {
                                         <span>
                                             <InputElement
                                                 type="radio"
-                                                value="여"
+                                                value="f"
                                                 name="userGender"
                                                 id="woman"
                                                 onChange={handleUpdateCancerInfo}
@@ -601,26 +722,26 @@ const Survey = () => {
                                     </div>
 
                                     <label>
-                                        <span>암 종(진단명) <i className="plusBtn">+</i></span>
+                                        <span ref={(element) => (cancerInfoRef.current[1] = element as HTMLSpanElement)}>암 종(진단명) <i className="plusBtn">+</i></span>
                                         <button type="button" className="plus"></button>
                                     </label>
                                     <p className="pointGreen">다른 암도 재발되었나요?<br/>그러면 해당 암 종도 추가해주세요.</p>
                                     <div>
                                         <div className="selectBox">
-                                            <select onChange={handleCancerNameChange}>
-                                                <option>암 종 선택</option>
-                                                <option>간암</option>
-                                                <option>갑상선암</option>
-                                                <option>담낭암</option>
-                                                <option>담도암</option>
-                                                <option>대장암</option>
-                                                <option>신장암</option>
-                                                <option>위암</option>
-                                                <option>유방암</option>
-                                                <option>전립선암</option>
-                                                <option>췌장암</option>
-                                                <option>폐암</option>
-                                                <option>직접입력</option>
+                                            <select name="userDiagnosis" value={beforeSurveyInfo.userDiagnosis} onChange={handleCancerNameChange}>
+                                                <option value="">암 종 선택</option>
+                                                <option value="1">간암</option>
+                                                <option value="2">갑상선암</option>
+                                                <option value="3">담낭암</option>
+                                                <option value="4">담도암</option>
+                                                <option value="5">대장암</option>
+                                                <option value="6">신장암</option>
+                                                <option value="7">위암</option>
+                                                <option value="8">유방암</option>
+                                                <option value="9">전립선암</option>
+                                                <option value="10">췌장암</option>
+                                                <option value="11">폐암</option>
+                                                <option value="etc">직접입력</option>
                                             </select>
                                         </div>
 
@@ -631,6 +752,9 @@ const Survey = () => {
                                                     type="text"
                                                     placeholder="직접입력"
                                                     id="custom_cancer_name"
+                                                    value={beforeSurveyInfo.userDiagName}
+                                                    name="userDiagName"
+                                                    onChange={handleUpdateCancerInfo}
                                                 />
                                             </div>
                                         )}
@@ -660,7 +784,7 @@ const Survey = () => {
                                         />
                                     </div>
                                     {/* 추가되는 영역 : S */}
-                                    <label>
+                                    {/* <label>
                                         <span>암 종(진단명)</span>
                                     </label>
                                     <select onChange={handleCancerNameChange}>
@@ -695,11 +819,11 @@ const Survey = () => {
                                             placeholder="예) 2015년 01월"
                                             id="cancer_type_end"
                                         />
-                                    </div>
+                                    </div> */}
                                     {/* 추가되는 영역 : E */}
 
                                     <label>
-                                        <span>치료유형(중복선택 가능)</span>
+                                        <span ref={(element) => (cancerInfoRef.current[2] = element as HTMLSpanElement)}>치료유형(중복선택 가능)</span>
                                     </label>
                                     <div className="chk_list treatment-type checkContents">
                                         <ul>
@@ -708,6 +832,9 @@ const Survey = () => {
                                                     type="checkbox"
                                                     id="surgery"
                                                     className="check02"
+                                                    name="userCureType"
+                                                    value="1"
+                                                    onChange={handleUpdateCancerInfo}
                                                 />
                                                 <label htmlFor="surgery">수술</label>
                                             </li>
@@ -716,6 +843,9 @@ const Survey = () => {
                                                     type="checkbox"
                                                     id="cancer_treatment"
                                                     className="check02"
+                                                    name="userCureType"
+                                                    value="2"
+                                                    onChange={handleUpdateCancerInfo}
                                                 />
                                                 <label htmlFor="cancer_treatment">항암치료</label>
                                             </li>
@@ -724,6 +854,9 @@ const Survey = () => {
                                                     type="checkbox"
                                                     id="radiation_treatment"
                                                     className="check02"
+                                                    name="userCureType"
+                                                    value="3"
+                                                    onChange={handleUpdateCancerInfo}
                                                 />
                                                 <label htmlFor="radiation_treatment">방사선치료</label>
                                             </li>
@@ -732,6 +865,9 @@ const Survey = () => {
                                                     type="checkbox"
                                                     id="hormone_treatment"
                                                     className="check02"
+                                                    name="userCureType"
+                                                    value="4"
+                                                    onChange={handleUpdateCancerInfo}
                                                 />
                                                 <label htmlFor="hormone_treatment">호르몬치료</label>
                                             </li>
@@ -740,25 +876,28 @@ const Survey = () => {
                                                     type="checkbox"
                                                     id="etc_treatment"
                                                     className="check02"
+                                                    name="userCureType"
+                                                    value="etc"
+                                                    onChange={handleUpdateCancerInfo}
                                                 />
                                                 <label htmlFor="etc_treatment">기타</label>
                                             </li>
                                         </ul>
-                                        <InputElement
+                                        {/* <InputElement
                                             type="text"
                                             placeholder="구체적으로 입력"
                                             id="detail_treatment"
-                                        />
+                                        /> */}
                                     </div>
                                     <label>
-                                        <span>현재 건강상태</span>
+                                        <span ref={(element) => (cancerInfoRef.current[3] = element as HTMLSpanElement)}>현재 건강상태</span>
                                     </label>
                                     <div className="radioCheck checkContents">
                                         <ul>
                                             <li>
                                                 <InputElement
                                                     type="radio"
-                                                    value="매우 건강하지 않다."
+                                                    value="1"
                                                     name="userNowHealStat"
                                                     id="radio01"
                                                     onChange={handleUpdateCancerInfo}
@@ -768,7 +907,7 @@ const Survey = () => {
                                             <li>
                                                 <InputElement
                                                     type="radio"
-                                                    value="건강하지 않다."
+                                                    value="2"
                                                     name="userNowHealStat"
                                                     id="radio02"
                                                     onChange={handleUpdateCancerInfo}
@@ -778,7 +917,7 @@ const Survey = () => {
                                             <li>
                                                 <InputElement
                                                     type="radio"
-                                                    value="건강하다."
+                                                    value="3"
                                                     name="userNowHealStat"
                                                     id="radio03"
                                                     onChange={handleUpdateCancerInfo}
@@ -788,7 +927,7 @@ const Survey = () => {
                                             <li>
                                                 <InputElement
                                                     type="radio"
-                                                    value="매우 건강하다."
+                                                    value="4"
                                                     name="userNowHealStat"
                                                     id="radio04"
                                                     onChange={handleUpdateCancerInfo}
@@ -799,7 +938,7 @@ const Survey = () => {
                                     </div>
                                     
                                     <label className="labelType" htmlFor="cancer_type_end">
-                                        <span>암 이외의 질환</span>
+                                        <span ref={(element) => (cancerInfoRef.current[4] = element as HTMLSpanElement)}>암 이외의 질환</span>
                                         (해당질환 모두 선택)
                                     </label>
                                     <div className="chk_list disease checkContents">
@@ -807,74 +946,100 @@ const Survey = () => {
                                             <li>
                                                 <InputElement
                                                     type="checkbox"
-                                                    value=""
+                                                    value="1"
                                                     className=""
                                                     id="empty"
+                                                    name="userDiagEtc"
+                                                    onChange={handleUpdateCancerInfo}
+                                                    ref={(element) => checkBoxRef.current[0] = element as HTMLInputElement}
                                                 />
                                                 <label htmlFor="empty">없음</label>
                                             </li>
                                             <li>
                                                 <InputElement
                                                     type="checkbox"
-                                                    value="고혈압"
+                                                    value="2"
                                                     id="hypertension"
+                                                    name="userDiagEtc"
+                                                    onChange={handleUpdateCancerInfo}
+                                                    ref={(element) => checkBoxRef.current[1] = element as HTMLInputElement}
                                                 />
                                                 <label htmlFor="hypertension">고혈압</label>
                                             </li>
                                             <li>
                                                 <InputElement
                                                     type="checkbox"
-                                                    value="당뇨병"
+                                                    value="3"
                                                     id="diabetic"
+                                                    name="userDiagEtc"
+                                                    onChange={handleUpdateCancerInfo}
+                                                    ref={(element) => checkBoxRef.current[2] = element as HTMLInputElement}
                                                 />
                                                 <label htmlFor="diabetic">당뇨병</label>
                                             </li>
                                             <li>
                                                 <InputElement
                                                     type="checkbox"
-                                                    value="뇌혈관질환"
+                                                    value="4"
                                                     id="cerebrovascular"
+                                                    name="userDiagEtc"
+                                                    onChange={handleUpdateCancerInfo}
+                                                    ref={(element) => checkBoxRef.current[3] = element as HTMLInputElement}
                                                 />
                                                 <label htmlFor="cerebrovascular">뇌혈관질환</label>
                                             </li>
                                             <li>
                                                 <InputElement
                                                     type="checkbox"
-                                                    value="호흡기질환"
+                                                    value="5"
                                                     id="respiratory"
+                                                    name="userDiagEtc"
+                                                    onChange={handleUpdateCancerInfo}
+                                                    ref={(element) => checkBoxRef.current[4] = element as HTMLInputElement}
                                                 />
                                                 <label htmlFor="respiratory">호흡기질환</label>
                                             </li>
                                             <li>
                                                 <InputElement
                                                     type="checkbox"
-                                                    value="심장질환"
+                                                    value="6"
                                                     id="cardiac"
+                                                    name="userDiagEtc"
+                                                    onChange={handleUpdateCancerInfo}
+                                                    ref={(element) => checkBoxRef.current[5] = element as HTMLInputElement}
                                                 />
                                                 <label htmlFor="cardiac">심장질환</label>
                                             </li>
                                             <li>
                                                 <InputElement
                                                     type="checkbox"
-                                                    value="우울증"
+                                                    value="7"
                                                     id="blues"
+                                                    name="userDiagEtc"
+                                                    onChange={handleUpdateCancerInfo}
+                                                    ref={(element) => checkBoxRef.current[6] = element as HTMLInputElement}
                                                 />
                                                 <label htmlFor="blues">우울증</label>
                                             </li>
                                             <li>
                                                 <InputElement
                                                     type="checkbox"
-                                                    value="관련 질환"
+                                                    value="8"
                                                     id="related"
+                                                    name="userDiagEtc"
+                                                    onChange={handleUpdateCancerInfo}
+                                                    ref={(element) => checkBoxRef.current[7] = element as HTMLInputElement}
                                                 />
                                                 <label htmlFor="related">관련 질환</label>
                                             </li>
                                             <li>
-                                                <InputElement type="checkbox" value="기타" id="etc" />
-                                                <label htmlFor="etc">기타</label>
+                                                <InputElement type="checkbox" value="etc" id="etc" name="userDiagEtc" onChange={handleUpdateCancerInfo}
+                                                    ref={(element) => checkBoxRef.current[8] = element as HTMLInputElement}
+                                                />
+                                                <label htmlFor="etc">직접 입력</label>
                                             </li>
                                         </ul>
-                                        <InputElement type="text" placeholder="직접 작성" />
+                                        <InputElement type="text" placeholder="직접 암 이외의 질환(진단명) 입력" name="userDiagEtcName" value={beforeSurveyInfo.userDiagEtcName} ref={(element) => checkBoxRef.current[9] = element as HTMLInputElement} onChange={handleUpdateCancerInfo}/>
                                     </div>
                                 </div>
                                 <button type="button" className="BtnActive" onClick={handlePopupEnd}>
