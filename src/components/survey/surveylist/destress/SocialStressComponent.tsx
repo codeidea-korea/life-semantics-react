@@ -15,7 +15,7 @@ const SocialStressComponent = () => {
     <React.Fragment>
       <div className="checkList checkList02">
         <span>정서 문제(9)</span>
-        <ul>
+        <ul className="survey_step_2_q_1">
           <li>
             <InputElement type="checkbox" id="worry" className="check02" />
             <label htmlFor="worry">걱정 또는 불안</label>
@@ -54,7 +54,7 @@ const SocialStressComponent = () => {
           </li>
         </ul>
         <span>사회관계 문제(6)</span>
-        <ul>
+        <ul className="survey_step_2_q_2">
           <li>
             <InputElement type="checkbox" id="spouse" className="check02" />
             <label htmlFor="spouse">배우자와의 관계</label>

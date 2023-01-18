@@ -19,7 +19,7 @@ const ReligionStressComponent = () => {
           <strong>(해당되는 곳에 모두 체크하세요.)</strong>
         </p>
         <span>실생활 문제(12)</span>
-        <ul>
+        <ul className="survey_step_3_q_1">
           <li>
             <InputElement type="checkbox" id="oneself" className="check02" />
             <label htmlFor="oneself">자신 돌보기</label>
@@ -70,7 +70,7 @@ const ReligionStressComponent = () => {
           </li>
         </ul>
         <span>영성/종교 문제(6)</span>
-        <ul>
+        <ul className="survey_step_3_q_2">
           <li>
             <InputElement type="checkbox" id="life" className="check02" />
             <label htmlFor="life">삶의 의미 또는 목적</label>
@@ -99,22 +99,23 @@ const ReligionStressComponent = () => {
         <div className="textareaBox">
           <span>기타문제</span>
           <textarea
+            className="survey_step_3_q_3"
             maxLength={500}
             onChange={handlePopup}
             placeholder="그 외의 염려되는 문제들이 있다면, 작성해주세요."
           ></textarea>
         </div>
         <ToastPopup
-        content={
-          <div>
-            완료하시면 <b>수정</b>이 <b>불가</b>합니다. <br />
-            내용을 확인하해주세요.
-          </div>
-        }
-        show={toast}
-      />
+          content={
+            <div>
+              완료하시면 <b>수정</b>이 <b>불가</b>합니다. <br />
+              내용을 확인하해주세요.
+            </div>
+          }
+          show={toast}
+        />
       </div>
-      
+
     </React.Fragment>
   );
 };
