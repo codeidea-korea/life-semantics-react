@@ -8,6 +8,7 @@ const LostIdComponent = ({next}: { next: Function }) => {
     const [requiredAuthCode, setRequiredAuthCode] = useState(false);
     const [num, setNum] = useState('');
     const [code, setCode] = useState('');
+    const [authCode, setAuthCode] = useState('');
     const [timePlaceHolder, setTimePlaceHolder] = useState('인증번호 입력(10분 안에)');
     const [minutes, setMinutes] = useState(0);
     const [seconds, setSeconds] = useState(0);
@@ -30,7 +31,7 @@ const LostIdComponent = ({next}: { next: Function }) => {
     const handleAuthCode = (event: React.ChangeEvent<HTMLInputElement>) => {
         const {value} = event.currentTarget;
         let reduceAuthCode = value.replace(/[^0-9]/g, '');
-        if (reduceAuthCode.length == 6) {
+        if (reduceAuthCode.length == 4) {
             setRequiredAuthCode(true);
         } else {
             setRequiredAuthCode(false);
@@ -55,9 +56,13 @@ const LostIdComponent = ({next}: { next: Function }) => {
         //TODO 인증 요청 로직 .then 후에 200 떨어진후 밑에 로직
         handleCountDownPlaceHolder(10,0);
         api
-            .post(`/users/auth-number?phone=${num}&userId=''`)
+            .post(`/users/auth-number?phone=${num}`)
             .then((res) => {
                 console.log(res)
+                if (res.status === 200) {
+                    console.log(res.data.body.authNumber);
+                    setAuthCode(res.data.body.authNumber);
+                }
             })
             .catch((err) => {
                 console.log(err)
@@ -66,7 +71,7 @@ const LostIdComponent = ({next}: { next: Function }) => {
 
     const handleSendAuth = () => {
         //TODO 인증 확인 로직 .then 후에 200 떨어진후 밑에 로직
-        setRequiredComplete(true);
+        if (code === authCode) setRequiredComplete(true);
     };
 
     useEffect(() => {
