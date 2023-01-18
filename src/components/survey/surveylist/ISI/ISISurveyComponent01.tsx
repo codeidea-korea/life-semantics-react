@@ -16,7 +16,7 @@ const ISISurveyComponent01 = () => {
         </p>
         <ul>
           <li className="surveyContent">
-            <p>a.잠들기 어렵다.</p>
+            <p className="survey_text">a.잠들기 어렵다.</p>
             <ul>
               <li>
                 <InputElement
@@ -66,7 +66,7 @@ const ISISurveyComponent01 = () => {
             </ul>
           </li>
           <li className="surveyContent">
-            <p>b.잠을 유지하기 어렵다.</p>
+            <p className="survey_text">b.잠을 유지하기 어렵다.</p>
             <ul>
               <li>
                 <InputElement
@@ -116,7 +116,7 @@ const ISISurveyComponent01 = () => {
             </ul>
           </li>
           <li className="surveyContent">
-            <p>c.쉽게 깬다.</p>
+            <p className="survey_text">c.쉽게 깬다.</p>
             <ul>
               <li>
                 <InputElement

@@ -45,7 +45,7 @@ const reqData: ReqData = {
   "svPgNo": 8,
   "svUserNo": 0,
   "svType1": "pre",
-  "svType2": "destress",
+  "svType2": "fatigue",
   "svStatus": "set",
   "svRegDate": getToday(),
   "userSurveysAnswersDTO": []
@@ -67,6 +67,7 @@ for (let i = 0; i < 15; i++) {
 
 const Tired = () => {
   const user = useRecoilValue(userState);
+  reqData.svUserNo = user.userNo;
   const location = useLocation();
   const navigate = useNavigate();
   const [modal, setModal] = useRecoilState(modalState);
@@ -141,6 +142,7 @@ const Tired = () => {
               show: true,
               title: "",
               cancelShow: false,
+              callBackShow: true,
               content: (
                 <div>
                   피로 설문을
