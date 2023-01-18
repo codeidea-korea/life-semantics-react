@@ -88,7 +88,7 @@ const TermsComponent = ({next}: { next: Function }) => {
                             <Link to="/policyPersonalInfo"></Link>
                         </li>
                         <li>
-                            <InputElement type="checkbox" className="ck" id="thirdPerson" name="thirdPerson"
+                            <InputElement type="checkbox" className="" id="thirdPerson" name="thirdPerson"
                                           checked={policy.thirdPerson}
                                           onChange={handleCheck}/>
                             <label htmlFor={"thirdPerson"}>[선택] 개인정보 수집 및 이용 동의</label>
