@@ -18,7 +18,6 @@ function getToday() {
     var year = date.getFullYear();
     var month = ("0" + (1 + date.getMonth())).slice(-2);
     var day = ("0" + date.getDate()).slice(-2);
-
     return year + "-" + month + "-" + day;
 }
 interface reqObj {
@@ -175,7 +174,7 @@ const SurveyDeStress = () => {
                 reqData.userSurveysAnswersDTO[0].saQst = 1;
                 reqData.userSurveysAnswersDTO[0].saAnsList = [];
                 const checkedIndex = Array.from(document.querySelectorAll('.scoreRadio input')).indexOf(document.querySelectorAll('.scoreRadio input:checked')[0])
-                reqData.userSurveysAnswersDTO[0].saAnsList.push(checkedIndex)
+                reqData.userSurveysAnswersDTO[0].saAnsList.push(checkedIndex + 1)
                 //2번
                 reqData.userSurveysAnswersDTO[1].saQst = 2;
                 reqData.userSurveysAnswersDTO[1].saAnsList = [];
@@ -184,7 +183,7 @@ const SurveyDeStress = () => {
                     Array.from(document.querySelectorAll('.py_prob_list input') as NodeListOf<HTMLInputElement>)
                         .forEach((item: HTMLInputElement, idx: number) => {
                             if (item.checked == true) {
-                                reqData.userSurveysAnswersDTO[1].saAnsList.push(idx)
+                                reqData.userSurveysAnswersDTO[1].saAnsList.push(idx + 1)
                             }
                         });
                 } else {
@@ -206,7 +205,7 @@ const SurveyDeStress = () => {
                     Array.from(document.querySelectorAll('.survey_step_2_q_1 input') as NodeListOf<HTMLInputElement>)
                         .forEach((item: HTMLInputElement, idx: number) => {
                             if (item.checked == true) {
-                                reqData.userSurveysAnswersDTO[2].saAnsList.push(idx)
+                                reqData.userSurveysAnswersDTO[2].saAnsList.push(idx + 1)
                             }
                         });
 
@@ -218,7 +217,7 @@ const SurveyDeStress = () => {
                     Array.from(document.querySelectorAll('.survey_step_2_q_2 input') as NodeListOf<HTMLInputElement>)
                         .forEach((item: HTMLInputElement, idx: number) => {
                             if (item.checked == true) {
-                                reqData.userSurveysAnswersDTO[3].saAnsList.push(idx)
+                                reqData.userSurveysAnswersDTO[3].saAnsList.push(idx + 1)
                             }
                         });
                 } else {
@@ -313,13 +312,13 @@ const SurveyDeStress = () => {
             Array.from(document.querySelectorAll('.survey_step_3_q_1 input') as NodeListOf<HTMLInputElement>)
                 .forEach((item: HTMLInputElement, idx: number) => {
                     if (item.checked == true) {
-                        reqData.userSurveysAnswersDTO[4].saAnsList.push(idx)
+                        reqData.userSurveysAnswersDTO[4].saAnsList.push(idx + 1)
                     }
                 });
             Array.from(document.querySelectorAll('.survey_step_3_q_2 input') as NodeListOf<HTMLInputElement>)
                 .forEach((item: HTMLInputElement, idx: number) => {
                     if (item.checked == true) {
-                        reqData.userSurveysAnswersDTO[5].saAnsList.push(idx)
+                        reqData.userSurveysAnswersDTO[5].saAnsList.push(idx + 1)
                     }
                 });
 
