@@ -76,7 +76,7 @@ const PhysicalStressComponent = () => {
                         <strong>(해당되는 곳에 모두 체크하세요.)</strong>
                     </p>
                     <span>신체 문제(9)</span>
-                    <ul>
+                    <ul className="py_prob_list">
                         <li>
                             <InputElement type="checkbox" id="pain" className="check02" />
                             <label htmlFor="pain">통증</label>
