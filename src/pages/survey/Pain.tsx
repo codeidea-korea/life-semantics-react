@@ -43,7 +43,6 @@ const Pain = () => {
 
         $(window).on("scroll", function () {
             var height = $(document).scrollTop();
-            console.log(height);
             if (this.scrollY > 300) {
                 $(".Step").addClass("fixed");
             } else {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useState, useEffect } from "react";
 import InputElement from "../../elements/InputElement";
 import { useRecoilState } from "recoil";
 import { joinState } from "@states/joinState";
@@ -7,6 +7,10 @@ import useAxios from "@hooks/useAxios";
 const MemberChk01 = ({ nextStep }: { nextStep: Function }) => {
     const [joinParam, setJoinParam] = useRecoilState(joinState);
     const api = useAxios();
+    const inputsRef = useRef<HTMLInputElement[]>([]);
+    const labelsRef = useRef<HTMLLabelElement[]>([]);
+    const [isDuplicatedUserID, setIsDuplicatedUserID] = useState(false);
+    const [passCheck, setPassCheck] = useState('');
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.currentTarget;
@@ -18,55 +22,82 @@ const MemberChk01 = ({ nextStep }: { nextStep: Function }) => {
             .post(`/users/checkUserDup?userID=${joinParam.userID}`, null)
             .then((res) => {
                 console.log(res);
+                if (!res.data.body.userID) setIsDuplicatedUserID(true);
             })
             .catch((err) => {
                 console.log(err);
             });
     };
 
-    const handleFocusBtn = (event: React.MouseEvent<HTMLButtonElement>) => {
-        const username = document.getElementById("username") as HTMLInputElement;
-        const password = document.getElementById("password") as HTMLInputElement;
-        const password_check = document.getElementById("password_check") as HTMLInputElement;
-        const name_check = document.getElementById("name_check") as HTMLInputElement;
-        const birth = document.getElementById("birth") as HTMLInputElement;
+    const moveScroll = (dom: HTMLLabelElement) => {
+        dom!.scrollIntoView({behavior: "smooth"});
+    }
 
-        if (!username.value) {
-            username.focus();
+    const handleFocusBtn = (event: React.MouseEvent<HTMLButtonElement>) => {
+        if (!joinParam.userID) {
+            inputsRef.current[0].focus();
+            moveScroll(labelsRef.current[0]);
             return false;
         }
-        if (!password.value) {
-            password.focus();
+        if (!isDuplicatedUserID){
+            moveScroll(labelsRef.current[0]);
             return false;
         }
-        if (!password_check.value) {
-            password_check.focus();
+        if (!joinParam.userPass) {
+            inputsRef.current[1].focus();
+            moveScroll(labelsRef.current[1]);
             return false;
         }
-        if (!name_check.value) {
-            name_check.focus();
+        if (!passCheck || joinParam.userPass !== passCheck) {
+            inputsRef.current[2].focus();
+            moveScroll(labelsRef.current[2]);
+            if (joinParam.userPass !== passCheck) {
+            
+            }
             return false;
         }
-        if (!birth.value) {
-            birth.focus();
+        if (!joinParam.userName) {
+            inputsRef.current[3].focus();
+            moveScroll(labelsRef.current[3]);
+            return false;
+        }
+        if (!joinParam.userBirth) {
+            inputsRef.current[4].focus();
+            moveScroll(labelsRef.current[4]);
+            return false;
+        }
+        if (!joinParam.userSmsAgree) {
+            inputsRef.current[5].focus();
+            moveScroll(labelsRef.current[5]);
+            return false;
+        }
+        if (!joinParam.userEmail) {
+            inputsRef.current[6].focus();
+            moveScroll(labelsRef.current[6]);
             return false;
         }
         nextStep(4); // 가입완료로 넘어가기위해 변경.
     };
 
+    useEffect(()=>{
+        console.log(joinParam)
+    },[joinParam])
+
     return (
         <React.Fragment>
             <div className="MemberChk MemberChk01">
-                <label>
+                <label ref={(element: HTMLLabelElement) => (labelsRef.current[0] = element as HTMLLabelElement)}>
                     <span>아이디</span>
                 </label>
                 <div className="CodeCheck">
                     <InputElement
                         type="text"
-                        placeholder="아이디 확인"
+                        placeholder="아이디 입력"
                         name="userID"
                         id="userID"
+                        value={joinParam.userID}
                         onChange={handleChange}
+                        ref={(element: HTMLInputElement) => (inputsRef.current[0] = element as HTMLInputElement)}
                     />
                     <button
                         type="button"
@@ -76,7 +107,7 @@ const MemberChk01 = ({ nextStep }: { nextStep: Function }) => {
                         중복확인
                     </button>
                 </div>
-                <label>
+                <label ref={(element: HTMLLabelElement) => (labelsRef.current[1] = element as HTMLLabelElement)}>
                     <span>비밀번호</span>
                 </label>
                 <InputElement
@@ -84,29 +115,40 @@ const MemberChk01 = ({ nextStep }: { nextStep: Function }) => {
                     placeholder="영문, 숫자, 특수문자 포함 8~16자리"
                     name="userPass"
                     id="userPass"
+                    value={joinParam.userPass}
+                    onChange={handleChange}
+                    ref={(element: HTMLInputElement) => (inputsRef.current[1] = element as HTMLInputElement)}
                 />
-                <label>
+                <label ref={(element: HTMLLabelElement) => (labelsRef.current[2] = element as HTMLLabelElement)}>
                     <span>비밀번호 확인</span>
                 </label>
                 <InputElement
                     type="passwordConfirm"
                     placeholder="비밀번호 확인"
                     id="passwordConfirm"
+                    name="passCheck"
+                    value={passCheck}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => setPassCheck(event.target.value)}
+                    ref={(element: HTMLInputElement) => (inputsRef.current[2] = element as HTMLInputElement)}
                 />
-                <label>
+                <label ref={(element: HTMLLabelElement) => (labelsRef.current[3] = element as HTMLLabelElement)}>
                     <span>이름</span>
                 </label>
-                <InputElement type="text" placeholder="이름확인" name="userName" id="userName" />
-                <label>
+                <InputElement type="text" placeholder="이름 입력" name="userName" id="userName" 
+                        onChange={handleChange}ref={(element: HTMLInputElement) => (inputsRef.current[3] = element as HTMLInputElement)}/>
+                <label ref={(element: HTMLLabelElement) => (labelsRef.current[4] = element as HTMLLabelElement)}>
                     <span>생년월일</span>
                 </label>
                 <InputElement
                     type="number"
-                    placeholder="생년월일"
+                    placeholder="생년월일 ex)20230101"
                     name="userBirth"
                     id="userBirth"
+                    value={joinParam.userBirth}
+                    onChange={handleChange}
+                    ref={(element: HTMLInputElement) => (inputsRef.current[4] = element as HTMLInputElement)}
                 />
-                <label>
+                <label ref={(element: HTMLLabelElement) => (labelsRef.current[5] = element as HTMLLabelElement)}>
                     <span>문자 수신동의</span>
                 </label>
                 <div className="chk_radio">
@@ -116,6 +158,8 @@ const MemberChk01 = ({ nextStep }: { nextStep: Function }) => {
                             value="동의"
                             name="userSmsAgree"
                             id="userSmsAgree"
+                            onChange={handleChange}
+                            ref={(element: HTMLInputElement) => (inputsRef.current[5] = element as HTMLInputElement)}
                         />
                         <label htmlFor="userSmsAgree">동의</label>
                     </span>
@@ -125,16 +169,18 @@ const MemberChk01 = ({ nextStep }: { nextStep: Function }) => {
                             value="미동의"
                             name="userSmsAgree"
                             id="userSmsDisAgree"
+                            onChange={handleChange}
                         />
                         <label htmlFor="userSmsDisAgree">미동의</label>
                     </span>
                 </div>
-                <label>
+                <label ref={(element: HTMLLabelElement) => (labelsRef.current[6] = element as HTMLLabelElement)}>
                     <span>이메일</span>
                 </label>
                 <div>
                     <span className="flexInput selectBox">
-                        <InputElement type="email" placeholder="이메일 확인" id="" />@
+                        <InputElement type="email" placeholder="이메일 입력" id="" value={joinParam.userEmail}
+                            ref={(element: HTMLInputElement) => (inputsRef.current[6] = element as HTMLInputElement)}/>@
                         <select name="userEmail">
                             <option></option>
                             <option></option>
@@ -142,7 +188,7 @@ const MemberChk01 = ({ nextStep }: { nextStep: Function }) => {
                         </select>
                     </span>
                 </div>
-                <label>
+                <label ref={(element: HTMLLabelElement) => (labelsRef.current[7] = element as HTMLLabelElement)}>
                     <span>이메일 수신동의</span>
                 </label>
                 <div className="chk_radio">
@@ -152,6 +198,7 @@ const MemberChk01 = ({ nextStep }: { nextStep: Function }) => {
                             value="동의"
                             name="userEmailAgree"
                             id="userEmailAgree"
+                            ref={(element: HTMLInputElement) => (inputsRef.current[7] = element as HTMLInputElement)}
                         />
                         <label htmlFor="userEmailAgree">동의</label>
                     </span>

@@ -3,11 +3,12 @@ import TitleHeadComponent from "@components/head/TitleHeadComponent";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { modalState } from "@states/modalState";
 import ModalComponent from "@components/modal/ModalComponent";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import useAxios from "@hooks/useAxios";
 import { SurveyListInterface } from "@interfaces/surveyListInterface";
 import InputElement from "@/components/elements/InputElement";
 import { BeforeSurveyInfoInterface } from "@/interfaces/surveyInterface";
+import { userState } from "@states/userState";
 
 const Survey = () => {
     const [modal, setModal] = useRecoilState(modalState);
@@ -16,6 +17,7 @@ const Survey = () => {
     const [, setSurvey] = useState<SurveyListInterface[]>();
     const [popup, setPopup] = useState(true);
     const {state} = useLocation() as BeforeSurveyInfoInterface;
+    const user = useRecoilValue(userState);
 
     const handleToolTip = () => {
         setShow(!isShow);
@@ -71,18 +73,20 @@ const Survey = () => {
     const [beforeSmoke, setBeforeSmoke] = useState(false);
     const [isDrink, setIsDrink] = useState(false);
     const [beforeDrink, setBeforeDrink] = useState(false);
+    const now = new Date();
+    const [userAge, ] = useState(Number(now.getFullYear()) - Number(user.userBirth?.substr(0,4)) + 1);
 
     const handleSmoke = (event: React.ChangeEvent<HTMLInputElement>) => {
         const target = event.target;
         if (target.value === "흡연") {
             setIsSmoke(true);
-            handleSetInfo(event);
+            handleUpdateHealthInfo(event);
         } else {
             setIsSmoke(false);
         }
         if (target.value === "금연") {
             setBeforeSmoke(true);
-            handleSetInfo(event);
+            handleUpdateHealthInfo(event);
         } else {
             setBeforeSmoke(false);
         }
@@ -92,13 +96,13 @@ const Survey = () => {
         const target = event.target;
         if (target.value === "음주") {
             setIsDrink(true);
-            handleSetInfo(event);
+            handleUpdateHealthInfo(event);
         } else {
             setIsDrink(false);
         }
         if (target.value === "금주") {
             setBeforeDrink(true);
-            handleSetInfo(event);
+            handleUpdateHealthInfo(event);
         } else {
             setBeforeDrink(false);
         }
@@ -108,6 +112,51 @@ const Survey = () => {
     const [endPopup, setEndPopup] = useState(false);
 
     const handlePopupStep = () => {
+    
+        if (beforeSurveyInfo.userIsSmoke === "") {
+            moveScroll(healthInfoRef.current[0])
+            return
+        }
+        else if (beforeSurveyInfo.userIsSmoke === "흡연") {
+            if (beforeSurveyInfo.userSmokeAmt === "") {
+                moveScroll(healthInfoRef.current[1])
+                return
+            }
+            else if (beforeSurveyInfo.userSmokeStartYear === "" || beforeSurveyInfo.userSmokeEndYear === "") {
+                moveScroll(healthInfoRef.current[2])
+                return
+            }
+        }
+        else if (beforeSurveyInfo.userIsSmoke === "금연" && beforeSurveyInfo.userWasSmoke === "") {
+            moveScroll(healthInfoRef.current[3])
+            return
+        }
+
+        if (beforeSurveyInfo.userIsDrink === "") {
+            moveScroll(healthInfoRef.current[4])
+            return
+        }
+        else if (beforeSurveyInfo.userIsDrink === "음주") {
+            if (beforeSurveyInfo.userDrinkAmt === "") {
+                moveScroll(healthInfoRef.current[5])
+                return
+            }
+            else if (beforeSurveyInfo.userDrinkStartYear === "" || beforeSurveyInfo.userDrinkEndYear === "") {
+                moveScroll(healthInfoRef.current[6])
+                return
+            }
+        }
+        else if (beforeSurveyInfo.userIsDrink === "금주" && beforeSurveyInfo.userWasDrink === "") {
+            moveScroll(healthInfoRef.current[7])
+            return
+        }
+
+        if (beforeSurveyInfo.userIsCaffeine === "") {
+            moveScroll(healthInfoRef.current[8])
+            return
+        }
+
+        moveScroll(beforeSurveyHeaderRef.current as HTMLDivElement);
         setPopupStep(1);
     };
 
@@ -149,9 +198,8 @@ const Survey = () => {
         userNowHealStat: "",
         userGender: ""
     });
-    const handleSetInfo = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleUpdateHealthInfo = (event: React.ChangeEvent<HTMLInputElement>) => {
         const {name, value} = event.target;
-        console.log(name, value)
 
         if (name === "userIsSmoke") {
             if (value === "흡연") {
@@ -196,10 +244,28 @@ const Survey = () => {
             })
         }
     }
+    
     useEffect(()=>{
         console.log(beforeSurveyInfo);
+        const now = new Date();
+        const age = Number(now.getFullYear()) - Number(user.userBirth?.substr(0,4)) + 1
     }, [beforeSurveyInfo]);
+    
+    const healthInfoRef = useRef<HTMLSpanElement[]>([]);
+    const beforeSurveyHeaderRef = useRef<null | HTMLDivElement>(null);
+    
+    const moveScroll = (dom: HTMLSpanElement) => {
+        dom.scrollIntoView({behavior: "smooth"});
+    }
+    
+    const handleUpdateCancerInfo = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const {name, value} = event.target;
 
+        setBeforeSurveyInfo({
+            ...beforeSurveyInfo,
+            [name]: value,
+        })
+    }
 
     return (
         <React.Fragment>
@@ -246,7 +312,7 @@ const Survey = () => {
             {/* 팝업 추가 - 임시로 이곳에 추가해둠. */}
             {state.isBeforeSurveyInfo && (
                 <div className="surveyBefore_popup" style={{ display: popup ? "blocik" : "none" }}>
-                    <div className="popupTitle">
+                    <div className="popupTitle" ref={beforeSurveyHeaderRef}>
                         <h2>설문 전 작성정보</h2>
                         <button type="button" className="close" onClick={handlePopup}></button>
                     </div>
@@ -264,7 +330,7 @@ const Survey = () => {
                                     <ul>
                                         <li>
                                             <label>
-                                                <span className="title">1) 흡연</span>
+                                                <span className="title" ref={(element) => (healthInfoRef.current[0] = element as HTMLSpanElement)}>1) 흡연</span>
                                                 <span className="desc">지금도 흡연 하고 계신가요?</span>
                                             </label>
                                             <div className="chk_radio03">
@@ -293,17 +359,17 @@ const Survey = () => {
                                                 className="input_detail"
                                                 style={{ display: isSmoke ? "block" : "none" }}
                                             >
-                                                <span>양</span>
+                                                <span ref={(element) => (healthInfoRef.current[1] = element as HTMLSpanElement)}>양</span>
                                                 <span className="detail">
                                                     <InputElement type="number" id="drinking_rate" name="userSmokeAmt" value={beforeSurveyInfo.userSmokeAmt}
-                                                            onChange={handleSetInfo}/>
+                                                            onChange={handleUpdateHealthInfo}/>
                                                     <label>갑/일</label>
                                                 </span>
                                                 <span className="point">
                                                     보통의 하루 평균적인 흡연 양을 적어주세요.
                                                 </span>
                                                 <span className="term">
-                                                    <span>기간</span>
+                                                    <span ref={(element) => (healthInfoRef.current[2] = element as HTMLSpanElement)}>기간</span>
                                                     <span className="termDate">
                                                         <InputElement
                                                             type="number"
@@ -311,7 +377,8 @@ const Survey = () => {
                                                             id="drinking_start"
                                                             name="userSmokeStartYear"
                                                             value={beforeSurveyInfo.userSmokeStartYear}
-                                                            onChange={handleSetInfo}
+                                                            onChange={handleUpdateHealthInfo}
+                                                            maxLength={4}
                                                         />
                                                         <label>년</label>
                                                         <b>~</b>
@@ -321,7 +388,7 @@ const Survey = () => {
                                                             id="drinking_end"
                                                             name="userSmokeEndYear"
                                                             value={beforeSurveyInfo.userSmokeEndYear}
-                                                            onChange={handleSetInfo}
+                                                            onChange={handleUpdateHealthInfo}
                                                         />
                                                         <label>년</label>
                                                     </span>
@@ -329,7 +396,7 @@ const Survey = () => {
                                             </div>
                                             <div style={{ display: beforeSmoke ? "block" : "none" }}>
                                                 <label>
-                                                    <span className="desc">
+                                                    <span className="desc" ref={(element) => (healthInfoRef.current[3] = element as HTMLSpanElement)}>
                                                         그러면 과거에는 흡연하셨나요?
                                                     </span>
                                                 </label>
@@ -340,7 +407,7 @@ const Survey = () => {
                                                             value="흡연"
                                                             name="userWasSmoke"
                                                             id="beforesmoking"
-                                                            onChange={handleSetInfo}
+                                                            onChange={handleUpdateHealthInfo}
                                                         />
                                                         <label htmlFor="beforesmoking">네</label>
                                                     </span>
@@ -350,7 +417,7 @@ const Survey = () => {
                                                             value="금연"
                                                             name="userWasSmoke"
                                                             id="beforestopSmoking"
-                                                            onChange={handleSetInfo}
+                                                            onChange={handleUpdateHealthInfo}
                                                         />
                                                         <label htmlFor="beforestopSmoking">
                                                             아니오
@@ -361,7 +428,7 @@ const Survey = () => {
                                         </li>
                                         <li>
                                             <label>
-                                                <span className="title">2) 음주</span>
+                                                <span className="title" ref={(element) => (healthInfoRef.current[4] = element as HTMLSpanElement)}>2) 음주</span>
                                                 <span className="desc">지금도 음주 하고 계신가요?</span>
                                             </label>
                                             <div className="chk_radio03">
@@ -392,17 +459,17 @@ const Survey = () => {
                                                 id="stopDrink"
                                                 style={{ display: isDrink ? "block" : "none" }}
                                             >
-                                                <span>종류</span>
+                                                <span ref={(element) => (healthInfoRef.current[5] = element as HTMLSpanElement)}>종류</span>
                                                 <span className="detail">
                                                     <InputElement type="number" id="drinking_rate" name="userDrinkAmt" value={beforeSurveyInfo.userDrinkAmt}
-                                                            onChange={handleSetInfo} />
+                                                            onChange={handleUpdateHealthInfo} />
                                                     <label>병/일</label>
                                                 </span>
                                                 <span className="point">
                                                     보통의 하루 평균적인 음주 양을 적어주세요.
                                                 </span>
                                                 <span className="term">
-                                                    <span>기간</span>
+                                                    <span ref={(element) => (healthInfoRef.current[6] = element as HTMLSpanElement)}>기간</span>
                                                     <span className="termDate">
                                                         <InputElement
                                                             type="number"
@@ -410,7 +477,7 @@ const Survey = () => {
                                                             id="drinking_start"
                                                             name="userDrinkStartYear"
                                                             value={beforeSurveyInfo.userDrinkStartYear}
-                                                            onChange={handleSetInfo}
+                                                            onChange={handleUpdateHealthInfo}
                                                         />
                                                         <label>년</label>
                                                         <b>~</b>
@@ -420,7 +487,7 @@ const Survey = () => {
                                                             id="drinking_end"
                                                             name="userDrinkEndYear"
                                                             value={beforeSurveyInfo.userDrinkEndYear}
-                                                            onChange={handleSetInfo}
+                                                            onChange={handleUpdateHealthInfo}
                                                         />
                                                         <label>년</label>
                                                     </span>
@@ -431,7 +498,7 @@ const Survey = () => {
                                                 style={{ display: beforeDrink ? "block" : "none" }}
                                             >
                                                 <label>
-                                                    <span className="desc">
+                                                    <span className="desc" ref={(element) => (healthInfoRef.current[7] = element as HTMLSpanElement)}>
                                                         그러면 과거에는 음주하셨나요?
                                                     </span>
                                                 </label>
@@ -442,7 +509,7 @@ const Survey = () => {
                                                             value="네"
                                                             name="userWasDrink"
                                                             id="before_drink"
-                                                            onChange={handleSetInfo}
+                                                            onChange={handleUpdateHealthInfo}
                                                         />
                                                         <label htmlFor="before_drink">네</label>
                                                     </span>
@@ -452,7 +519,7 @@ const Survey = () => {
                                                             value="아니오"
                                                             name="userWasDrink"
                                                             id="before_no_drink"
-                                                            onChange={handleSetInfo}
+                                                            onChange={handleUpdateHealthInfo}
                                                         />
                                                         <label htmlFor="before_no_drink">아니오</label>
                                                     </span>
@@ -461,7 +528,7 @@ const Survey = () => {
                                         </li>
                                         <li>
                                             <label>
-                                                <span className="title">3) 카페인</span>
+                                                <span className="title" ref={(element) => (healthInfoRef.current[8] = element as HTMLSpanElement)}>3) 카페인</span>
                                                 <span className="desc">
                                                     요새 카페인(커피나 녹차)을 드시곤 하나요?
                                                 </span>
@@ -473,7 +540,7 @@ const Survey = () => {
                                                         value="카페인"
                                                         name="userIsCaffeine"
                                                         id="Caffeine"
-                                                        onChange={handleSetInfo}
+                                                        onChange={handleUpdateHealthInfo}
                                                     />
                                                     <label htmlFor="Caffeine">네</label>
                                                 </span>
@@ -483,7 +550,7 @@ const Survey = () => {
                                                         value="디카페인"
                                                         name="userIsCaffeine"
                                                         id="stopCaffeine"
-                                                        onChange={handleSetInfo}
+                                                        onChange={handleUpdateHealthInfo}
                                                     />
                                                     <label htmlFor="stopCaffeine">아니오</label>
                                                 </span>
@@ -504,7 +571,7 @@ const Survey = () => {
                                         <label>
                                             <span>나이</span>
                                         </label>
-                                        <span className="age">나이</span>
+                                        <span className="age">{userAge}</span>
                                     </div>
 
                                     <label>
@@ -515,8 +582,9 @@ const Survey = () => {
                                             <InputElement
                                                 type="radio"
                                                 value="남"
-                                                name="gender"
+                                                name="userGender"
                                                 id="man"
+                                                onChange={handleUpdateCancerInfo}
                                             />
                                             <label htmlFor="man">남</label>
                                         </span>
@@ -524,8 +592,9 @@ const Survey = () => {
                                             <InputElement
                                                 type="radio"
                                                 value="여"
-                                                name="gender"
+                                                name="userGender"
                                                 id="woman"
+                                                onChange={handleUpdateCancerInfo}
                                             />
                                             <label htmlFor="woman">여</label>
                                         </span>
@@ -564,6 +633,9 @@ const Survey = () => {
                                             type="text"
                                             placeholder="예) 2015년 01월"
                                             id="cancer_start"
+                                            name="userDiagDate"
+                                            value=""
+                                            onChange={handleUpdateCancerInfo}
                                         />
                                         <label>
                                             <span>치료종료 시기</span>
@@ -572,6 +644,9 @@ const Survey = () => {
                                             type="text"
                                             placeholder="예) 2015년 01월"
                                             id="cancer_end"
+                                            name="userCureEndDate"
+                                            value=""
+                                            onChange={handleUpdateCancerInfo}
                                         />
                                     </div>
                                     {/* 추가되는 영역 : S */}
@@ -664,8 +739,9 @@ const Survey = () => {
                                                 <InputElement
                                                     type="radio"
                                                     value="매우 건강하지 않다."
-                                                    name="chk_info"
+                                                    name="userNowHealStat"
                                                     id="radio01"
+                                                    onChange={handleUpdateCancerInfo}
                                                 />
                                                 <label htmlFor="radio01">매우 건강하지 않다.</label>
                                             </li>
@@ -673,8 +749,9 @@ const Survey = () => {
                                                 <InputElement
                                                     type="radio"
                                                     value="건강하지 않다."
-                                                    name="chk_info"
+                                                    name="userNowHealStat"
                                                     id="radio02"
+                                                    onChange={handleUpdateCancerInfo}
                                                 />
                                                 <label htmlFor="radio02">건강하지 않다.</label>
                                             </li>
@@ -682,8 +759,9 @@ const Survey = () => {
                                                 <InputElement
                                                     type="radio"
                                                     value="건강하다."
-                                                    name="chk_info"
+                                                    name="userNowHealStat"
                                                     id="radio03"
+                                                    onChange={handleUpdateCancerInfo}
                                                 />
                                                 <label htmlFor="radio03">건강하다.</label>
                                             </li>
@@ -691,8 +769,9 @@ const Survey = () => {
                                                 <InputElement
                                                     type="radio"
                                                     value="매우 건강하다."
-                                                    name="chk_info"
+                                                    name="userNowHealStat"
                                                     id="radio04"
+                                                    onChange={handleUpdateCancerInfo}
                                                 />
                                                 <label htmlFor="radio04">매우 건강하다.</label>
                                             </li>
