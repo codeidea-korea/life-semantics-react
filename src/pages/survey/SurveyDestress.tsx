@@ -115,9 +115,6 @@ const reqData: ReqData = {
 
 
 const SurveyDeStress = () => {
-
-
-
     const [modal, setModal] = useRecoilState(modalState);
     const [toast, setToast] = useState(false);
     const location = useLocation();
@@ -167,7 +164,6 @@ const SurveyDeStress = () => {
 
 
     const isVaildAnswer = (step: number) => {
-        console.log(reqData);
         if (step === 1) {
             if (document.querySelectorAll('.scoreRadio input:checked')[0] !== undefined && document.querySelectorAll('.py_prob_list input:checked')[0] !== undefined) {
                 //1번
