@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-const InputElement = (props: any) => {
+const InputElement = React.forwardRef((props: any, ref: React.ForwardedRef<unknown>) => {
   const [value, setValue] = useState('');
 
   useEffect(() => {
@@ -13,7 +13,7 @@ const InputElement = (props: any) => {
     if (props.onChange) props.onChange(event);
   };
 
-  return <input {...props} onChange={handleChange} value={value} />;
-};
+  return <input {...props} onChange={handleChange} value={value} ref={ref}/>;
+});
 
 export default InputElement;
