@@ -48,9 +48,19 @@ const ModifyCheck03 = () => {
               <p className="pointGreen">다른 암도 재발되었나요?<br/>그러면 해당 암 종도 추가해주세요.</p>
               <div className="selectBox">
                 <select name="cancer">
-                  <option>암 종(진단명)</option>
-                  <option></option>
-                  <option></option>
+                    <option>암 종 선택</option>
+                    <option>간암</option>
+                    <option>갑상선암</option>
+                    <option>담낭암</option>
+                    <option>담도암</option>
+                    <option>대장암</option>
+                    <option>신장암</option>
+                    <option>위암</option>
+                    <option>유방암</option>
+                    <option>전립선암</option>
+                    <option>췌장암</option>
+                    <option>폐암</option>
+                    <option>직접입력</option>
                 </select>
               </div>
             </li>
@@ -81,9 +91,19 @@ const ModifyCheck03 = () => {
               </label>
               <div className="selectBox">
                 <select name="cancer">
-                  <option>암 종(진단명)</option>
-                  <option></option>
-                  <option></option>
+                    <option>암 종 선택</option>
+                    <option>간암</option>
+                    <option>갑상선암</option>
+                    <option>담낭암</option>
+                    <option>담도암</option>
+                    <option>대장암</option>
+                    <option>신장암</option>
+                    <option>위암</option>
+                    <option>유방암</option>
+                    <option>전립선암</option>
+                    <option>췌장암</option>
+                    <option>폐암</option>
+                    <option>직접입력</option>
                 </select>
               </div>
             </li>
