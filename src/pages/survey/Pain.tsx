@@ -126,7 +126,7 @@ const Pain = () => {
             reqData.userSurveysAnswersDTO[0].saAnsList = [];
             if (selectedElement !== undefined) {
                 document.querySelectorAll('.dot.on').forEach((item, idx) => {
-                    reqData.userSurveysAnswersDTO[0].saAnsList.push(item.getAttribute("data-index"));
+                    reqData.userSurveysAnswersDTO[0].saAnsList.push(Number(item.getAttribute("data-index")) + 1);
                 })
             }
         } else if (step === 2) {
@@ -134,7 +134,7 @@ const Pain = () => {
             reqData.userSurveysAnswersDTO[1].saAnsList = [];
             if (selectedElement !== undefined) {
                 document.querySelectorAll('.dot.red').forEach((item, idx) => {
-                    reqData.userSurveysAnswersDTO[1].saAnsList.push(item.getAttribute("data-index"));
+                    reqData.userSurveysAnswersDTO[1].saAnsList.push(Number(item.getAttribute("data-index")) + 1);
                 })
             }
         }
@@ -178,7 +178,7 @@ const Pain = () => {
             reqData.userSurveysAnswersDTO[2].saQst = 3;
             reqData.userSurveysAnswersDTO[2].saAnsList = [];
             const checkedIndex = Array.from(document.querySelectorAll('.scoreRadio input')).indexOf(document.querySelectorAll('.scoreRadio input:checked')[0])
-            reqData.userSurveysAnswersDTO[2].saAnsList.push(checkedIndex)
+            reqData.userSurveysAnswersDTO[2].saAnsList.push(checkedIndex + 1)
 
 
             fetch(`https://api.life.codeidea.io/usr/surveys`,
