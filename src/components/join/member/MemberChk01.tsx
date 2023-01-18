@@ -11,9 +11,25 @@ const MemberChk01 = ({ nextStep }: { nextStep: Function }) => {
     const labelsRef = useRef<HTMLLabelElement[]>([]);
     const [isDuplicatedUserID, setIsDuplicatedUserID] = useState(false);
     const [passCheck, setPassCheck] = useState('');
+    const [idCheckBorder, setIdCheckBorder] = useState(false);
+    const [alertText, setAlertText] = useState({
+        userID: [0, ''],
+        userPass: [0, ''],
+        userPassCheck: [0, ''],
+        userEmail: [0, ''],
+    })
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.currentTarget;
+        if (name === 'userID') {
+            setIsDuplicatedUserID(false);
+            if (value.length < 6 || value.length > 18) inputsRef.current[0].style.borderColor = "";
+            else inputsRef.current[0].style.borderColor = "f30909";
+        }
+        else if (name === 'userPass') inputsRef.current[1].style.borderColor = "";
+        else if (name === 'userName') inputsRef.current[3].style.borderColor = "";
+        else if (name === 'userBirth') inputsRef.current[4].style.borderColor = "";
+        else if (name === 'userEmail') inputsRef.current[5].style.borderColor = "";
         setJoinParam({ ...joinParam, [name]: value });
     };
 
@@ -22,7 +38,10 @@ const MemberChk01 = ({ nextStep }: { nextStep: Function }) => {
             .post(`/users/checkUserDup?userID=${joinParam.userID}`, null)
             .then((res) => {
                 console.log(res);
-                if (!res.data.body.userID) setIsDuplicatedUserID(true);
+                if (!res.data.body.userID) {
+                    setIsDuplicatedUserID(true);
+                    setIdCheckBorder(false);
+                }        
             })
             .catch((err) => {
                 console.log(err);
@@ -36,20 +55,24 @@ const MemberChk01 = ({ nextStep }: { nextStep: Function }) => {
     const handleFocusBtn = (event: React.MouseEvent<HTMLButtonElement>) => {
         if (!joinParam.userID) {
             inputsRef.current[0].focus();
+            inputsRef.current[0].style.borderColor = "#f30909";
             moveScroll(labelsRef.current[0]);
             return false;
         }
         if (!isDuplicatedUserID){
+            setIdCheckBorder(true);
             moveScroll(labelsRef.current[0]);
             return false;
         }
         if (!joinParam.userPass) {
             inputsRef.current[1].focus();
+            inputsRef.current[1].style.borderColor = "#f30909";
             moveScroll(labelsRef.current[1]);
             return false;
         }
         if (!passCheck || joinParam.userPass !== passCheck) {
             inputsRef.current[2].focus();
+            inputsRef.current[2].style.borderColor = "#f30909";
             moveScroll(labelsRef.current[2]);
             if (joinParam.userPass !== passCheck) {
             
@@ -58,22 +81,28 @@ const MemberChk01 = ({ nextStep }: { nextStep: Function }) => {
         }
         if (!joinParam.userName) {
             inputsRef.current[3].focus();
+            inputsRef.current[3].style.borderColor = "#f30909";
             moveScroll(labelsRef.current[3]);
             return false;
         }
         if (!joinParam.userBirth) {
             inputsRef.current[4].focus();
+            inputsRef.current[4].style.borderColor = "#f30909";
             moveScroll(labelsRef.current[4]);
             return false;
         }
         if (!joinParam.userSmsAgree) {
-            inputsRef.current[5].focus();
             moveScroll(labelsRef.current[5]);
             return false;
         }
         if (!joinParam.userEmail) {
-            inputsRef.current[6].focus();
+            inputsRef.current[5].focus();
+            inputsRef.current[5].style.borderColor = "#f30909";
             moveScroll(labelsRef.current[6]);
+            return false;
+        }
+        if (!joinParam.userEmailAgree) {
+            moveScroll(labelsRef.current[7]);
             return false;
         }
         nextStep(4); // 가입완료로 넘어가기위해 변경.
@@ -101,12 +130,13 @@ const MemberChk01 = ({ nextStep }: { nextStep: Function }) => {
                     />
                     <button
                         type="button"
-                        className="doubleCheck green"
+                        className={"doubleCheck " + (idCheckBorder && "green")}
                         onClick={checkUserIdDuplication}
                     >
                         중복확인
                     </button>
                 </div>
+                {alertText.userID[0] && <span className="alert_text">비밀번호를 입력해주세요.</span>}
                 <label ref={(element: HTMLLabelElement) => (labelsRef.current[1] = element as HTMLLabelElement)}>
                     <span>비밀번호</span>
                 </label>
@@ -119,6 +149,7 @@ const MemberChk01 = ({ nextStep }: { nextStep: Function }) => {
                     onChange={handleChange}
                     ref={(element: HTMLInputElement) => (inputsRef.current[1] = element as HTMLInputElement)}
                 />
+                /
                 <label ref={(element: HTMLLabelElement) => (labelsRef.current[2] = element as HTMLLabelElement)}>
                     <span>비밀번호 확인</span>
                 </label>
@@ -128,7 +159,7 @@ const MemberChk01 = ({ nextStep }: { nextStep: Function }) => {
                     id="passwordConfirm"
                     name="passCheck"
                     value={passCheck}
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => setPassCheck(event.target.value)}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {inputsRef.current[2].style.borderColor = ""; setPassCheck(event.target.value);}}
                     ref={(element: HTMLInputElement) => (inputsRef.current[2] = element as HTMLInputElement)}
                 />
                 <label ref={(element: HTMLLabelElement) => (labelsRef.current[3] = element as HTMLLabelElement)}>
@@ -159,7 +190,6 @@ const MemberChk01 = ({ nextStep }: { nextStep: Function }) => {
                             name="userSmsAgree"
                             id="userSmsAgree"
                             onChange={handleChange}
-                            ref={(element: HTMLInputElement) => (inputsRef.current[5] = element as HTMLInputElement)}
                         />
                         <label htmlFor="userSmsAgree">동의</label>
                     </span>
@@ -178,14 +208,15 @@ const MemberChk01 = ({ nextStep }: { nextStep: Function }) => {
                     <span>이메일</span>
                 </label>
                 <div>
-                    <span className="flexInput selectBox">
-                        <InputElement type="email" placeholder="이메일 입력" id="" value={joinParam.userEmail}
-                            ref={(element: HTMLInputElement) => (inputsRef.current[6] = element as HTMLInputElement)}/>@
-                        <select name="userEmail">
-                            <option></option>
-                            <option></option>
-                            <option></option>
-                        </select>
+                    <span>
+                        <InputElement 
+                            type="email" 
+                            placeholder="이메일 입력" 
+                            id="" 
+                            value={joinParam.userEmail}
+                            name="userEmail"
+                            onChange={handleChange}
+                            ref={(element: HTMLInputElement) => (inputsRef.current[5] = element as HTMLInputElement)}/>
                     </span>
                 </div>
                 <label ref={(element: HTMLLabelElement) => (labelsRef.current[7] = element as HTMLLabelElement)}>
@@ -198,7 +229,7 @@ const MemberChk01 = ({ nextStep }: { nextStep: Function }) => {
                             value="동의"
                             name="userEmailAgree"
                             id="userEmailAgree"
-                            ref={(element: HTMLInputElement) => (inputsRef.current[7] = element as HTMLInputElement)}
+                            onChange={handleChange}
                         />
                         <label htmlFor="userEmailAgree">동의</label>
                     </span>
@@ -208,6 +239,7 @@ const MemberChk01 = ({ nextStep }: { nextStep: Function }) => {
                             value="미동의"
                             name="userEmailAgree"
                             id="userEmailDisAgree"
+                            onChange={handleChange}
                         />
                         <label htmlFor="userEmailDisAgree">미동의</label>
                     </span>
