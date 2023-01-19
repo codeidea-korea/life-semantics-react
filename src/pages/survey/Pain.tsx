@@ -33,7 +33,7 @@ interface ReqData {
     svNo: Number,
     svPgNo: Number,
     svUserNo: unknown,
-    svType1: string,
+    svType1: unknown,
     svType2: string,
     svStatus: string,
     svRegDate: string,
@@ -95,6 +95,16 @@ const Pain = () => {
             title: String(document.querySelector("input")?.value),
         });
     const [step, setStep] = useState(1);
+
+    //url로 전달받은 데이터
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+
+    const pgNo = urlParams.get('pgNo');
+    const type = urlParams.get('type');
+    reqData.svPgNo = Number(pgNo);
+    reqData.svType1 = type
+
 
     useEffect(() => {
         const inner = document.querySelector(".next") as HTMLButtonElement;
@@ -222,7 +232,7 @@ const Pain = () => {
 
     const moveSurveyMain = () => {
         setModal({ ...modal, show: false });
-        navigate('/surveyBefore');
+        navigate('/survey');
     };
 
 

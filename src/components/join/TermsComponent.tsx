@@ -3,9 +3,11 @@ import InputElement from '../elements/InputElement';
 import {Link} from 'react-router-dom';
 import {joinPolicyState, joinPolicyAllCheck, joinPolicyAllReset} from '@states/joinPolicyState';
 import {useRecoilState, useRecoilValue} from "recoil";
+import { joinState } from '@/states/joinState';
 
 const TermsComponent = ({next}: { next: Function }) => {
 
+    const [joinParam, setJoinParam] = useRecoilState(joinState);
     const [policy, setPolicy] = useRecoilState(joinPolicyState);
     const policyAllReset = useRecoilValue(joinPolicyAllReset);
     const policyAllCheck = useRecoilValue(joinPolicyAllCheck);
@@ -53,6 +55,12 @@ const TermsComponent = ({next}: { next: Function }) => {
     };
 
     const moveNextStep = () => {
+        setJoinParam({
+            ...joinParam,
+            ['tos1']: policy.personalInfo,
+            ['tos2']: policy.thirdPerson,
+            ['tos3']: policy.privacy,
+        })
         next();
     };
 

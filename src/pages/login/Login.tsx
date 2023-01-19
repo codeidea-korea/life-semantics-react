@@ -90,7 +90,9 @@ const Login = () => {
                     <br/> 다시 확인해 주세요.
                 </div>
             ),
-            confirmText: '확인'
+            confirmText: '확인',
+
+            onConfirmCallback: () => setModal({...modal, show:false})
         });
     };
 

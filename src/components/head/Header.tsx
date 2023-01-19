@@ -9,7 +9,6 @@ const HeaderComponent = () => {
     const [closeList, setCloseList] = useState<boolean>(false);
     const listRef = useRef<HTMLDivElement>(null);
     const user = useRecoilValue(userState);
-    console.log(user.accessToken);
 
     function foldList() {
         if (!listRef || !listRef.current) {

@@ -13,10 +13,14 @@ const joinState = atom({
         userBirth: '',
         userPhone: '',
         userSmsAgree: '',
-        //userGender: '',
         userEmail: '',
         userEmailAgree: '',
+        tos1: false,
+        tos2: false,
+        tos3: false,
+
         // piNo: 0,
+        // userGender: '',
         // userIsSmoke: '',
         // userSmokeAmt: 0,
         // userSmokeStartYear: 0,
@@ -36,9 +40,6 @@ const joinState = atom({
         // userDiagEtc: '',
         // userDiagEtcName: '',
         // userNowHealStat: '',
-        tos1: false,
-        tos2: false,
-        tos3: false,
     },
 });
 

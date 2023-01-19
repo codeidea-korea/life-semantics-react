@@ -33,7 +33,7 @@ interface ReqData {
   svNo: Number,
   svPgNo: Number,
   svUserNo: unknown,
-  svType1: string,
+  svType1: unknown,
   svType2: string,
   svStatus: string,
   svRegDate: string,
@@ -76,6 +76,15 @@ const Tired = () => {
   const [toast2, setToast2] = useState(false);
   const [step, setStep] = useState(1);
 
+  //url로 전달받은 데이터
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+
+  const pgNo = urlParams.get('pgNo');
+  const type = urlParams.get('type');
+  reqData.svPgNo = Number(pgNo);
+  reqData.svType1 = type
+
   const dataSet = (qnaLength: number) => {
     const checkedElementArray = document.querySelectorAll('.surveyList input:checked');
     for (let i = 0; i < qnaLength; i++) {
@@ -108,7 +117,7 @@ const Tired = () => {
 
   const moveSurveyMain = () => {
     setModal({ ...modal, show: false });
-    navigate('/surveyBefore');
+    navigate('/survey');
   };
 
   const handleTiredSurveyComplete = () => {

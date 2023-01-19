@@ -1,18 +1,41 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Dispatch, SetStateAction } from 'react';
 import ProgramNumberDetailComponent from './ProgramNumberDetailComponent';
 import useUserHttp from '@hooks/queries/useUserQuery';
 import { ListInterface } from '@interfaces/listInterface';
 import { UserInterface } from '@interfaces/userInterface';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
+import useAxios from '@/hooks/useAxios';
+import { useRecoilState } from 'recoil';
+import { forestState } from '@/states/forestState';
 
 const RoundTextComponent = () => {
+  const api = useAxios();
   const [roundDetails, setRoundDetails] = useState<number[]>([]);
+  const [categoryList, setCategoryList] = useState([]);
+  const [forest, setForest] = useRecoilState(forestState);
 
   useEffect(() => {
+    (async () => {
+      await getCategoryList();
+    })();
+  }, []);
+
+  const getCategoryList = async () => {
+    await api
+      .get('/user/forest/category')
+      .then((res) => {
+        if (res.status === 200) setCategoryList(res.data.category1);
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+  
+  useEffect(()=>{
     const totalRound = document.querySelector('.roundNumber') as HTMLDivElement;
     totalRound.click();
-  }, []);
+  }, [categoryList])
 
   const setDetail = (
     event: React.MouseEvent<HTMLElement>,
@@ -34,9 +57,22 @@ const RoundTextComponent = () => {
     target.style.backgroundColor = backgroundColor;
     target.style.color = color;
  
-
-    setRoundDetails(roundNumber === 0 ? [1, 2, 3, 4, 5, 6] : [roundNumber]);
+    setRoundDetails(roundNumber === 0 ? categoryList.map((elem,idx)=>idx+1) : [roundNumber]);
+    getForestList(roundNumber === 0 ? '' : `?category1=${categoryList[roundNumber-1]}`);
   };
+
+  const getForestList = async (query: string) => {
+    const uri = `user/forest${query}`;
+
+    await api
+      .get(`${uri}`)
+      .then((res) => {
+        if (res.status === 200) setForest(res.data.forestList)
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  }
 
   return (
     <React.Fragment>
@@ -52,7 +88,17 @@ const RoundTextComponent = () => {
         >
           전체
         </SwiperSlide>
-        <SwiperSlide
+        {categoryList.map((elem, idx) => (
+          <SwiperSlide
+            key={idx}
+            className="roundNumber"
+            onClick={(event) => setDetail(event, idx+1, '#41b946', '#fff')}
+          >
+            {elem}
+          </SwiperSlide>
+        ))}
+
+        {/* <SwiperSlide
           className="roundNumber"
           onClick={(event) => setDetail(event, 1, '#41b946', '#fff')}
         >
@@ -99,7 +145,7 @@ const RoundTextComponent = () => {
           onClick={(event) => setDetail(event, 6, '#41b946', '#fff')}
         >
           대관령
-        </SwiperSlide>
+        </SwiperSlide> */}
       </Swiper>
     </React.Fragment>
   );
