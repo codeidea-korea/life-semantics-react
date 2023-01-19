@@ -16,7 +16,7 @@ const Survey = () => {
     const [isShow, setShow] = useState<boolean>(false);
     const [, setSurvey] = useState<SurveyListInterface[]>();
     const [popup, setPopup] = useState(true);
-    const {state} = useLocation() as BeforeSurveyInfoInterface;
+    const { state } = useLocation() as BeforeSurveyInfoInterface;
     const user = useRecoilValue(userState);
 
     const handleToolTip = () => {
@@ -74,7 +74,7 @@ const Survey = () => {
     const [isDrink, setIsDrink] = useState(false);
     const [beforeDrink, setBeforeDrink] = useState(false);
     const now = new Date();
-    const [userAge, ] = useState(Number(now.getFullYear()) - Number(user.userBirth?.substr(0,4)) + 1);
+    const [userAge,] = useState(Number(now.getFullYear()) - Number(user.userBirth?.substr(0, 4)) + 1);
 
     const handleSmoke = (event: React.ChangeEvent<HTMLInputElement>) => {
         const target = event.target;
@@ -136,7 +136,7 @@ const Survey = () => {
     });
 
     const handlePopupStep = () => {
-    
+
         if (beforeSurveyInfo.userIsSmoke === "") {
             moveScroll(healthInfoRef.current[0])
             return
@@ -213,7 +213,7 @@ const Survey = () => {
             moveScroll(cancerInfoRef.current[4])
             return
         }
-        
+
         requestRegBeforeSurveyInfo();
     };
 
@@ -231,9 +231,9 @@ const Survey = () => {
             ['userDiagDate']: newUserDiagDate,
             ['userCureEndDate']: newUserCureEndDate,
         };
-        
+
         api
-            .post('/users/health-and-cancer', requestBody, {headers: {Authorization: `Bearer ${user.accessToken}`}})
+            .post('/users/health-and-cancer', requestBody, { headers: { Authorization: `Bearer ${user.accessToken}` } })
             .then((res) => {
                 console.log(res);
                 if (res.status === 200) {
@@ -258,7 +258,7 @@ const Survey = () => {
         } else {
             setIsCustomCanerName(false);
         }
-        
+
         setBeforeSurveyInfo({
             ...beforeSurveyInfo,
             [target.name]: target.value,
@@ -266,7 +266,7 @@ const Survey = () => {
     };
 
     const handleUpdateHealthInfo = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const {name, value} = event.target;
+        const { name, value } = event.target;
 
         if (name === "userIsSmoke") {
             if (value === "1") {
@@ -309,20 +309,20 @@ const Survey = () => {
             })
         }
     }
-    
-    useEffect(()=>{
+
+    useEffect(() => {
         console.log(beforeSurveyInfo);
         console.log(beforeSurveyInfo.userDiagEtc);
         const now = new Date();
-        const age = Number(now.getFullYear()) - Number(user.userBirth?.substr(0,4)) + 1
+        const age = Number(now.getFullYear()) - Number(user.userBirth?.substr(0, 4)) + 1
     }, [beforeSurveyInfo]);
-    
+
     const moveScroll = (dom: HTMLSpanElement) => {
-        dom.scrollIntoView({behavior: "smooth"});
+        dom.scrollIntoView({ behavior: "smooth" });
     }
-    
+
     const handleUpdateCancerInfo = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const {name, value} = event.target;
+        const { name, value } = event.target;
 
         if (name === 'userCureType') {
             let cureTypeList: string[] = [];
@@ -349,7 +349,7 @@ const Survey = () => {
             if (value !== "1") {
                 checkBoxRef.current[0].checked = false;
                 let diagEtcList: string[] = [];
-    
+
                 if (beforeSurveyInfo.userDiagEtc.length) {
                     diagEtcList = beforeSurveyInfo.userDiagEtc.split(',');
                     const idx = diagEtcList.indexOf(value);
@@ -362,7 +362,7 @@ const Survey = () => {
                     diagEtcList = beforeSurveyInfo.userDiagEtc.split('');
                     diagEtcList.push(value);
                 }
-    
+
                 setBeforeSurveyInfo({
                     ...beforeSurveyInfo,
                     ['userDiagEtc']: diagEtcList.join(','),
@@ -372,7 +372,7 @@ const Survey = () => {
                 checkBoxRef.current.forEach((elem, idx) => {
                     if (idx && elem.checked && checkBoxRef.current[0].checked) elem.checked = false;
                 })
-                
+
                 setBeforeSurveyInfo({
                     ...beforeSurveyInfo,
                     ['userDiagEtc']: '1',
@@ -388,44 +388,79 @@ const Survey = () => {
         }
     }
 
+    const [resData, setResData] = useState([])
+
+    useEffect(() => {
+        fetch(`https://api.life.codeidea.io/usr/programs/myList?paUserNo=${user.userNo}`,
+            {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + user.accessToken,
+                    'Content-Type': 'application/json'
+                },
+            }).then((response) => {
+                return response.json();
+            }).then((data) => {
+                if (data.result == "true") {
+                    setResData(data.body);
+                }
+            }).catch((error) => {
+                console.log(error)
+            });
+    }, [])
+
+    function getDayDifference(dateString: string) {
+        const today = new Date();
+        const targetDate = new Date(dateString);
+        const timeDiff = Math.abs(targetDate.getTime() - today.getTime());
+        const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+        return dayDiff;
+    }
+
     return (
         <React.Fragment>
             <TitleHeadComponent name="설문 작성" targetUrl="/main" />
             <div className="survey">
                 <div className="surveyMain">
-                    <div className="surveyName">
-                        <p>굿바이 피로1기</p>
-                        <div className="noticeIco on" onClick={handleToolTip}>
-                            <img src="public/images/question.svg" alt="" className="" />
-                            {isShow && (
-                                <div className="noticeBox">
-                                    <ul>
-                                        <li>
-                                            <span>매일 입력 설문</span>은 8주 간(56일간)매일 간단한
-                                            수치를 입력하는 설문입니다.
-                                        </li>
-                                        <li>
-                                            <span>사전/사후 설문</span>은 프로그램 시작전, 종료 후에
-                                            선택형 및 서술형으로 작성하는 설문입니다.
-                                        </li>
-                                    </ul>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                    <ul>
-                        <li className="" onClick={(event) => handleNavigate("/surveyBefore")}>
-                            시작전 설문(2/3)
-                        </li>
-                        <li className="" onClick={(event) => handleNavigate("/surveyToday")}>
-                            일일 설문
-                            <br />
-                            <span>(최근 5일 이내 미작성 2건)</span>
-                        </li>
-                        <li className="active" onClick={handleNotOpen}>
-                            <Link to="">종료후 설문(0/3)</Link>
-                        </li>
-                    </ul>
+                    {
+                        resData.map((item: any, index: number) =>
+                            <>
+                                {index == 0 && <div className="surveyName">
+                                    <p>굿바이 피로1기</p>
+                                    <div className="noticeIco on" onClick={handleToolTip}>
+                                        <img src="public/images/question.svg" alt="" className="" />
+                                        {isShow && (
+                                            <div className="noticeBox">
+                                                <ul>
+                                                    <li>
+                                                        <span>매일 입력 설문</span>은 8주 간(56일간)매일 간단한
+                                                        수치를 입력하는 설문입니다.
+                                                    </li>
+                                                    <li>
+                                                        <span>사전/사후 설문</span>은 프로그램 시작전, 종료 후에
+                                                        선택형 및 서술형으로 작성하는 설문입니다.
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>}
+                                <ul key={index}>
+                                    <li className={item.surveys.pre.length == 3 ? "active" : ""} onClick={(event) => handleNavigate(`/surveyBefore?pgNo=${item.pgNo}&type=goodBye&type2=pre&title=${item.pgTitle}&progress=${item.surveys.pre}`)}>
+                                        시작전 설문({item.surveys.pre.length}/3)
+                                    </li>
+                                    <li className="" onClick={(event) => handleNavigate("/surveyToday")}>
+                                        일일 설문
+                                        <br />
+                                        <span>(최근 5일 이내 미작성 2건)</span>
+                                    </li>
+                                    <li className={item.surveys.pre.length == 3 ? "active" : ""} onClick={() => handleNavigate(`/surveyAfter?pgNo=${item.pgNo}&type=goodBye&type2=end&title=${item.pgTitle}&progress=${item.surveys.end}`)}>
+                                        <Link to="">종료후 설문({item.surveys.end.length}/3)</Link>
+                                    </li>
+                                </ul>
+                            </>
+                        )
+                    }
                 </div>
             </div>
             <ModalComponent />
@@ -483,7 +518,7 @@ const Survey = () => {
                                                 <span ref={(element) => (healthInfoRef.current[1] = element as HTMLSpanElement)}>양</span>
                                                 <span className="detail">
                                                     <InputElement type="number" id="drinking_rate" name="userSmokeAmt" value={beforeSurveyInfo.userSmokeAmt}
-                                                            onChange={handleUpdateHealthInfo}/>
+                                                        onChange={handleUpdateHealthInfo} />
                                                     <label>갑/일</label>
                                                 </span>
                                                 <span className="point">
@@ -583,7 +618,7 @@ const Survey = () => {
                                                 <span ref={(element) => (healthInfoRef.current[5] = element as HTMLSpanElement)}>종류</span>
                                                 <span className="detail">
                                                     <InputElement type="number" id="drinking_rate" name="userDrinkAmt" value={beforeSurveyInfo.userDrinkAmt}
-                                                            onChange={handleUpdateHealthInfo} />
+                                                        onChange={handleUpdateHealthInfo} />
                                                     <label>병/일</label>
                                                 </span>
                                                 <span className="point">
@@ -725,7 +760,7 @@ const Survey = () => {
                                         <span ref={(element) => (cancerInfoRef.current[1] = element as HTMLSpanElement)}>암 종(진단명) <i className="plusBtn">+</i></span>
                                         <button type="button" className="plus"></button>
                                     </label>
-                                    <p className="pointGreen">다른 암도 재발되었나요?<br/>그러면 해당 암 종도 추가해주세요.</p>
+                                    <p className="pointGreen">다른 암도 재발되었나요?<br />그러면 해당 암 종도 추가해주세요.</p>
                                     <div>
                                         <div className="selectBox">
                                             <select name="userDiagnosis" value={beforeSurveyInfo.userDiagnosis} onChange={handleCancerNameChange}>
@@ -936,7 +971,7 @@ const Survey = () => {
                                             </li>
                                         </ul>
                                     </div>
-                                    
+
                                     <label className="labelType" htmlFor="cancer_type_end">
                                         <span ref={(element) => (cancerInfoRef.current[4] = element as HTMLSpanElement)}>암 이외의 질환</span>
                                         (해당질환 모두 선택)
@@ -1039,7 +1074,7 @@ const Survey = () => {
                                                 <label htmlFor="etc">직접 입력</label>
                                             </li>
                                         </ul>
-                                        <InputElement type="text" placeholder="직접 암 이외의 질환(진단명) 입력" name="userDiagEtcName" value={beforeSurveyInfo.userDiagEtcName} ref={(element) => checkBoxRef.current[9] = element as HTMLInputElement} onChange={handleUpdateCancerInfo}/>
+                                        <InputElement type="text" placeholder="직접 암 이외의 질환(진단명) 입력" name="userDiagEtcName" value={beforeSurveyInfo.userDiagEtcName} ref={(element) => checkBoxRef.current[9] = element as HTMLInputElement} onChange={handleUpdateCancerInfo} />
                                     </div>
                                 </div>
                                 <button type="button" className="BtnActive" onClick={handlePopupEnd}>
@@ -1086,7 +1121,7 @@ const Survey = () => {
                         )}
                     </div>
                 </div>
-            )}    
+            )}
         </React.Fragment>
     );
 };

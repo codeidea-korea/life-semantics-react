@@ -38,6 +38,7 @@ import SurveyToday from "@pages/survey/SurveyToday";
 import SurveyComplete from "@/pages/survey/SurveyComplete";
 import SurveyList from "@/pages/survey/SurveyList";
 import DeleteAccountComplete from "@/pages/account/DeleteAccountComplete";
+import SurveyAfter from "@/pages/survey/SurveyAfter";
 
 function Router() {
     const routes = [
@@ -165,6 +166,15 @@ function Router() {
                 {
                     path: "",
                     element: <SurveyBefore />,
+                },
+            ],
+        }, {
+            path: "surveyAfter",
+            element: <TotalLayout />,
+            children: [
+                {
+                    path: "",
+                    element: <SurveyAfter />,
                 },
             ],
         },
