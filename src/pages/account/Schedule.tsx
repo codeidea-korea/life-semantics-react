@@ -63,6 +63,7 @@ const Schedule = () => {
             .get(`/usr/plans/monthly-schedule?year=${selectYear}&month=${requestMonth}`, {headers:{Authorization: `Bearer ${user.accessToken}`}})
             .then((res) => {
                 setScheduleList(res.data.body);
+                console.log(res.data.body);
             })
             .catch((err) => {
                 console.log(err);
@@ -134,7 +135,7 @@ const Schedule = () => {
                     <div className="programInfo">
                         <span className="name goodBye">{elem.type === 'goodBye' ? '굿바이 피로' : '웰컴 굿잠'}</span>
                         <span className="round">{elem.round}회차</span>
-                        <span className="time">{elem.time || ''}</span>
+                        <span className="time">{elem.startTime} ~ {elem.endTime}</span>
                     </div>
                     { new Date(today) > new Date(elem.date) && (<span className="badge">완료</span>)}
                 </div>

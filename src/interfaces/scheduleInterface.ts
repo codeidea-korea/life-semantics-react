@@ -2,5 +2,6 @@ export interface ScheduleInterface {
     date: string,
     round: number,
     type: string,
-    time?: string
+    startTime: string,
+    endTime: string,
 }
