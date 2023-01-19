@@ -101,18 +101,6 @@ const SurveyList = () => {
                                 ],
                                 
                             }}
-                            options={
-                                responsive: false,
-                                scales: {
-                                    yAxes: [{
-                                        ticks: {
-                                            min: -10;
-                                            max: 25;
-                                            fontSize : 14,
-                                        }
-                                    }]
-                                }
-                            }
                         />
                     </div>
                     {/* <span>{elem.history[0].dt?.split('-')[1]}월</span> */}
