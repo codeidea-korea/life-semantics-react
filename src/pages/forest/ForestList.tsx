@@ -11,6 +11,7 @@ import RoundTextComponent from "@components/program/RoundTextComponent";
 import ForestCardComponent from "@components/program/ForestCardComponent";
 import $ from "jquery";
 import BannerComponent02 from "@/components/program/banner/BannerComponent02";
+import { ForestInterface } from "@/interfaces/forestInterface";
 
 const ForestList = () => {
   return (
@@ -18,7 +19,7 @@ const ForestList = () => {
       <HeaderComponent />
       <div className="programInfo" id="forest">
         <h2>치유의 숲 찾기</h2>
-        <RoundTextComponent />
+        <RoundTextComponent/>
       </div>
       <div className="banner03">
         <a href="https://www.fowi.or.kr/user/program/programList.do?progrmSeCd=PS01">
@@ -26,7 +27,7 @@ const ForestList = () => {
         </a>
       </div>
       <div className="programInfo">
-        <ForestCardComponent />
+        <ForestCardComponent/>
       </div>
 
       {/* <div className="forestCard">
