@@ -10,8 +10,8 @@ const ForestCardComponent = () => {
     <React.Fragment>
       {
         forestList.map((forest, idx) => (
-          <div className="forestCard">
-            <Link to={"/forestView"} state={{forestInfo : forest}}>
+          <div className="forestCard" key={forest.id}>
+            <Link to={"/forestView"} state={{forestId : forest.id}}>
               <p className="forestName">{forest.name}</p>
               <span>
                 {forest.address}

@@ -1,9 +1,37 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import BannerComponent02 from "@/components/program/banner/BannerComponent02";
 import HeaderComponent from "@components/head/Header";
+import useAxios from "@/hooks/useAxios";
 
 const ForestContent = () => {
+  const {state} = useLocation() as {state: {forestId:number}};
+  const api = useAxios();
+  const [forestInfo, setForestInfo] = useState({
+    address: '',
+    category1: '',
+    category2: '',
+    center: '',
+    name: '',
+    id: state.forestId,
+    reservation: '',
+    tel: ''
+  });
+
+  useEffect(() => {
+    api
+      .get(`/user/forest/${state.forestId}`)
+      .then((res) => {
+        console.log(res);
+        if (res.status === 200) {
+          setForestInfo(res.data.forest);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  }, []);
+
   const handleChange = () => {
     const explainText = document.querySelector(
       ".explainText"
@@ -18,17 +46,18 @@ const ForestContent = () => {
       moreText.innerText = "닫기";
     }
   };
+
   return (
     <React.Fragment>
       <HeaderComponent />
       <div className="programInfo">
         <h2>치유의 숲</h2>
         <div className="forestContent">
-          <p className="forestTitle">산음 치유의 숲</p>
+          <p className="forestTitle">{forestInfo.name}</p>
           <ul>
             <li>
               <span>소재지</span>
-              <span>경기도 양평군 단월면 윗고북길 33-39</span>
+              <span>{forestInfo.address}</span>
             </li>
             <li>
               <span>운영시간</span>
@@ -36,7 +65,7 @@ const ForestContent = () => {
             </li>
             <li>
               <span>전화번호</span>
-              <span>031-774-8133</span>
+              <span>{forestInfo.tel}</span>
             </li>
             <li>
               <span>설명</span>
