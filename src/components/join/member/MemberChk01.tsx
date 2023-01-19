@@ -17,9 +17,6 @@ const MemberChk01 = ({ nextStep }: { nextStep: Function }) => {
         userPass: [0, ''],
         userPassCheck: [0, ''],
         userEmail: [0, ''],
-        tos1: false,
-        tos2: false,
-        tos3: false,
     })
     const idReg = /^.*(?=.*\d)(?=.*[a-zA-Z]).*$/;
     const passReg = /^.*(?=.*\d)(?=.*[a-zA-Z])(?=.*[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]).*$/;
