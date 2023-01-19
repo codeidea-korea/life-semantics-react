@@ -1,26 +1,75 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TitleHeadComponent from "@components/head/TitleHeadComponent";
 import { useNavigate } from "react-router-dom";
-
-
+import { useRecoilValue, useRecoilState } from "recoil";
+import { userState } from "@/states/userState";
+import { modalState } from "@states/modalState";
+import ModalComponent from "@components/modal/ModalComponent";
 const SurveyBefore = () => {
-
+  const user = useRecoilValue(userState);
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   const pgNo = urlParams.get('pgNo');
   const type = urlParams.get('type');
   const type2 = urlParams.get('type2');
   const title = urlParams.get('title');
-  const completeData = urlParams.get('progress');
 
   const navigate = useNavigate();
   const [isShow, setShow] = useState<boolean>(false);
   const handleToolTip = () => {
     setShow(!isShow);
   }
-  const handleNavigate = (url: string) => {
-    navigate(url);
+  const [modal, setModal] = useRecoilState(modalState);
+  const handleNavigate = (e: any, url: string) => {
+    if (e.target.classList.contains("active")) {
+      setModal({
+        ...modal,
+        show: true,
+        title: "",
+        cancelShow: false,
+        content: (
+          <div>
+            이미 참여 완료한
+            <br />
+            설문입니다.
+          </div>
+        ),
+        confirmText: "확인",
+      });
+    } else {
+      navigate(url);
+    }
+
   }
+  useEffect(() => {
+    fetch(`https://api.life.codeidea.io/usr/programs/myList?paUserNo=${user.userNo}`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: 'Bearer ' + user.accessToken,
+          'Content-Type': 'application/json'
+        },
+      }).then((response) => {
+        return response.json();
+      }).then((data) => {
+        data.body.forEach((item: any, idx: number) => {
+          if (pgNo == item.pgNo) {
+            if (item.surveys.pre.length !== 0) {
+              item.surveys.pre.forEach((item2: any, idx2: number) => {
+                document.querySelectorAll('.survey_list li').forEach((item3: any, idx3) => {
+                  if (item3.getAttribute("data-title") == item2.svType2) {
+                    item3.classList.add("active");
+                  }
+                });
+              });
+            }
+          }
+        });
+      }).catch((error) => {
+        console.log(error)
+      });
+  }, [])
+
   return (
     <React.Fragment>
       <TitleHeadComponent name="시작 전 설문" targetUrl="/survey" />
@@ -55,17 +104,18 @@ const SurveyBefore = () => {
               }
             </div>
           </div>
-          <ul>
+          <ul className="survey_list">
             {/*설문을 완료 했을때 회색으로 변경 active */}
-            <li onClick={event => handleNavigate("/deStress")}>디스트레스</li>
-            <li onClick={event => handleNavigate("/pain")}>통증</li>
-            <li onClick={event => handleNavigate("/tired")}>피로</li>
-
-
-            <li className="active">피로</li>
+            {type == "goodBye" ? <><li data-title="destress" onClick={event => handleNavigate(event, `/deStress?pgNo=${pgNo}&type=pre`)}>디스트레스</li>
+              <li data-title="ache" onClick={event => handleNavigate(event, `/pain?pgNo=${pgNo}&type=pre`)}>통증</li>
+              <li data-title="fatigue" onClick={event => handleNavigate(event, `/tired?pgNo=${pgNo}&type=pre`)}>피로</li></> : <>            <li data-title="destress" onClick={event => handleNavigate(event, `/deStress?pgNo=${pgNo}&type=pre`)}>디스트레스</li>
+              <li data-title="isi" onClick={event => handleNavigate(event, `/isi?pgNo=${pgNo}&type=pre`)}>불면(ISI)</li>
+              <li data-title="nccn" onClick={event => handleNavigate(event, `/nccn?pgNo=${pgNo}&type=pre`)}>수면위생(NCCN)</li></>}
+            {/* <li className="active">피로</li> */}
           </ul>
         </div>
       </div>
+      <ModalComponent />
     </React.Fragment>
   );
 };

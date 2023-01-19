@@ -24,8 +24,26 @@ const Survey = () => {
     };
 
     const navigate = useNavigate();
-    const handleNavigate = (url: string) => {
-        navigate(url);
+    const handleNavigate = (e: any, url: string) => {
+        if (e.target.classList.contains("active")) {
+            setModal({
+                ...modal,
+                show: true,
+                title: "",
+                cancelShow: false,
+                content: (
+                    <div>
+                        이미 참여 완료한
+                        <br />
+                        설문입니다.
+                    </div>
+                ),
+                confirmText: "확인",
+            });
+        } else {
+            navigate(url);
+        }
+
     };
 
     const handlePopup = () => {
@@ -388,27 +406,46 @@ const Survey = () => {
         }
     }
 
-    const [resData, setResData] = useState([])
-
+    const [resData, setResData] = useState([]);
+    const [notData, setNotData] = useState<number[]>([]);
     useEffect(() => {
-        fetch(`https://api.life.codeidea.io/usr/programs/myList?paUserNo=${user.userNo}`,
-            {
-                method: 'POST',
-                headers: {
-                    Authorization: 'Bearer ' + user.accessToken,
-                    'Content-Type': 'application/json'
-                },
-            }).then((response) => {
-                return response.json();
-            }).then((data) => {
-                if (data.result == "true") {
+        fetch(`https://api.life.codeidea.io/usr/programs/myList?paUserNo=${user.userNo}`, {
+            method: 'POST',
+            headers: {
+                Authorization: 'Bearer ' + user.accessToken,
+                'Content-Type': 'application/json'
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.result === 'true') {
                     setResData(data.body);
+                    data.body.forEach((item: any, idx: number) => {
+                        fetch(
+                            `https://api.life.codeidea.io/usr/surveys/not-created-ing?pgNo=${item.pgNo}`,
+                            {
+                                method: 'GET',
+                                headers: {
+                                    Authorization: 'Bearer ' + user.accessToken,
+                                    'Content-Type': 'application/json'
+                                },
+                            }
+                        )
+                            .then((response) => response.json())
+                            .then((data) => {
+                                document.querySelectorAll('.recent_not_survey')[idx].textContent = `최근 5일 이내 미작성 ${data}건`;
+                            })
+                            .catch((error) => {
+                                console.log(error);
+                            });
+                    });
                 }
-            }).catch((error) => {
-                console.log(error)
+            })
+            .catch((error) => {
+                console.log(error);
             });
-    }, [])
-
+        console.log(notData);
+    }, []);
     function getDayDifference(dateString: string) {
         const today = new Date();
         const targetDate = new Date(dateString);
@@ -424,42 +461,46 @@ const Survey = () => {
                 <div className="surveyMain">
                     {
                         resData.map((item: any, index: number) =>
-                            <>
-                                {index == 0 && <div className="surveyName">
-                                    <p>굿바이 피로1기</p>
-                                    <div className="noticeIco on" onClick={handleToolTip}>
-                                        <img src="public/images/question.svg" alt="" className="" />
-                                        {isShow && (
-                                            <div className="noticeBox">
-                                                <ul>
-                                                    <li>
-                                                        <span>매일 입력 설문</span>은 8주 간(56일간)매일 간단한
-                                                        수치를 입력하는 설문입니다.
-                                                    </li>
-                                                    <li>
-                                                        <span>사전/사후 설문</span>은 프로그램 시작전, 종료 후에
-                                                        선택형 및 서술형으로 작성하는 설문입니다.
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>}
-                                <ul key={index}>
-                                    <li className={item.surveys.pre.length == 3 ? "active" : ""} onClick={(event) => handleNavigate(`/surveyBefore?pgNo=${item.pgNo}&type=goodBye&type2=pre&title=${item.pgTitle}&progress=${item.surveys.pre}`)}>
+                            <div key={index}>
+                                <div className="surveyName">
+                                    <p>{item.pgTitle}</p>
+                                    {index == 0 &&
+                                        <div className="noticeIco on" onClick={handleToolTip}>
+                                            <img src="public/images/question.svg" alt="" className="" />
+                                            {isShow && (
+                                                <div className="noticeBox">
+                                                    <ul>
+                                                        <li>
+                                                            <span>매일 입력 설문</span>은 8주 간(56일간)매일 간단한
+                                                            수치를 입력하는 설문입니다.
+                                                        </li>
+                                                        <li>
+                                                            <span>사전/사후 설문</span>은 프로그램 시작전, 종료 후에
+                                                            선택형 및 서술형으로 작성하는 설문입니다.
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            )}
+                                        </div>
+                                    }
+                                </div>
+                                <ul>
+                                    <li className={item.surveys.pre.length == 3 ? "active" : ""} onClick={(event) => handleNavigate(event, `/surveyBefore?pgNo=${item.pgNo}&type=goodBye&type2=pre&title=${item.pgTitle}`)}>
                                         시작전 설문({item.surveys.pre.length}/3)
                                     </li>
-                                    <li className="" onClick={(event) => handleNavigate("/surveyToday")}>
+                                    <li className="" onClick={(event) => handleNavigate(event, "/surveyToday")}>
                                         일일 설문
                                         <br />
-                                        <span>(최근 5일 이내 미작성 2건)</span>
+                                        <span className="recent_not_survey"></span>
                                     </li>
-                                    <li className={item.surveys.pre.length == 3 ? "active" : ""} onClick={() => handleNavigate(`/surveyAfter?pgNo=${item.pgNo}&type=goodBye&type2=end&title=${item.pgTitle}&progress=${item.surveys.end}`)}>
+                                    <li className={item.surveys.end.length == 3 ? "active" : ""} onClick={(event) => handleNavigate(event, `/surveyAfter?pgNo=${item.pgNo}&type=goodBye&type2=end&title=${item.pgTitle}`)}>
                                         <Link to="">종료후 설문({item.surveys.end.length}/3)</Link>
                                     </li>
                                 </ul>
-                            </>
+                            </div>
+
                         )
+
                     }
                 </div>
             </div>
