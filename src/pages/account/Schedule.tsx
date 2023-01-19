@@ -63,7 +63,6 @@ const Schedule = () => {
             .get(`/usr/plans/monthly-schedule?year=${selectYear}&month=${requestMonth}`, {headers:{Authorization: `Bearer ${user.accessToken}`}})
             .then((res) => {
                 setScheduleList(res.data.body);
-                console.log(res.data.body)
             })
             .catch((err) => {
                 console.log(err);
@@ -140,57 +139,6 @@ const Schedule = () => {
                     { new Date(today) > new Date(elem.date) && (<span className="badge">완료</span>)}
                 </div>
                 ))}
-                
-                {/* <div className="programSchedul">
-                    <div className="toDay">
-                        <span>
-                            {displayMonth}/{todayDate}
-                            <br />
-                            {day}
-                        </span>
-                    </div>
-                    <div className="programInfo">
-                        <span className="name goodBye">굿바이 피로</span>
-                        <span className="round">3회차</span>
-                        <span className="time">10:00 ~ 11:00</span>
-                    </div>
-                </div>
-                <div className="programSchedul ">
-                    <div className="roundDate">
-                        <span>
-                            8/22
-                            <br />
-                            (월)
-                        </span>
-                    </div>
-                    <div className="programInfo">
-                        <span className="name goodBye">굿바이 피로</span>
-                        <span className="round">3회차</span>
-                        <span className="time">10:00 ~ 11:00</span>
-                    </div>
-                </div>
-                <div className="programSchedul programType">
-                    <div className="roundDate">
-                        <span>
-                            8/22
-                            <br />
-                            (월)
-                        </span>
-                    </div>
-                    <div>
-                        <div className="programInfo">
-                            <span className="name goodBye">굿바이 피로</span>
-                            <span className="round">3회차</span>
-                            <span className="time">10:00 ~ 11:00</span>
-                        </div>
-                        <div className="programInfo">
-                            <span className="name welcome">굿바이 피로</span>
-                            <span className="round">3회차</span>
-                            <span className="time">10:00 ~ 11:00</span>
-                        </div>
-                    </div>
-                    <span className="badge">완료</span>
-                </div> */}
             </div>
             <button type="button" onClick={handleModal}></button>
             <ModalComponent />
