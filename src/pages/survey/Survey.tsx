@@ -488,7 +488,7 @@ const Survey = () => {
                                     <li className={item.surveys.pre.length == 3 ? "active" : ""} onClick={(event) => handleNavigate(event, `/surveyBefore?pgNo=${item.pgNo}&type=goodBye&type2=pre&title=${item.pgTitle}`)}>
                                         시작전 설문({item.surveys.pre.length}/3)
                                     </li>
-                                    <li className="" onClick={(event) => handleNavigate(event, "/surveyToday")}>
+                                    <li className="" onClick={(event) => handleNavigate(event, `/surveyToday?pgNo=${item.pgNo}`)}>
                                         일일 설문
                                         <br />
                                         <span className="recent_not_survey"></span>

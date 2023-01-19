@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { userState } from "@/states/userState";
 import TitleHeadComponent from "@components/head/TitleHeadComponent";
 import { countState, sampleState } from "@states/sampleState";
 import DateComponent from "@components/survey/todaySurvey/DateComponent";
@@ -11,13 +12,75 @@ import { modalState } from "@states/modalState";
 import ModalComponent from "@components/modal/ModalComponent";
 import ToastPopup from "@components/modal/ToastPopup";
 import $ from "jquery";
+function getToday() {
+    var date = new Date();
+    var year = date.getFullYear();
+    var month = ("0" + (1 + date.getMonth())).slice(-2);
+    var day = ("0" + date.getDate()).slice(-2);
+    return year + "-" + month + "-" + day;
+}
+
+interface reqObj {
+    saSvNo: number;
+    saQst: number;
+    saAnsList: unknown[];
+    saAns: unknown;
+    saEtcAns: string;
+    saRegDate: string;
+}
+interface ReqData {
+    svNo: Number,
+    svPgNo: Number,
+    svUserNo: unknown,
+    svType1: unknown,
+    svType2: string,
+    svStatus: string,
+    svRegDate: string,
+    userSurveysAnswersDTO: reqObj[]
+}
+
+const reqData: ReqData = {
+    "svNo": 0,
+    "svPgNo": 8,
+    "svUserNo": 0,
+    "svType1": "ing",
+    "svType2": getToday(),
+    "svStatus": "set",
+    "svRegDate": getToday(),
+    "userSurveysAnswersDTO": []
+}
+for (let i = 0; i < 1; i++) {
+    reqData.userSurveysAnswersDTO.push(
+        {
+            "saSvNo": 0,
+            "saQst": 1,
+            "saAnsList": [
+
+            ],
+            "saAns": 0,
+            "saEtcAns": "string",
+            "saRegDate": getToday(),
+        }
+    )
+}
+
 
 const SurveyToday = () => {
+    const user = useRecoilValue(userState);
+    reqData.svUserNo = user.userNo;
     const [modal, setModal] = useRecoilState(modalState);
     const location = useLocation();
     const navigate = useNavigate();
     const [sample, setSample] = useRecoilState(sampleState);
     const [toast, setToast] = useState(false);
+    const [toast2, setToast2] = useState(false);
+
+    //url로 전달받은 데이터
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+
+    const pgNo = urlParams.get('pgNo');
+    reqData.svPgNo = Number(pgNo);
 
     const handleUseNotice = () => {
         setModal({
@@ -125,16 +188,152 @@ const SurveyToday = () => {
         navigate("/survey");
     };
 
+
+
+    function getDates(start: string): Array<{ year: string, month: string, day: string, total: string }> {
+        const startDate = new Date(start);
+        const endDate = new Date();
+        endDate.setDate(endDate.getDate() + 1)
+        const result = [];
+        while (startDate <= endDate) {
+            result.push({
+                year: startDate.getFullYear().toString(),
+                month: (startDate.getMonth() + 1).toString(),
+                day: startDate.getDate().toString(),
+                total: startDate.toISOString().slice(0, 10),
+            });
+            startDate.setDate(startDate.getDate() + 1);
+        }
+        return result;
+    }
+
+    function getToday() {
+        var date = new Date();
+        var year = date.getFullYear();
+        var month = ("0" + (1 + date.getMonth())).slice(-2);
+        var day = ("0" + date.getDate()).slice(-2);
+        return year + "-" + month + "-" + day;
+    }
+    const [selectedDate, setSelectedDate] = useState<Array<{ year: string; month: string; day: string; total: string }>>([]);
+    const [selectedIndex, setSelectedIndex] = useState<any>(0);
+    const [ingData, setIngData] = useState<any>([])
     useEffect(() => {
-        handleUseNotice();
+        fetch(`https://api.life.codeidea.io/usr/programs/myList?paUserNo=${user.userNo}`,
+            {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + user.accessToken,
+                    'Content-Type': 'application/json'
+                },
+            }).then((response) => {
+                return response.json();
+            }).then((data) => {
+                data.body.forEach((item: any, idx: number) => {
+                    if (pgNo == item.pgNo) {
+                        setIngData([...ingData, item.surveys.ing]);
+                        setSelectedDate(getDates(item.pgSttDate))
+                        setSelectedIndex(getDates(item.pgSttDate).length - 1);
+                    }
+                });
+            }).catch((error) => {
+                console.log(error)
+            });
     }, []);
+
+    useEffect(() => {
+        const element = document.querySelectorAll('.scoreRadio input:checked')[0] as HTMLInputElement
+        if (element) {
+            element.checked = false;
+        }
+        console.log(ingData);
+        ingData?.forEach((item2: any, idx: number) => {
+            item2.forEach((item3: any, idx: number) => {
+                if (selectedDate[selectedIndex].total == item3.svType2) {
+                    const el = document.querySelectorAll('.scoreRadio input')[item3.qnaList[0].saAnsList[0] - 1] as HTMLInputElement
+                    el.checked = true;
+                }
+            });
+
+        });
+        if (selectedDate.length !== 0) {
+            reqData.userSurveysAnswersDTO[0].saRegDate = selectedDate[selectedIndex].total
+            reqData.svType2 = selectedDate[selectedIndex].total
+            reqData.svRegDate = selectedDate[selectedIndex].total
+        }
+    }, [selectedIndex, selectedDate])
+
+
+    const handlePrevDate = () => {
+        if (selectedIndex > selectedDate.length - 6)
+            selectedIndex > 0 && setSelectedIndex(selectedIndex - 1)
+
+        reqData.userSurveysAnswersDTO[0].saRegDate = selectedDate[selectedIndex].total
+        reqData.svType2 = selectedDate[selectedIndex].total
+        reqData.svRegDate = selectedDate[selectedIndex].total
+
+    }
+
+    const handleNextDate = () => {
+        selectedIndex < selectedDate.length - 1 && setSelectedIndex(selectedIndex + 1)
+        reqData.userSurveysAnswersDTO[0].saRegDate = selectedDate[selectedIndex].total
+        reqData.svType2 = selectedDate[selectedIndex].total
+        reqData.svRegDate = selectedDate[selectedIndex].total
+    }
+
+    const handleSubmit = () => {
+        if (document.querySelectorAll('.scoreRadio input:checked')[0]) {
+            reqData.userSurveysAnswersDTO[0].saAnsList = [];
+            reqData.userSurveysAnswersDTO[0].saAnsList.push(Number(Array.from(document.querySelectorAll('.scoreRadio input')).indexOf(document.querySelectorAll('.scoreRadio input:checked')[0])) + 1)
+            fetch(`https://api.life.codeidea.io/usr/surveys`,
+                {
+                    method: 'POST',
+                    body: JSON.stringify(reqData),
+                    headers: {
+                        Authorization: 'Bearer ' + user.accessToken,
+                        'Content-Type': 'application/json'
+                    },
+                }).then((response) => {
+                    return response.json();
+                }).then((data) => {
+                    if (data.result == "true") {
+                        handleTodaySurveyComplete()
+                    }
+                }).catch((error) => {
+                    console.log(error)
+                });
+        } else {
+            setToast2(true);
+            setTimeout(() => {
+                setToast2(false)
+            }, 3000);
+        }
+
+    }
+
 
     return (
         <React.Fragment>
             <TitleHeadComponent name="일일 설문" targetUrl="" />
             <div className="survey surveyToday">
-                <div className="dDay">D+16</div>
-                <DateComponent />
+
+
+                <div className="dDay">D+{selectedDate.length - 1}</div>
+                <div className='date'>
+                    <button type='button' onClick={handlePrevDate}></button>
+                    {selectedDate.map((date, index) => (
+                        index == selectedIndex
+                            ?
+                            <span className='today' key={index}>
+                                {date.month}월{date.day}일
+                            </span>
+                            :
+                            <span style={{ display: "none" }} className='today' key={index}>
+                                {date.month}월{date.day}일
+                            </span>
+                    ))}
+                    <button type='button' onClick={handleNextDate}> </button>
+                </div>
+
                 {/* UI변경으로 주석처리. */}
                 {/* <p>
                     지난 24시간 동안의 피로를 나타내는 <br />
@@ -190,7 +389,8 @@ const SurveyToday = () => {
                 </ul>
                 <ToastPopup content={"수정되었습니다."} show={toast} />
                 <ToastPopup content={"저장되었습니다."} show={toast} />
-                <button type="button" className="BtnActive02" onClick={handlePopup}>
+                <ToastPopup content={"점수를 선택해주세요."} show={toast2} />
+                <button type="button" className="BtnActive02" onClick={handleSubmit}>
                     저장
                 </button>
             </div>
