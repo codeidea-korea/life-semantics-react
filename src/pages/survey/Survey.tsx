@@ -62,7 +62,8 @@ const Survey = () => {
     };
 
     useEffect(() => {
-        console.log(state.isBeforeSurveyInfo);
+        console.log(state?.isBeforeSurveyInfo)
+        if (state?.isBeforeSurveyInfo || true) navigate('/login');
         (async () => {
             await getSurvey();
         })();
@@ -431,7 +432,7 @@ const Survey = () => {
             <ModalComponent />
 
             {/* 팝업 추가 - 임시로 이곳에 추가해둠. */}
-            {state.isBeforeSurveyInfo || (
+            {(state?.isBeforeSurveyInfo || true) || (
                 <div className="surveyBefore_popup" style={{ display: popup ? "block" : "none" }}>
                     <div className="popupTitle" ref={beforeSurveyHeaderRef}>
                         <h2>설문 전 작성정보</h2>
