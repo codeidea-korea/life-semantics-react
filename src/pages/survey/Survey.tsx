@@ -62,8 +62,7 @@ const Survey = () => {
     };
 
     useEffect(() => {
-        console.log(state?.isBeforeSurveyInfo)
-        if (state?.isBeforeSurveyInfo || true) navigate('/login');
+        if (state?.isBeforeSurveyInfo && !user.accessToken) navigate('/login');
         (async () => {
             await getSurvey();
         })();

@@ -141,7 +141,7 @@ const LostPassword = () => {
     }
 
     api
-      .post(`/users/temporary-password?userName=${userID}&userPhone=${userPhone}&userPass=${userNewPass}`, null)
+      .post(`/users/temporary-password?userID=${userID}&userPhone=${userPhone}&userPass=${userNewPass}`, null)
       .then((res) => {
         console.log(res);
         if (res.data.body.result) handleModal01(['새 비밀번호 설정이', '완료되었습니다.']);
@@ -149,6 +149,7 @@ const LostPassword = () => {
       })
       .catch((err) => {
         console.log(err);
+        handleModal();
       })
   }
 
