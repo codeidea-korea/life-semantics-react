@@ -47,7 +47,8 @@ const Survey = () => {
     };
 
     const handlePopup = () => {
-        setPopup(false);
+        navigate(-1);
+        //setPopup(false);
     };
 
     const handleNotOpen = () => {
@@ -81,9 +82,9 @@ const Survey = () => {
 
     useEffect(() => {
         if (state?.isBeforeSurveyInfo && !user.accessToken) navigate('/login');
-        (async () => {
-            await getSurvey();
-        })();
+        // (async () => {
+        //     await getSurvey();
+        // })();
     }, []);
 
     // 팝업 위한 코드
@@ -330,7 +331,6 @@ const Survey = () => {
 
     useEffect(() => {
         console.log(beforeSurveyInfo);
-        console.log(beforeSurveyInfo.userDiagEtc);
         const now = new Date();
         const age = Number(now.getFullYear()) - Number(user.userBirth?.substr(0, 4)) + 1
     }, [beforeSurveyInfo]);
@@ -507,7 +507,7 @@ const Survey = () => {
             <ModalComponent />
 
             {/* 팝업 추가 - 임시로 이곳에 추가해둠. */}
-            {(state?.isBeforeSurveyInfo || true) || (
+            {state?.isBeforeSurveyInfo || (
                 <div className="surveyBefore_popup" style={{ display: popup ? "block" : "none" }}>
                     <div className="popupTitle" ref={beforeSurveyHeaderRef}>
                         <h2>설문 전 작성정보</h2>
