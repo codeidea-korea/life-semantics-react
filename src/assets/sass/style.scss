@@ -4066,8 +4066,31 @@ button[type="button"] {
 }
 
 
-.plusBtn {display:inline-block; width:30px; height:30px; background-color:#ddd; border-radius:50%; font-size:20px; text-align:center; line-height:29px; }
-.pointGreen {color:#41b946;}
-.modalFooter {justify-content: center !important;}
+.plusBtn {
+    display:inline-block; 
+    width:30px; height:30px; 
+    background-color:#ddd; 
+    border-radius:50%; 
+    font-size:20px; 
+    text-align:center; 
+    line-height:29px; 
+}
+.pointGreen {
+    color:#41b946;
+}
+.modalFooter {
+    justify-content: center !important;
+}
 #flexModal .flex .btn.confirmBtn {background:#41b946 !important; color:#fff !important; border:1px solid #41b946 !important;}
-.pl-20 {padding-left:20px !important; }
+.pl-20 {
+    padding-left:20px !important; 
+}
+.noSchedule {
+    padding:30px; 
+    text-align:center; 
+    font-weight:bold;
+    font-size:20px;
+    button {
+        margin-top:30px; 
+    }
+}

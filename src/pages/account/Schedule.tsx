@@ -140,6 +140,20 @@ const Schedule = () => {
                     { new Date(today) > new Date(elem.date) && (<span className="badge">완료</span>)}
                 </div>
                 ))}
+
+                {/* 일정 없을때 : 과거 */}
+                {/* <div className="noSchedule">
+                    진행한 프로그램이<br/>
+                    없습니다.
+                    <button type="button" className="btn-02 active">프로그램 예약하기</button>
+                </div> */}
+
+                {/* 일정 없을때 : 미래 */}
+                {/* <div className="noSchedule">
+                    아직 등록된<br/>
+                    프로그램의 일정이 없습니다.
+                    <button type="button" className="btn-02 active">프로그램 예약하기</button>
+                </div> */}
             </div>
             <button type="button" onClick={handleModal}></button>
             <ModalComponent />
