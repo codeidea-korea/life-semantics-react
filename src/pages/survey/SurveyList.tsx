@@ -62,7 +62,7 @@ const SurveyList = () => {
             },
         ],
     };
-    const options = {
+    const options: object = {
         scales: {
             y: {
                 ticks: {
@@ -71,8 +71,19 @@ const SurveyList = () => {
                     stepSize: 1, // this will set the tick interval to 1
                 },
             },
-        },
+            xAxes: [{
+                gridLines: {
+                    display: false
+                }
+            }],
+            yAxes: [{
+                gridLines: {
+                    display: false
+                }
+            }]
+        }
     };
+
     const handleSetWeek = (week: number) => {
         setWeek(week)
     }
@@ -128,5 +139,4 @@ const SurveyList = () => {
         </React.Fragment>
     );
 };
-
 export default SurveyList;
