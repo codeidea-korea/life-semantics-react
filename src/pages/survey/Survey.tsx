@@ -16,9 +16,9 @@ const Survey = () => {
     const [isShow, setShow] = useState<boolean>(false);
     const [, setSurvey] = useState<SurveyListInterface[]>();
     const [popup, setPopup] = useState(true);
-    const { state } = useLocation() as BeforeSurveyInfoInterface;
     const user = useRecoilValue(userState);
-    console.log(state);
+    const [isBeforeSurveyInfo, setIsBeforeSurveyInfo] = useState(true);
+    
     const handleToolTip = () => {
         setShow(!isShow);
     };
@@ -81,7 +81,18 @@ const Survey = () => {
     };
 
     useEffect(() => {
-        if (state?.isBeforeSurveyInfo && !user.accessToken) navigate('/login');
+        user.accessToken && (
+            api
+            .get('/users/health-and-cancer/check', {headers: {Authorization: `Bearer ${user.accessToken}`}})
+            .then((res) => {
+                console.log(res);
+                setIsBeforeSurveyInfo(res.data.body.isCreated)
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+        )
+        if (isBeforeSurveyInfo && !user.accessToken) navigate('/login');
         // (async () => {
         //     await getSurvey();
         // })();
@@ -259,7 +270,7 @@ const Survey = () => {
                     setEndPopup(true);
                     setTimeout(() => {
                         setEndPopup(false);
-                        state.isBeforeSurveyInfo = true;
+                        navigate('/');
                     }, 3000);
                 }
             })
@@ -507,7 +518,7 @@ const Survey = () => {
             <ModalComponent />
 
             {/* 팝업 추가 - 임시로 이곳에 추가해둠. */}
-            {state?.isBeforeSurveyInfo || (
+            {isBeforeSurveyInfo || (
                 <div className="surveyBefore_popup" style={{ display: popup ? "block" : "none" }}>
                     <div className="popupTitle" ref={beforeSurveyHeaderRef}>
                         <h2>설문 전 작성정보</h2>
