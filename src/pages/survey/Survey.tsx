@@ -16,9 +16,9 @@ const Survey = () => {
     const [isShow, setShow] = useState<boolean>(false);
     const [, setSurvey] = useState<SurveyListInterface[]>();
     const [popup, setPopup] = useState(true);
-    const { state } = useLocation() as BeforeSurveyInfoInterface;
     const user = useRecoilValue(userState);
-
+    const [isBeforeSurveyInfo, setIsBeforeSurveyInfo] = useState(true);
+    
     const handleToolTip = () => {
         setShow(!isShow);
     };
@@ -47,7 +47,8 @@ const Survey = () => {
     };
 
     const handlePopup = () => {
-        setPopup(false);
+        navigate(-1);
+        //setPopup(false);
     };
 
     const handleNotOpen = () => {
@@ -80,10 +81,21 @@ const Survey = () => {
     };
 
     useEffect(() => {
-        if (state?.isBeforeSurveyInfo && !user.accessToken) navigate('/login');
-        (async () => {
-            await getSurvey();
-        })();
+        user.accessToken && (
+            api
+            .get('/users/health-and-cancer/check', {headers: {Authorization: `Bearer ${user.accessToken}`}})
+            .then((res) => {
+                console.log(res);
+                setIsBeforeSurveyInfo(res.data.body.isCreated)
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+        )
+        if (isBeforeSurveyInfo && !user.accessToken) navigate('/login');
+        // (async () => {
+        //     await getSurvey();
+        // })();
     }, []);
 
     // 팝업 위한 코드
@@ -258,7 +270,7 @@ const Survey = () => {
                     setEndPopup(true);
                     setTimeout(() => {
                         setEndPopup(false);
-                        state.isBeforeSurveyInfo = true;
+                        setIsBeforeSurveyInfo(true);
                     }, 3000);
                 }
             })
@@ -330,7 +342,6 @@ const Survey = () => {
 
     useEffect(() => {
         console.log(beforeSurveyInfo);
-        console.log(beforeSurveyInfo.userDiagEtc);
         const now = new Date();
         const age = Number(now.getFullYear()) - Number(user.userBirth?.substr(0, 4)) + 1
     }, [beforeSurveyInfo]);
@@ -488,7 +499,7 @@ const Survey = () => {
                                     <li className={item.surveys.pre.length == 3 ? "active" : ""} onClick={(event) => handleNavigate(event, `/surveyBefore?pgNo=${item.pgNo}&type=goodBye&type2=pre&title=${item.pgTitle}`)}>
                                         시작전 설문({item.surveys.pre.length}/3)
                                     </li>
-                                    <li className="" onClick={(event) => handleNavigate(event, "/surveyToday")}>
+                                    <li className="" onClick={(event) => handleNavigate(event, `/surveyToday?pgNo=${item.pgNo}`)}>
                                         일일 설문
                                         <br />
                                         <span className="recent_not_survey"></span>
@@ -507,7 +518,7 @@ const Survey = () => {
             <ModalComponent />
 
             {/* 팝업 추가 - 임시로 이곳에 추가해둠. */}
-            {(state?.isBeforeSurveyInfo || true) || (
+            {isBeforeSurveyInfo || (
                 <div className="surveyBefore_popup" style={{ display: popup ? "block" : "none" }}>
                     <div className="popupTitle" ref={beforeSurveyHeaderRef}>
                         <h2>설문 전 작성정보</h2>

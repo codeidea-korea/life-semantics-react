@@ -347,6 +347,14 @@ ol {
             input {
                 width: 60%;
             }
+            button.doubleCheck {
+                background-color: #fff;
+                color: #000;
+                border: 1px solid $font-color;
+            }
+            button.doubleCheck.green {
+                border: 1px solid $main-color;
+            }
             button {
                 width: 36%;
                 height: 50px;

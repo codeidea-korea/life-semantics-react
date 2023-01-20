@@ -3,10 +3,15 @@ import InputElement from "../../elements/InputElement";
 import { useRecoilState } from "recoil";
 import { joinState } from "@states/joinState";
 import useAxios from "@hooks/useAxios";
+import { useNavigate } from "react-router-dom";
+import ModalComponent from "@components/modal/ModalComponent";
+import { modalState } from "@/states/modalState";
 
 const MemberChk01 = ({ nextStep }: { nextStep: Function }) => {
     const [joinParam, setJoinParam] = useRecoilState(joinState);
     const api = useAxios();
+    const navigate = useNavigate();
+    const [modal, setModal] = useRecoilState(modalState);
     const inputsRef = useRef<HTMLInputElement[]>([]);
     const labelsRef = useRef<HTMLLabelElement[]>([]);
     const [isDuplicatedUserID, setIsDuplicatedUserID] = useState(false);
@@ -113,7 +118,7 @@ const MemberChk01 = ({ nextStep }: { nextStep: Function }) => {
         dom!.scrollIntoView({behavior: "smooth"});
     }
 
-    const handleFocusBtn = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const handleFocusBtn = () => {
         for (let i = 0; i < labelsRef.current.length; i++) {
             if (i === 0) {
                 if (inputsRef.current[i].value === "") {
@@ -150,7 +155,6 @@ const MemberChk01 = ({ nextStep }: { nextStep: Function }) => {
         }
 
         requestJoin();
-        
     };
 
     const requestJoin = async () => {
@@ -161,13 +165,28 @@ const MemberChk01 = ({ nextStep }: { nextStep: Function }) => {
                 nextStep(4); // 가입완료로 넘어가기위해 변경.
             })
             .catch((err) => {
-                console.log(err);
+                if (err.response.status === 500) {
+                    setModal({
+                        ...modal,
+                        show: true,
+                        title: "",
+                        confirmShow: true,
+                        callBackShow: true,
+                        content: (
+                            <div>
+                                이미 가입된 번호입니다.
+                            </div>
+                        ),
+                        confirmText: "확인",
+                        
+                        onConfirmCallback: () => {
+                            setModal({...modal, show:false})
+                            navigate('/');
+                        }
+                    });
+                }
             })
     }
-    
-    useEffect(()=>{
-        console.log(joinParam)
-    },[joinParam])
 
     return (
         <React.Fragment>
@@ -179,6 +198,7 @@ const MemberChk01 = ({ nextStep }: { nextStep: Function }) => {
                     <InputElement
                         type="text"
                         placeholder="아이디 입력"
+                        maxLength={18}
                         name="userID"
                         id="userID"
                         value={joinParam.userID}
@@ -224,7 +244,7 @@ const MemberChk01 = ({ nextStep }: { nextStep: Function }) => {
                 <label ref={(element: HTMLLabelElement) => (labelsRef.current[3] = element as HTMLLabelElement)}>
                     <span>이름</span>
                 </label>
-                <InputElement type="text" placeholder="이름 입력" name="userName" id="userName" 
+                <InputElement type="text" placeholder="이름 입력" name="userName" id="userName" style={{imeMode:'auto'}}
                         onChange={handleChange}ref={(element: HTMLInputElement) => (inputsRef.current[3] = element as HTMLInputElement)}/>
                 <label ref={(element: HTMLLabelElement) => (labelsRef.current[4] = element as HTMLLabelElement)}>
                     <span>생년월일</span>
@@ -306,13 +326,14 @@ const MemberChk01 = ({ nextStep }: { nextStep: Function }) => {
                 </div>
             </div>
             <div className="fixBtn">
-                <button type="button" className="prev">
+                <button type="button" className="prev" onClick={()=>navigate(-1)}>
                     이전
                 </button>
-                <button type="button" className="next" onClick={handleFocusBtn}>
+                <button type="button" className="next" onClick={()=>handleFocusBtn()}>
                     다음
                 </button>
             </div>
+            <ModalComponent id="flexModal" />
         </React.Fragment>
     );
 };

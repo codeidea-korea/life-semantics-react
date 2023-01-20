@@ -62,6 +62,7 @@ const LostIdComponent = ({next}: { next: Function }) => {
         api
             .post(`/users/auth-number?phone=${num}`)
             .then((res) => {
+                console.log(res.data.body.authNumber)
                 if (res.status === 200) {
                     setAuthCode(res.data.body.authNumber);
                 }

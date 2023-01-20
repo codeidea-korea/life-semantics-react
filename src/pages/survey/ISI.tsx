@@ -121,7 +121,6 @@ const ISI = () => {
         navigate('/surveyBefore');
       };
 
-      console.log(reqData);
       fetch(`https://api.life.codeidea.io/usr/surveys`,
         {
           method: 'POST',
