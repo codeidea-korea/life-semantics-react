@@ -23,7 +23,7 @@ const LostPassword = () => {
   const inputsRef = useRef<HTMLInputElement[]>([]);
   const [userInfoForTempPass, setUserInfoForTempPass] = useState({
     userName: '',
-    userPhone: ''
+    userPhoneTemp: ''
   });
   const [userInfoForNewPass, setUserInfoForNewPass] = useState({
     userID: '',
@@ -53,21 +53,30 @@ const LostPassword = () => {
   const [seconds, setSeconds] = useState(0);
   const [requiredPhoneNumber, setRequiredPhoneNumber] = useState(false);
   const handlePhoneNumber = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const {value} = event.currentTarget;
+    const {name, value} = event.currentTarget;
     let reducePhoneNumber = value.replace(/[^0-9]/g, '')
         .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, "$1-$2-$3").replace(/(\-{1,2})$/g, "");
-    if (reducePhoneNumber.length == 13) {
+    if (name === 'userPhoneTemp') {
+      setUserInfoForTempPass({
+        ...userInfoForTempPass,
+        userPhoneTemp: reducePhoneNumber
+      })
+    }
+    else {
+      if (reducePhoneNumber.length == 13) {
         setRequiredPhoneNumber(true);
         inputsRef.current[1].style.borderColor = "#8f8f8f";
         setAlertText({...alertText, userPhone: [0, '']})
-    } else {
-        setRequiredPhoneNumber(false);
+      } else {
+          setRequiredPhoneNumber(false);
+      }
+      setUserInfoForNewPass({
+        ...userInfoForNewPass,
+        userPhone: reducePhoneNumber
+      })
+      setAuthCode('');
     }
-    setUserInfoForNewPass({
-      ...userInfoForNewPass,
-      userPhone: reducePhoneNumber
-    })
-    setAuthCode('');
+    
   };
   useEffect(() => {
     if (seconds > 0 || minutes > 0) {
@@ -101,24 +110,6 @@ const LostPassword = () => {
       ...sample,
       title: String(document.querySelector("input")?.value),
     });
-
-  const handleModal = () => {
-    setModal({
-      ...modal,
-      show: true,
-      title: "안내",
-      cancelShow: false,
-      content: (
-        <div>
-          아이디 또는 비밀번호를
-          <br /> 다시 확인해 주세요.
-        </div>
-      ),
-      confirmText: "확인",
-
-      onConfirmCallback: () => setModal({...modal, show: false})
-    });
-  };
 
   const handleModalFail = (content: string[]) => {
     setModal({
@@ -182,7 +173,7 @@ const LostPassword = () => {
   
   const requestTempPass = () => {
     api
-      .post(`/users/temporary-password?userName=${userInfoForTempPass.userName}&userPhone=${userInfoForTempPass.userPhone}`, null)
+      .post(`/users/temporary-password?userName=${userInfoForTempPass.userName}&userPhone=${userInfoForTempPass.userPhoneTemp}`, null)
       .then((res) => {
         console.log(res)
         if (res.data.body.result) handleModalSuccess(['임시 비밀번호 발급이', '완료되었습니다.']);
@@ -197,21 +188,19 @@ const LostPassword = () => {
   const handleUserInfoForNewPass = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {name, value} = event.target;
     if (name === 'userNewPassCheck') {
-      if (value !== userInfoForNewPass.userNewPass) {
-        if (value === '') {
-          setAlertText({
-            ...alertText,
-            ["userNewPassCheck"]: [0, '']
-          });
-          inputsRef.current[4].style.borderColor = "#8f8f8f";
-        }
-        else {
-          setAlertText({
-            ...alertText,
-            ["userNewPassCheck"]: [1, '비밀번호가 일치하지 않습니다.']
-          });
-          inputsRef.current[4].style.borderColor = "#f30909";
-        }
+      if (value === '') {
+        setAlertText({
+          ...alertText,
+          ["userNewPassCheck"]: [0, '']
+        });
+        inputsRef.current[4].style.borderColor = "#8f8f8f";
+      }
+      else if (value !== userInfoForNewPass.userNewPass) {
+        setAlertText({
+          ...alertText,
+          ["userNewPassCheck"]: [1, '비밀번호가 일치하지 않습니다.']
+        });
+        inputsRef.current[4].style.borderColor = "#f30909";
       }
       else {
         setAlertText({
@@ -222,14 +211,13 @@ const LostPassword = () => {
       }
     }
     else {
-      setAlertText({
-        ...alertText,
-        [name]: [0, '']
-      });
-      if (name === 'userID') inputsRef.current[0].style.borderColor = "#8f8f8f";
-      if (name === 'userPhone') inputsRef.current[1].style.borderColor = "#8f8f8f";
-      if (name === 'userCode') inputsRef.current[2].style.borderColor = "#8f8f8f";
-      if (name === 'userNewPass') inputsRef.current[3].style.borderColor = "#8f8f8f";
+      if (value === userInfoForNewPass.userNewPass) {
+        setAlertText({
+          ...alertText,
+          ["userNewPassCheck"]: [0, '']
+        });
+        inputsRef.current[4].style.borderColor = "#8f8f8f";
+      }
     }
     setUserInfoForNewPass({
       ...userInfoForNewPass,
@@ -299,46 +287,13 @@ const LostPassword = () => {
       handleModalFail(['조건을', '확인해주세요.']);
       return false
     }
-    // if (!userID) {
-    //   setAlertText({...alertText, userID: [1, '아이디를 입력해주세요.']})
-    //   inputsRef.current[0].style.borderColor = "#f30909";
-    //   return false
-    // }
-    // if (!userPhone || !requiredPhoneNumber) {
-    //   setAlertText({...alertText, userPhone: [1, '휴대폰 번호를 입력해주세요.']})
-    //   inputsRef.current[1].style.borderColor = "#f30909";
-    //   return false
-    // }
-    // if (!userCode) {
-    //   setAlertText({...alertText, userCode: [1, '인증번호를 입력해주세요.']})
-    //   inputsRef.current[2].style.borderColor = "#f30909";
-    //   return false
-    // }
-    // if (userCode !== authCode) {
-    //   setAlertText({...alertText, userCode: [1, '인증번호가 일치하지않습니다.']})
-    //   inputsRef.current[2].style.borderColor = "#f30909";
-    //   return false
-    // }
-    // if (!userNewPass) {
-    //   setAlertText({...alertText, userNewPass: [1, '비밀번호를 입력해주세요.']})
-    //   inputsRef.current[3].style.borderColor = "#f30909";
-    //   return false
-    // }
-    // if (!userNewPassCheck || userNewPass !== userNewPassCheck) {
-    //   setAlertText({...alertText, userNewPassCheck: [1, '비밀번호가 일치하지않습니다.']})
-    //   inputsRef.current[4].style.borderColor = "#f30909";
-    //   return false
-    // }
+    
     return true
   }
 
   const requestNewPass = () => {
     if (!checkInputs()) return;
     const {userID, userCode, userPhone, userNewPass, userNewPassCheck} = userInfoForNewPass;
-    // if (!userID || !userCode || userCode !== authCode || userNewPass !== userNewPassCheck) {
-    //   handleModal();
-    //   return
-    // }
 
     api
       .post(`/users/new-password?userID=${userID}&userPhone=${userPhone}&userPass=${userNewPass}`, null)
@@ -362,7 +317,7 @@ const LostPassword = () => {
           <label>이름</label>
           <InputElement type="text" placeholder="이름 입력" maxLength="10" name="userName" value={userInfoForTempPass.userName} onChange={handleUserInfoForTempPass}/>
           <label>휴대폰 번호</label>
-          <input type="number" placeholder="숫자만 입력" name="userPhone" value={userInfoForTempPass.userPhone} onChange={handleUserInfoForTempPass} />
+          <input type="text" placeholder="숫자만 입력" name="userPhoneTemp" value={userInfoForTempPass.userPhoneTemp} onChange={handlePhoneNumber} maxLength={13}/>
           <button className="InnerBtn" onClick={requestTempPass}>
             임시 비밀번호 발급
           </button>
@@ -371,8 +326,6 @@ const LostPassword = () => {
           <p>새 비밀번호 설정</p>
           <label>아이디</label>
           <input type="text" placeholder="아이디 입력" name="userID" value={userInfoForNewPass.userID} onChange={handleUserInfoForNewPass} ref={(element) => inputsRef.current[0] = element as HTMLInputElement}/>
-          {/* <InputElement type="text" placeholder="아이디 입력" name="userID" value={userInfoForNewPass.userID} onChange={handleUserInfoForNewPass} ref={(element) => inputsRef.current[0] = element as HTMLInputElement}/> */}
-          {!!alertText.userID[0] && <span className="alert_text">{alertText.userID[1]}</span>}
           <label>휴대폰 번호</label>
           <div className="CodeCheck">
             <input type="text" placeholder="휴대폰 번호 입력" name="userPhone" value={userInfoForNewPass.userPhone} onChange={handlePhoneNumber} maxLength={13} ref={(element) => inputsRef.current[1] = element as HTMLInputElement}/>
@@ -384,19 +337,16 @@ const LostPassword = () => {
             <ToastPopup content={"인증번호를 발송했습니다."} show={toast} />
           </div>
           <input type="number" placeholder={timePlaceHolder} name="userCode" value={userInfoForNewPass.userCode} onChange={handleUserInfoForNewPass} ref={(element) => inputsRef.current[2] = element as HTMLInputElement}/>
-          {!!alertText.userPhone[0] && <span className="alert_text">{alertText.userPhone[1]}</span>}
-          {!!alertText.userCode[0] && <span className="alert_text">{alertText.userCode[1]}</span>}
           {sendAuthCode && (
           <div style={{color: '#41b946'}}>
           인증번호를 발송했습니다. (유효시간 10분)
-          인증번호가 오지 않으면, 입력하신 정보가 정확한
-          지 확인해주세요. 이미 가입된 번호이거나 가상 휴
-          대폰번호는 인증번호를 받을 수 없습니다.
+          인증번호가 오지 않으면, 입력하신 정보가 정확한지
+          확인해주세요. 이미 가입된 번호이거나 가상
+          휴대폰번호는 인증번호를 받을 수 없습니다.
           </div>)
           }
           <label>새 비밀번호 설정</label>
           <input type="password" placeholder="새 비밀번호 입력" name="userNewPass" value={userInfoForNewPass.userNewPass} onChange={handleUserInfoForNewPass} ref={(element) => inputsRef.current[3] = element as HTMLInputElement}/>
-          {!!alertText.userNewPass[0] && <span className="alert_text">{alertText.userNewPass[1]}</span>}
           <label>새 비밀번호 확인</label>
           <input type="password" placeholder="새 비밀번호 확인" name="userNewPassCheck" value={userInfoForNewPass.userNewPassCheck} onChange={handleUserInfoForNewPass} ref={(element) => inputsRef.current[4] = element as HTMLInputElement}/>
           {!!alertText.userNewPassCheck[0] && <span className="alert_text">{alertText.userNewPassCheck[1]}</span>}
