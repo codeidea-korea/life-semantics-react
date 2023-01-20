@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import BookComponent from "@components/program/book/BookComponent";
 import GoodByeComponent from "@components/program/GoodByeProgramComponent";
 import GoodSleepComponent from "@components/program/GoodSleepProgramComponent";
@@ -10,12 +10,15 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import BannerComponent02 from "@/components/program/banner/BannerComponent02";
 import { Link, useNavigate } from "react-router-dom";
 import { joinPolicyAllReset, joinPolicyState } from "@states/joinPolicyState";
+import useAxios from "@/hooks/useAxios";
 
 const Program = () => {
     const navigate = useNavigate();
     const user = useRecoilValue(userState);
     const [, setPolicy] = useRecoilState(joinPolicyState);
     const policyAllReset = useRecoilValue(joinPolicyAllReset);
+    const api = useAxios();
+    const [showSurvey, setShowSurvey] = useState(false);
 
     const getMorePrograms = () => {
         navigate("/program");
@@ -23,12 +26,24 @@ const Program = () => {
 
     useEffect(() => {
         setPolicy(policyAllReset);
+        if (user.accessToken) {
+            api
+                .post(`/usr/programs/myList?paUserNo=${user.userNo}`, null, {headers: {Authorization: `Bearer: ${user.accessToken}`}})
+                .then((res) => {
+                    console.log(res.data)
+                    if (!res.data.body.length) setShowSurvey(false);
+                    else setShowSurvey(true);
+                })
+                .catch((err) => console.log(err))
+        }
+        console.log(user);
     }, []);
+
     return (
         <React.Fragment>
             <HeaderComponent />
             <div className="programName">
-                {user.accessToken && <BookProgram />}
+                {showSurvey && <BookProgram />}
                 <GoodByeComponent />
                 <GoodSleepComponent />
             </div>

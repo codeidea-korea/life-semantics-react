@@ -73,6 +73,7 @@ const ProgramInfo = () => {
           setModal({
             ...modal,
             show: true,
+            cancelShow: false,
             callBackShow: true,
             content: <div>프로그램 예약이 완료됐습니다.</div>,
             confirmText: "확인",
@@ -93,6 +94,7 @@ const ProgramInfo = () => {
           setModal({
             ...modal,
             show: true,
+            cancelShow: false,
             callBackShow: true,
             content: <div>프로그램 취소가 완료됐습니다.</div>,
             confirmText: "확인",
