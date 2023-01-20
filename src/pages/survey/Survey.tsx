@@ -270,7 +270,7 @@ const Survey = () => {
                     setEndPopup(true);
                     setTimeout(() => {
                         setEndPopup(false);
-                        navigate('/');
+                        setIsBeforeSurveyInfo(true);
                     }, 3000);
                 }
             })
