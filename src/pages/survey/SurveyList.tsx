@@ -62,6 +62,20 @@ const SurveyList = () => {
             },
         ],
     };
+    const options = {
+        scales: {
+            y: {
+                ticks: {
+                    min: 0,
+                    max: 10,
+                    stepSize: 1, // this will set the tick interval to 1
+                },
+            },
+        },
+    };
+    const handleSetWeek = (week: number) => {
+        setWeek(week)
+    }
 
     return (
         <React.Fragment>
@@ -72,65 +86,45 @@ const SurveyList = () => {
                         <h3>{elem.pgTitle}</h3>
                         <p>{elem.pgType === 'goodBye' ? '피로도 점수 추이' : '수면 만족도 점수 추이'}</p>
                     </div>
-                    <div className="weekBtn">
-                        <span>
-                            <input type="radio" id={`${elem.week}`} name={`${elem.pgNo}`} value={`${elem.pgNo}`} onClick={() => setWeek(2)} ref={(element) => (radioRef.current[idx] = element as HTMLInputElement)}></input>
-                            <label htmlFor="week2">2주</label>
-                        </span>
-                        <span>
-                            <input type="radio" id={`${elem.week}`} name={`${elem.pgNo}`} value={`${elem.pgNo}`} onClick={() => setWeek(4)}></input>
-                            <label htmlFor="week4">4주</label>
-                        </span>
-                        <span>
-                            <input type="radio" id={`${elem.week}`} name={`${elem.pgNo}`} value={`${elem.pgNo}`} onClick={() => setWeek(8)}></input>
-                            <label htmlFor="week8">8주</label>
-                        </span>
-                    </div>
-                    <div>
+                    {idx === 0 &&
+                        <div className="weekBtn">
+                            <span>
+                                <input checked={week === 2} type="radio" id={`1week_${elem.week}`} name={`week_${elem.pgNo}`} value={`${elem.pgNo}`} onClick={() => { setWeek(2) }} ref={(element) => (radioRef.current[idx] = element as HTMLInputElement)}></input>
+                                <label htmlFor={`1week_${elem.week}`}>2주</label>
+                            </span>
+                            <span>
+                                <input checked={week === 4} type="radio" id={`2week_${elem.week}`} name={`week_${elem.pgNo}`} value={`${elem.pgNo}`} onClick={() => { setWeek(4) }}></input>
+                                <label htmlFor={`2week_${elem.week}`}>4주</label>
+                            </span>
+                            <span>
+                                <input checked={week === 8} type="radio" id={`3week_${elem.week}`} name={`week_${elem.pgNo}`} value={`${elem.pgNo}`} onClick={() => { setWeek(8) }}></input>
+                                <label htmlFor={`3week_${elem.week}`}>8주</label>
+                            </span>
+                        </div>
+                    }
+                    <div style={{
+                        overflowX: "auto",
+                        width: "100%"
+                    }} className="chartScroller">
                         {/* 그래프 들어가는 곳 */}
-                        <Line data={{
+                        <Line style={{
+                            marginLeft: "20px"
+                        }} options={options} data={{
                             labels: elem.history.map((survey, idx) => `${survey.dt?.split('-')[2]}일`),
                             datasets: [
                                 {
                                     type: 'line',
                                     label: 'Dataset 1',
-                                    borderColor: 'rgb(54, 162, 235)',
+                                    borderColor: '#41b946',
                                     borderWidth: 2,
                                     data: elem.history.map((survey, idx) => survey.answer),
                                 },
                             ],
-
                         }}
                         />
                     </div>
-                    {/* <span>{elem.history[0].dt?.split('-')[1]}월</span> */}
                 </div>
             )))}
-
-            {/* <div className="surveyList">
-                <div className="surveyList_title">
-                    <h3>굿바이 피로 1기</h3>
-                    <p>피로도 점수 추이</p>
-                </div>
-                <div className="weekBtn">
-                    <span>
-                        <input type="radio" id="week2" name="week" value='2' onClick={() => setWeek(2)} ref={radioRef}></input>
-                        <label htmlFor="week2">2주</label>
-                    </span>
-                    <span>
-                        <input type="radio" id="week4" name="week" value={week} onClick={() => setWeek(4)}></input>
-                        <label htmlFor="week4">4주</label>
-                    </span>
-                    <span>
-                        <input type="radio" id="week8" name="week" value={week} onClick={() => setWeek(8)}></input>
-                        <label htmlFor="week8">8주</label>
-                    </span>
-                </div>
-                <div>
-                    
-                </div>
-                </div> 
-            */}
         </React.Fragment>
     );
 };
