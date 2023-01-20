@@ -26,11 +26,11 @@ const MemberChk03 = ({ nextStep }: { nextStep: Function }) => {
     ) as HTMLInputElement;
 
     if (isCustomCancerName) {
-      if(!custom_cancer_name.value){
+      if (!custom_cancer_name.value) {
         custom_cancer_name.focus();
         return false;
       }
-      
+
     }
     if (!cancer_start.value) {
       cancer_start.focus();
@@ -85,11 +85,11 @@ const MemberChk03 = ({ nextStep }: { nextStep: Function }) => {
           {isCustomCancerName && (
             <div className="manualInput">
               <label>직접입력</label>
-              <InputElement type="text" placeholder="직접입력" id="custom_cancer_name"/>
+              <InputElement type="text" placeholder="직접입력" id="custom_cancer_name" />
             </div>
           )}
         </div>
-        
+
         <label>
           <span>진단시기</span>
         </label>

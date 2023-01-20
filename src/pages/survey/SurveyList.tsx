@@ -14,7 +14,7 @@ import {
     PointElement,
     LineElement,
 } from "chart.js";
-  
+
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement);
 
 const SurveyList = () => {
@@ -23,7 +23,7 @@ const SurveyList = () => {
     const [week, setWeek] = useState(2);
     const radioRef = useRef<HTMLInputElement[]>([]);
     const [surveyList, setSurveyList] = useState<DailySurveyHistoryInterface[]>([]);
-    
+
     useEffect(() => {
         radioRef.current.map(elem => elem.click());
     }, [])
@@ -35,7 +35,7 @@ const SurveyList = () => {
 
     const getDailyHistory = async (week: number) => {
         await api
-            .get(`/usr/surveys/daily-history?week=${week}`, {headers: {Authorization: `Bearer ${user.accessToken}`}})
+            .get(`/usr/surveys/daily-history?week=${week}`, { headers: { Authorization: `Bearer ${user.accessToken}` } })
             .then((res) => {
                 console.log(res)
                 if (res.data.result) setSurveyList(res.data.body);
@@ -46,27 +46,27 @@ const SurveyList = () => {
     }
 
     const weekHandle = (event: React.MouseEvent<HTMLInputElement>) => {
-        const {name, value} = event.currentTarget;
+        const { name, value } = event.currentTarget;
         console.log(name, value)
     };
 
     const data: any = {
         labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
         datasets: [
-          {
-            type: 'line',
-            label: 'Dataset 1',
-            borderColor: 'rgb(54, 162, 235)',
-            borderWidth: 2,
-            data: [1, 2, 3, 4, 5],
-          },
+            {
+                type: 'line',
+                label: 'Dataset 1',
+                borderColor: 'rgb(54, 162, 235)',
+                borderWidth: 2,
+                data: [1, 2, 3, 4, 5],
+            },
         ],
     };
-    
+
     return (
         <React.Fragment>
             <TitleHeadComponent name="일일 설문 내역" targetUrl="" />
-            {surveyList.map((elem, idx) => (elem.history.length && ( 
+            {surveyList.map((elem, idx) => (elem.history.length && (
                 <div className="surveyList" key={elem.pgNo}>
                     <div className="surveyList_title">
                         <h3>{elem.pgTitle}</h3>
@@ -89,8 +89,8 @@ const SurveyList = () => {
                     <div>
                         {/* 그래프 들어가는 곳 */}
                         <Line data={{
-                                labels: elem.history.map((survey, idx) => `${survey.dt?.split('-')[2]}일`),
-                                datasets: [
+                            labels: elem.history.map((survey, idx) => `${survey.dt?.split('-')[2]}일`),
+                            datasets: [
                                 {
                                     type: 'line',
                                     label: 'Dataset 1',
@@ -98,9 +98,9 @@ const SurveyList = () => {
                                     borderWidth: 2,
                                     data: elem.history.map((survey, idx) => survey.answer),
                                 },
-                                ],
-                                
-                            }}
+                            ],
+
+                        }}
                         />
                     </div>
                     {/* <span>{elem.history[0].dt?.split('-')[1]}월</span> */}

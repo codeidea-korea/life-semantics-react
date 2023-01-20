@@ -317,7 +317,7 @@ const SurveyToday = () => {
             <div className="survey surveyToday">
 
 
-                <div className="dDay">D+{selectedDate.length - 1}</div>
+                <div className="dDay">D+{selectedDate.length}</div>
                 <div className='date'>
                     <button type='button' onClick={handlePrevDate}></button>
                     {selectedDate.map((date, index) => (

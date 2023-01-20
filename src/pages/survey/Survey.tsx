@@ -18,7 +18,7 @@ const Survey = () => {
     const [popup, setPopup] = useState(true);
     const { state } = useLocation() as BeforeSurveyInfoInterface;
     const user = useRecoilValue(userState);
-
+    console.log(state);
     const handleToolTip = () => {
         setShow(!isShow);
     };

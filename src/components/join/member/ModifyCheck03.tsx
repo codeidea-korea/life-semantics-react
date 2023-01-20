@@ -2,8 +2,14 @@ import React from "react";
 import { useEffect } from "react";
 import InputElement from "../../elements/InputElement";
 import $ from "jquery";
+import { userState } from "@/states/userState";
+import { useRecoilValue } from "recoil";
 
 const ModifyCheck03 = () => {
+  const user = useRecoilValue(userState);
+  useEffect(() => {
+    console.log(user);
+  }, [])
   return (
     <React.Fragment>
       <div className="modifyCheck">
@@ -17,50 +23,50 @@ const ModifyCheck03 = () => {
               <span>나이</span>
             </li>
             <li>
-            <label>
-              <span>성별</span>
+              <label>
+                <span>성별</span>
               </label>
               <div className="chk_radio02">
-                  <span className="isCheck">
-                      <InputElement
-                          type="radio"
-                          value="남"
-                          name="gender"
-                          id="man"
-                      />
-                      <label htmlFor="man">남</label>
-                  </span>
-                  <span>
-                      <InputElement
-                          type="radio"
-                          value="여"
-                          name="gender"
-                          id="woman"
-                      />
-                      <label htmlFor="woman">여</label>
-                  </span>
+                <span className="isCheck">
+                  <InputElement
+                    type="radio"
+                    value="남"
+                    name="gender"
+                    id="man"
+                  />
+                  <label htmlFor="man">남</label>
+                </span>
+                <span>
+                  <InputElement
+                    type="radio"
+                    value="여"
+                    name="gender"
+                    id="woman"
+                  />
+                  <label htmlFor="woman">여</label>
+                </span>
               </div>
             </li>
             <li>
               <label>
                 <span>암 종(진단명) <i className="plusBtn">+</i></span>
               </label>
-              <p className="pointGreen">다른 암도 재발되었나요?<br/>그러면 해당 암 종도 추가해주세요.</p>
+              <p className="pointGreen">다른 암도 재발되었나요?<br />그러면 해당 암 종도 추가해주세요.</p>
               <div className="selectBox">
                 <select name="cancer">
-                    <option>암 종 선택</option>
-                    <option>간암</option>
-                    <option>갑상선암</option>
-                    <option>담낭암</option>
-                    <option>담도암</option>
-                    <option>대장암</option>
-                    <option>신장암</option>
-                    <option>위암</option>
-                    <option>유방암</option>
-                    <option>전립선암</option>
-                    <option>췌장암</option>
-                    <option>폐암</option>
-                    <option>직접입력</option>
+                  <option>암 종 선택</option>
+                  <option>간암</option>
+                  <option>갑상선암</option>
+                  <option>담낭암</option>
+                  <option>담도암</option>
+                  <option>대장암</option>
+                  <option>신장암</option>
+                  <option>위암</option>
+                  <option>유방암</option>
+                  <option>전립선암</option>
+                  <option>췌장암</option>
+                  <option>폐암</option>
+                  <option>직접입력</option>
                 </select>
               </div>
             </li>
@@ -91,19 +97,19 @@ const ModifyCheck03 = () => {
               </label>
               <div className="selectBox">
                 <select name="cancer">
-                    <option>암 종 선택</option>
-                    <option>간암</option>
-                    <option>갑상선암</option>
-                    <option>담낭암</option>
-                    <option>담도암</option>
-                    <option>대장암</option>
-                    <option>신장암</option>
-                    <option>위암</option>
-                    <option>유방암</option>
-                    <option>전립선암</option>
-                    <option>췌장암</option>
-                    <option>폐암</option>
-                    <option>직접입력</option>
+                  <option>암 종 선택</option>
+                  <option>간암</option>
+                  <option>갑상선암</option>
+                  <option>담낭암</option>
+                  <option>담도암</option>
+                  <option>대장암</option>
+                  <option>신장암</option>
+                  <option>위암</option>
+                  <option>유방암</option>
+                  <option>전립선암</option>
+                  <option>췌장암</option>
+                  <option>폐암</option>
+                  <option>직접입력</option>
                 </select>
               </div>
             </li>
