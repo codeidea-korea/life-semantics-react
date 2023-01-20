@@ -118,7 +118,7 @@ const MemberChk01 = ({ nextStep }: { nextStep: Function }) => {
         dom!.scrollIntoView({behavior: "smooth"});
     }
 
-    const handleFocusBtn = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const handleFocusBtn = () => {
         for (let i = 0; i < labelsRef.current.length; i++) {
             if (i === 0) {
                 if (inputsRef.current[i].value === "") {
@@ -155,7 +155,6 @@ const MemberChk01 = ({ nextStep }: { nextStep: Function }) => {
         }
 
         requestJoin();
-        
     };
 
     const requestJoin = async () => {
@@ -171,6 +170,7 @@ const MemberChk01 = ({ nextStep }: { nextStep: Function }) => {
                         ...modal,
                         show: true,
                         title: "",
+                        confirmShow: true,
                         callBackShow: true,
                         content: (
                             <div>
@@ -179,7 +179,10 @@ const MemberChk01 = ({ nextStep }: { nextStep: Function }) => {
                         ),
                         confirmText: "확인",
                         
-                        onConfirmCallback: ()=>navigate(-1),
+                        onConfirmCallback: () => {
+                            setModal({...modal, show:false})
+                            navigate('/');
+                        }
                     });
                 }
             })
@@ -326,7 +329,7 @@ const MemberChk01 = ({ nextStep }: { nextStep: Function }) => {
                 <button type="button" className="prev" onClick={()=>navigate(-1)}>
                     이전
                 </button>
-                <button type="button" className="next" onClick={handleFocusBtn}>
+                <button type="button" className="next" onClick={()=>handleFocusBtn()}>
                     다음
                 </button>
             </div>
