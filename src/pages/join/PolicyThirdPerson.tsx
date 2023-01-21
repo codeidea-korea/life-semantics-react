@@ -1,10 +1,25 @@
-import React from "react";
+import React, { useState } from 'react';
 import WebLayout from "@layouts/web/WebLayout";
 import { useNavigate } from "react-router-dom";
 import InputElement from "@/components/elements/InputElement";
+import {joinPolicyState, joinPolicyAllCheck, joinPolicyAllReset} from '@states/joinPolicyState';
+import {useRecoilState, useRecoilValue} from "recoil";
 
 const PolicyThirdPerson = () => {
     const navigate = useNavigate();
+    const [policy, setPolicy] = useRecoilState(joinPolicyState);
+    const [agree, setAgree] = useState(policy.thirdPerson);
+
+    const handleCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const {checked} = e.currentTarget;
+        setAgree(checked);
+    }
+
+    const handleConfirm = () => {
+        if (policy.thirdPerson !== agree) setPolicy({...policy, thirdPerson: agree});
+        navigate(-1)
+    }
+
     return (
         <WebLayout>
             <div className="HeaderFix policyHeader">
@@ -44,11 +59,11 @@ const PolicyThirdPerson = () => {
                 그러나 동의를 거부할 경우 원활한 예약 확인 정보 안내에 제한을 받을 수 있습니다.
                 <div className="checkBox">
                     <div className="checkAll">
-                        <InputElement type="checkbox" className="ck" id="thirdPerson" name="thirdPerson" />
-                        <label htmlFor={"thirdPerson"}>모든약관에 모두 확인, 동의합니다.</label>
+                        <InputElement checked={agree} type="checkbox" className="ck" id="thirdPerson" name="thirdPerson" onChange={handleCheck}/>
+                        <label htmlFor={"thirdPerson"}>해당 약관에 확인, 동의합니다.</label>
                     </div>
                 </div>
-                <button type="button" className="btn-02 active">
+                <button type="button" className="btn-02 active" onClick={handleConfirm}>
                     확인
                 </button>
             </div>
