@@ -34,14 +34,17 @@ const MemberChk01 = ({ nextStep }: { nextStep: Function }) => {
             if (value.length < 6 || value.length > 18) {
                 setAlertText({...alertText, [name]: [1, '6~18자리 이내로 해주세요.']})
                 inputsRef.current[0].style.borderColor = "#f30909";
+                setIdCheckBorder(false);
             }
             else if (!idReg.test(value)) {
                 setAlertText({...alertText, [name]: [1, '영문, 숫자를 최소 1자리를 포함해주세요.']})
                 inputsRef.current[0].style.borderColor = "#f30909";
+                setIdCheckBorder(false);
             }
             else {
                 setAlertText({...alertText, [name]: [0, '']})
                 inputsRef.current[0].style.borderColor = "";
+                setIdCheckBorder(true);
             }
         }
         else if (name === 'userPass') {
@@ -126,11 +129,25 @@ const MemberChk01 = ({ nextStep }: { nextStep: Function }) => {
                     moveScroll(labelsRef.current[i]);
                     return
                 }
-                else if (!isDuplicatedUserID) {
-                    setIdCheckBorder(true);
-                    moveScroll(labelsRef.current[0]);
-                    setAlertText({...alertText, ["userID"]: [1, '중복확인을 해주세요.']})
+                if (inputsRef.current[i].value.length < 6 || inputsRef.current[i].value.length > 18) {
+                    setAlertText({...alertText, ['userID']: [1, '6~18자리 이내로 해주세요.']})
                     inputsRef.current[0].style.borderColor = "#f30909";
+                    setIdCheckBorder(false);
+                    moveScroll(labelsRef.current[0]);
+                    return
+                }
+                if (!idReg.test(inputsRef.current[i].value)) {
+                    setAlertText({...alertText, ['userID']: [1, '영문, 숫자를 최소 1자리를 포함해주세요.']})
+                    inputsRef.current[0].style.borderColor = "#f30909";
+                    setIdCheckBorder(false);
+                    moveScroll(labelsRef.current[i]);
+                    return
+                }
+                if (!isDuplicatedUserID) {
+                    setIdCheckBorder(true);
+                    moveScroll(labelsRef.current[i]);
+                    setAlertText({...alertText, ["userID"]: [1, '중복확인을 해주세요.']})
+                    //inputsRef.current[0].style.borderColor = "#f30909";
                     return
                 }
             }

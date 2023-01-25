@@ -1,10 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import WebLayout from '@layouts/web/WebLayout';
 import {useNavigate} from 'react-router-dom';
 import InputElement from '@/components/elements/InputElement';
+import {joinPolicyState, joinPolicyAllCheck, joinPolicyAllReset} from '@states/joinPolicyState';
+import {useRecoilState, useRecoilValue} from "recoil";
 
 const PolicyTermOfService = () => {
     const navigate = useNavigate();
+    const [policy, setPolicy] = useRecoilState(joinPolicyState);
+    const [agree, setAgree] = useState(policy.termOfService);
+
+    const handleCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const {checked} = e.currentTarget;
+        setAgree(checked);
+    }
+
+    const handleConfirm = () => {
+        if (policy.termOfService !== agree) setPolicy({...policy, termOfService: agree});
+        navigate(-1)
+    }
+
     return (
         <WebLayout>
             <div className="HeaderFix policyHeader">
@@ -38,11 +53,13 @@ const PolicyTermOfService = () => {
                 할지라도 예가 청춘의 힘차게 힘차게 듣는다.
                 <div className="checkBox">
                     <div className='checkAll'>
-                        <InputElement type="checkbox" className="ck" id="thirdPerson" name="thirdPerson"/>
-                        <label htmlFor={"thirdPerson"}>모든약관에 모두 확인, 동의합니다.</label>
+                        <InputElement checked={agree} type="checkbox" className="ck" id="thirdPerson" name="thirdPerson" onChange={handleCheck}/>
+                        <label htmlFor={"thirdPerson"}>해당 약관에 확인, 동의합니다.</label>
                     </div>
                 </div>
-                <button type="button" className="btn-02 active">확인</button>
+                <button type="button" className="btn-02 active" onClick={handleConfirm}>
+                    확인
+                </button>
             </div>
         </WebLayout>
     );

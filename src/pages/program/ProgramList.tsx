@@ -28,14 +28,15 @@ const ProgramList = () => {
   }
 
   useEffect(() => {
-    console.log(state)
     {state?.pgType && 
       setProgramFilter({
         ...programFilter,
         ['type']: state.pgType
       });
     }
+  }, [])
 
+  useEffect(() => {
     if (state?.pgType && typeSelectedText.current) {
       typeSelectedText.current.innerText = state?.pgType === 'goodBye' ? '굿바이 피로' : '웰컴 굿잠';
     }
@@ -75,7 +76,7 @@ const ProgramList = () => {
         info_bx.css("display", "none");
       }
     }
-  }, []);
+  }, [programFilter]);
 
   return (
     <React.Fragment>
@@ -131,25 +132,30 @@ const ProgramList = () => {
             </ul>
           </div>
         </div>
-        <div className="dropDown">
-          <div className="selected">
-            <span>정렬 순서</span>
-          </div>
-          <div className="options">
-            <ul>
-              <li onClick={() => handleFilter('orderBy', '')}>
-                전체
-                <div className="value"></div>
-              </li>
-              <li onClick={() => handleFilter('orderBy', 'pgAppEndDate')}>
-                마감 임박 순<div className="value"></div>
-              </li>
-              <li onClick={() => handleFilter('orderBy', 'pgLeftOver')}>
-                잔여 인원 순<div className="value"></div>
-              </li>
-            </ul>
-          </div>
-        </div>
+        {
+          programFilter.status === 'inApply' &&
+          (
+            <div className="dropDown">
+              <div className="selected">
+                <span>정렬 순서</span>
+              </div>
+              <div className="options">
+                <ul>
+                  <li onClick={() => handleFilter('orderBy', '')}>
+                    전체
+                    <div className="value"></div>
+                  </li>
+                  <li onClick={() => handleFilter('orderBy', 'pgAppEndDate')}>
+                    마감 임박 순<div className="value"></div>
+                  </li>
+                  <li onClick={() => handleFilter('orderBy', 'pgLeftOver')}>
+                    잔여 인원 순<div className="value"></div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          )
+        }
         <div className="checkBox" id="checkBox">
           <span className="inputCheckType01">
             <InputElement type="checkbox" className="check" id="agree" onClick={() => setProgramFilter({...programFilter, ing: 1-programFilter.ing})}/>
