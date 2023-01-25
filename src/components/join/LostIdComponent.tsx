@@ -15,6 +15,7 @@ const LostIdComponent = ({next}: { next: Function }) => {
     const [minutes, setMinutes] = useState(0);
     const [seconds, setSeconds] = useState(0);
     const [joinParam, setJoinParam] = useRecoilState(joinState);
+    const [sendAuthCode, setSendAuthCode] = useState(false);
     const moveNextStep = () => {
         setJoinParam({...joinParam, ["userPhone"]: num})
         next();
@@ -65,6 +66,7 @@ const LostIdComponent = ({next}: { next: Function }) => {
                 console.log(res.data.body.authNumber)
                 if (res.status === 200) {
                     setAuthCode(res.data.body.authNumber);
+                    setSendAuthCode(true);
                 }
             })
             .catch((err) => {
@@ -105,23 +107,30 @@ const LostIdComponent = ({next}: { next: Function }) => {
                     <span className="CodeCheck">
                         <input type="text" placeholder="휴대폰 번호 입력" value={num} onChange={handlePhoneNumber} maxLength={13}/>
                         {requiredPhoneNumber &&
-                            <button type="button" onClick={handleRequestAuth}>인증번호<br/>받기</button>
+                        <button type="button" onClick={handleRequestAuth}>인증번호<br/>받기</button>
                         }
                         {!requiredPhoneNumber &&
-                            <button type="button" className="doubleCheck green">인증번호<br/>받기</button>
+                        <button type="button" className="doubleCheck green">인증번호<br/>받기</button>
                         }
                     </span>
                     <span className="CodeCheck">
-                    <input type="text" id="authNumber" placeholder={timePlaceHolder} maxLength={6} value={code}
+                        <input type="text" id="authNumber" placeholder={timePlaceHolder} maxLength={6} value={code}
                            onChange={handleAuthCode}/>
                         {requiredAuthCode &&
-                            <button type="button" onClick={handleSendAuth}>확인</button>
+                        <button type="button" onClick={handleSendAuth}>확인</button>
                         }
                         {!requiredAuthCode &&
-                            <button type="button" className="doubleCheck green">확인</button>
+                        <button type="button" className="doubleCheck green">확인</button>
                         }
                     </span>
-
+                    {sendAuthCode && (
+                    <div style={{color: '#41b946'}}>
+                    인증번호를 발송했습니다. (유효시간 10분)
+                    인증번호가 오지 않으면, 입력하신 정보가 정확한지
+                    확인해주세요. 이미 가입된 번호이거나 가상
+                    휴대폰번호는 인증번호를 받을 수 없습니다.
+                    </div>)
+                    }
                 </div>
                 {requiredComplete && <p className="alarm">인증이<br/>완료되었습니다.</p>}
                 {!requiredComplete && <p className="alarm">아직 인증이<br/>완료되지 않았습니다.</p>}
