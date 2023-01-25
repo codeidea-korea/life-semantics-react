@@ -23,9 +23,8 @@ const Schedule = () => {
     const [monthList, setMonthList] = useState(Array.from({length: 12}, (v, i)=>i+1));
     const [selectYear, setSelectYear] = useState(todayYear);
     const [selectMonth, setSelectMonth] = useState(todayMonth);
-    const [scheduleList, setScheduleList] = useState<ScheduleInterface[]>([]);
     const [noScheduleState, SetNoScheduleState] = useState<string[]>([]);
-    const [scheduleList1, setScheduleList1] = useState<NewScheduleInterface[]>([]);
+    const [scheduleList, setScheduleList] = useState<NewScheduleInterface[]>([]);
 
     useEffect(() => {
         if (todayYear - userRegYear > 5) {
@@ -47,12 +46,13 @@ const Schedule = () => {
         api
             .get(`/usr/plans/monthly-schedule?year=${selectYear}&month=${requestMonth}`, {headers:{Authorization: `Bearer ${user.accessToken}`}})
             .then((res) => {
+                console.log(res)
                 if (!res.data.body.length) {
                     if (Number(selectYear) > todayYear || (Number(selectYear) === todayYear && Number(selectMonth) > todayMonth)) {
                         SetNoScheduleState(['아직 등록된','프로그램의 일정이 없습니다.'])
                     }
                     else SetNoScheduleState(['진행한 프로그램이','없습니다.'])
-                    setScheduleList1([]);
+                    setScheduleList([]);
                 }
                 else {
                     let data = res.data.body;
@@ -68,7 +68,6 @@ const Schedule = () => {
                     const date = Array.from(new Set(res.data.body.map((elem: ScheduleInterface) => elem.date.slice(0, 10))));
                     let newScheduleList: NewScheduleInterface[] = [];
                     date.map(elem => newScheduleList.push({['date']: String(elem), ['pg']: []}))
-                    // Array.from({length: date.length}, (v, i)=>{return { 'date': date[i], 'pg': []}})
                     for (let i = 0; i < data.length; i++) {
                         for (let j = 0; j < newScheduleList.length; j++) {
                             let obj = {
@@ -81,7 +80,7 @@ const Schedule = () => {
                         }
                         
                     }
-                    setScheduleList1(newScheduleList);
+                    setScheduleList(newScheduleList);
                 }
             })
             .catch((err) => {
@@ -91,16 +90,16 @@ const Schedule = () => {
 
     const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const {name, value} = event.target;
-
         if (name === 'year') {
             let newMonthList = [];
             if (value === yearList[yearList.length-1] && Number(value) === userRegYear) newMonthList = Array.from({length: 12 - userRegMonth + 1}, (v, i) => userRegMonth + i);
             else newMonthList = Array.from({length: 12}, (v, i) => i+1);
-            setSelectMonth(newMonthList[0]);
             setMonthList(newMonthList);
+            setSelectMonth(newMonthList[0]);
             setSelectYear(Number(value));
         }
         else {
+            setMonthList([...monthList]);
             setSelectMonth(Number(value));
         }
     };
@@ -113,22 +112,22 @@ const Schedule = () => {
                 <div className="schedulDate">
                     <select name="year" id="" className="year selectBox" onChange={handleChange}>
                         {yearList.map((elem, idx) => (
-                            Number(elem) === todayYear ?
+                            Number(elem) === selectYear ?
                             (<option key={elem} value={elem} selected>{elem}년</option>) :
                             (<option key={elem} value={elem}>{elem}년</option>)
                         ))}
                     </select>
                     <select name="month" id="" className="month selectBox" onChange={handleChange}>
                         {monthList.map((elem, idx) => (
-                            elem === todayMonth ?
+                            elem === selectMonth ?
                             (<option key={elem} value={elem} selected>{elem}월</option>) :
                             (<option key={elem} value={elem}>{elem}월</option>)
                         ))}
                     </select>
                 </div>
                 {
-                scheduleList1 && (
-                scheduleList1.map((elem, idx) => (
+                scheduleList && (
+                scheduleList.map((elem, idx) => (
                 <div className="programSchedul">
                     {( todayYear === Number(selectYear)
                         && todayMonth === Number(selectMonth)
