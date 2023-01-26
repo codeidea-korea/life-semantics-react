@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import ModalComponent from "@components/modal/ModalComponent";
 import { modalState } from "@/states/modalState";
 
-const MemberChk01 = ({ nextStep }: { nextStep: Function }) => {
+const MemberChk01 = ({ nextStep, prevStep }: { nextStep: Function, prevStep: Function }) => {
     const [joinParam, setJoinParam] = useRecoilState(joinState);
     const api = useAxios();
     const navigate = useNavigate();
@@ -197,8 +197,8 @@ const MemberChk01 = ({ nextStep }: { nextStep: Function }) => {
                         confirmText: "확인",
                         
                         onConfirmCallback: () => {
-                            setModal({...modal, show:false})
-                            navigate('/');
+                            setModal({...modal, show:false});
+                            prevStep();
                         }
                     });
                 }
@@ -343,7 +343,7 @@ const MemberChk01 = ({ nextStep }: { nextStep: Function }) => {
                 </div>
             </div>
             <div className="fixBtn">
-                <button type="button" className="prev" onClick={()=>navigate(-1)}>
+                <button type="button" className="prev" onClick={()=>prevStep()}>
                     이전
                 </button>
                 <button type="button" className="next" onClick={()=>handleFocusBtn()}>

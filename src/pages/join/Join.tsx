@@ -16,6 +16,10 @@ const IndexPage = () => {
         }
     };
 
+    const handlePrevStep = () => {
+        setStep(2);
+    }
+
     return (
         <WebLayout>
             <TitleHeadComponent name="회원가입" targetUrl=""/>
@@ -32,7 +36,7 @@ const IndexPage = () => {
                 </div>
                 {step === 1 && <TermsComponent next={handleNextStep}/>}
                 {step === 2 && <LostIdComponent next={handleNextStep}/>}
-                {step === 3 && <MemberComponent joinLevelStep={handleNextStep}/>}
+                {step === 3 && <MemberComponent joinLevelStep={handleNextStep} handlePrevStep={handlePrevStep}/>}
                 {step === 4 && <JoinCompleteComponent/>}
             </div>
         </WebLayout>

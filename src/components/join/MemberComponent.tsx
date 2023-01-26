@@ -7,7 +7,7 @@ import CircleComponent from "../CircleComponent";
 import { useNavigate } from "react-router-dom";
 import $ from "jquery";
 
-const MemberComponent = ({ joinLevelStep }: { joinLevelStep: Function }) => {
+const MemberComponent = ({ joinLevelStep, handlePrevStep }: { joinLevelStep: Function, handlePrevStep: Function }) => {
     const [step, setStep] = useState(1);
 
     useEffect(() => {
@@ -29,7 +29,7 @@ const MemberComponent = ({ joinLevelStep }: { joinLevelStep: Function }) => {
         <React.Fragment>
             <div className="member">
                 <div className="">
-                    {step === 1 && <MemberChk01 nextStep={handleStep} />}
+                    {step === 1 && <MemberChk01 nextStep={handleStep} prevStep={handlePrevStep}/>}
                     {/* 회원정보 step 하나로 수정. */}
                     {/* {step === 2 && <MemberChk02 nextStep={handleStep} />}
                     {step === 3 && <MemberChk03 nextStep={handleStep} />} */}
