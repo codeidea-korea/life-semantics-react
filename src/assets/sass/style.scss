@@ -891,7 +891,7 @@ select {
         color: #fff;
     }
 }
-
+.surveyName {position:relative; }
 .noticeBox {
     position: absolute;
     .surveyMain ul li {
@@ -906,9 +906,10 @@ select {
     }
 }
 .noticeBox {
-    width: calc(100% - 80px);
+    display:none;
+    width: 100%;
     position: absolute;
-    top: 150px;
+    top: 100px;
     left: 50%;
     transform: translateX(-50%);
     background-color: #fff;

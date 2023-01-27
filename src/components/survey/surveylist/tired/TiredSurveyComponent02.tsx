@@ -21,15 +21,19 @@ const TiredSurveyComponent02 = () => {
             </li>
             <li>
               <InputElement type='radio' className='radioButton' value='2' name='qna6'/>
-              <label htmlFor="">그렇지 않다</label>
+              <label htmlFor="">거의 그렇지 않다</label>
             </li>
             <li>
               <InputElement type='radio' className='radioButton' value='3' name='qna6'/>
-              <label htmlFor="">그렇다</label>
+              <label htmlFor="">약간 그렇다</label>
             </li>
             <li>
               <InputElement type='radio' className='radioButton' value='4' name='qna6'/>
-              <label htmlFor="">매우 그렇다</label>
+              <label htmlFor="">상당히 그렇다</label>
+            </li>
+            <li>
+              <InputElement type='radio' className='radioButton' value='5' name='qna6'/>
+              <label htmlFor="">매우 상당히 그렇다</label>
             </li>
             
           </ul>
@@ -43,15 +47,19 @@ const TiredSurveyComponent02 = () => {
             </li>
             <li>
               <InputElement type='radio' className='radioButton' value='2' name='qna7'/>
-              <label htmlFor="">그렇지 않다</label>
+              <label htmlFor="">거의 그렇지 않다</label>
             </li>
             <li>
               <InputElement type='radio' className='radioButton' value='3' name='qna7'/>
-              <label htmlFor="">그렇다</label>
+              <label htmlFor="">약간 그렇다</label>
             </li>
             <li>
               <InputElement type='radio' className='radioButton' value='4' name='qna7'/>
               <label htmlFor="">매우 그렇다</label>
+            </li>
+            <li>
+              <InputElement type='radio' className='radioButton' value='5' name='qna7'/>
+              <label htmlFor="">매우 상당히 그렇다</label>
             </li>
             
           </ul>
@@ -65,15 +73,19 @@ const TiredSurveyComponent02 = () => {
             </li>
             <li>
               <InputElement type='radio' className='radioButton' value='2' name='qna8'/>
-              <label htmlFor="">그렇지 않다</label>
+              <label htmlFor="">거의 그렇지 않다</label>
             </li>
             <li>
               <InputElement type='radio' className='radioButton' value='3' name='qna8'/>
-              <label htmlFor="">그렇다</label>
+              <label htmlFor="">상당히 그렇다</label>
             </li>
             <li>
               <InputElement type='radio' className='radioButton' value='4' name='qna8'/>
               <label htmlFor="">매우 그렇다</label>
+            </li>
+            <li>
+              <InputElement type='radio' className='radioButton' value='5' name='qna8'/>
+              <label htmlFor="">매우 상당히 그렇다</label>
             </li>
             
           </ul>
@@ -87,15 +99,19 @@ const TiredSurveyComponent02 = () => {
             </li>
             <li>
               <InputElement type='radio' className='radioButton' value='2' name='qna9'/>
-              <label htmlFor="">그렇지 않다</label>
+              <label htmlFor="">거의 그렇지 않다</label>
             </li>
             <li>
               <InputElement type='radio' className='radioButton' value='3' name='qna9'/>
-              <label htmlFor="">그렇다</label>
+              <label htmlFor="">상당히 그렇다</label>
             </li>
             <li>
               <InputElement type='radio' className='radioButton' value='4' name='qna9'/>
               <label htmlFor="">매우 그렇다</label>
+            </li>
+            <li>
+              <InputElement type='radio' className='radioButton' value='5' name='qna9'/>
+              <label htmlFor="">매우 상당히 그렇다</label>
             </li>
           </ul>
         </li>
@@ -108,15 +124,19 @@ const TiredSurveyComponent02 = () => {
             </li>
             <li>
               <InputElement type='radio' className='radioButton' value='2' name='qna10'/>
-              <label htmlFor="">그렇지 않다</label>
+              <label htmlFor="">거의 그렇지 않다</label>
             </li>
             <li>
               <InputElement type='radio' className='radioButton' value='3' name='qna10'/>
-              <label htmlFor="">그렇다</label>
+              <label htmlFor="">약간 그렇다</label>
             </li>
             <li>
               <InputElement type='radio' className='radioButton' value='4' name='qna10'/>
-              <label htmlFor="">매우 그렇다</label>
+              <label htmlFor="">상당히 그렇다</label>
+            </li>
+            <li>
+              <InputElement type='radio' className='radioButton' value='5' name='qna10'/>
+              <label htmlFor="">매우 상당히 그렇다</label>
             </li>
           </ul>
         </li>

@@ -19,8 +19,9 @@ const Survey = () => {
     const user = useRecoilValue(userState);
     const [isBeforeSurveyInfo, setIsBeforeSurveyInfo] = useState(true);
     
-    const handleToolTip = () => {
-        setShow(!isShow);
+    const handleToolTip = (e: any) => {
+        // setShow(!isShow);
+        e.target.parentNode.classList.toggle('on')
     };
 
     const navigate = useNavigate();
@@ -562,10 +563,9 @@ const Survey = () => {
                             <div key={index}>
                                 <div className="surveyName">
                                     <p>{item.pgTitle}</p>
-                                    {index == 0 &&
-                                        <div className="noticeIco on" onClick={handleToolTip}>
+                                        <div className="noticeIco" onClick={handleToolTip}>
                                             <img src="public/images/question.svg" alt="" className="" />
-                                            {isShow && (
+                                            {/* {isShow && ( */}
                                                 <div className="noticeBox">
                                                     <ul>
                                                         <li>
@@ -578,9 +578,8 @@ const Survey = () => {
                                                         </li>
                                                     </ul>
                                                 </div>
-                                            )}
+                                            {/* )} */}
                                         </div>
-                                    }
                                 </div>
                                 <ul>
                                     <li className={item.surveys.pre.length == 3 ? "active" : ""} onClick={(event) => handleNavigate(event, `/surveyBefore?pgNo=${item.pgNo}&type=goodBye&type2=pre&title=${item.pgTitle}`)}>

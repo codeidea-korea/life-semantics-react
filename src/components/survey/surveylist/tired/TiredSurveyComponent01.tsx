@@ -36,7 +36,7 @@ const TiredSurveyComponent01 = () => {
                   value="2"
                   name="qna1"
                 />
-                <label htmlFor="">그렇지 않다</label>
+                <label htmlFor="">거의 그렇지 않다</label>
               </li>
               <li>
                 <InputElement
@@ -45,7 +45,7 @@ const TiredSurveyComponent01 = () => {
                   value="3"
                   name="qna1"
                 />
-                <label htmlFor="">그렇다</label>
+                <label htmlFor="">약간 그렇다</label>
               </li>
               <li>
                 <InputElement
@@ -54,7 +54,16 @@ const TiredSurveyComponent01 = () => {
                   value="4"
                   name="qna1"
                 />
-                <label htmlFor="">매우 그렇다</label>
+                <label htmlFor="">상당히 그렇다</label>
+              </li>
+              <li>
+                <InputElement
+                  type="radio"
+                  className="radioButton"
+                  value="5"
+                  name="qna1"
+                />
+                <label htmlFor="">매우 상당히 그렇다</label>
               </li>
             </ul>
           </li>
@@ -77,7 +86,7 @@ const TiredSurveyComponent01 = () => {
                   value="2"
                   name="qna2"
                 />
-                <label htmlFor="">그렇지 않다</label>
+                <label htmlFor="">거의 그렇지 않다</label>
               </li>
               <li>
                 <InputElement
@@ -86,7 +95,7 @@ const TiredSurveyComponent01 = () => {
                   value="3"
                   name="qna2"
                 />
-                <label htmlFor="">그렇다</label>
+                <label htmlFor="">약간 그렇다</label>
               </li>
               <li>
                 <InputElement
@@ -95,7 +104,16 @@ const TiredSurveyComponent01 = () => {
                   value="4"
                   name="qna2"
                 />
-                <label htmlFor="">매우 그렇다</label>
+                <label htmlFor="">상당히 그렇다</label>
+              </li>
+              <li>
+                <InputElement
+                  type="radio"
+                  className="radioButton"
+                  value="5"
+                  name="qna2"
+                />
+                <label htmlFor="">매우 상당히 그렇다</label>
               </li>
             </ul>
           </li>
@@ -118,7 +136,7 @@ const TiredSurveyComponent01 = () => {
                   value="2"
                   name="qna3"
                 />
-                <label htmlFor="">그렇지 않다</label>
+                <label htmlFor="">거의 그렇지 않다</label>
               </li>
               <li>
                 <InputElement
@@ -127,16 +145,25 @@ const TiredSurveyComponent01 = () => {
                   value="3"
                   name="qna3"
                 />
-                <label htmlFor="">그렇다</label>
+                <label htmlFor="">약간 그렇다</label>
               </li>
               <li>
                 <InputElement
                   type="radio"
                   className="radioButton"
                   value="4"
-                  name="qna4"
+                  name="qna3"
                 />
-                <label htmlFor="">매우 그렇다</label>
+                <label htmlFor="">상당히 그렇다</label>
+              </li>
+              <li>
+                <InputElement
+                  type="radio"
+                  className="radioButton"
+                  value="5"
+                  name="qna3"
+                />
+                <label htmlFor="">매우 상당히 그렇다</label>
               </li>
             </ul>
           </li>
@@ -159,7 +186,7 @@ const TiredSurveyComponent01 = () => {
                   value="2"
                   name="qna4"
                 />
-                <label htmlFor="">그렇지 않다</label>
+                <label htmlFor="">거의 그렇지 않다</label>
               </li>
               <li>
                 <InputElement
@@ -168,7 +195,7 @@ const TiredSurveyComponent01 = () => {
                   value="3"
                   name="qna4"
                 />
-                <label htmlFor="">그렇다</label>
+                <label htmlFor="">약간 그렇다</label>
               </li>
               <li>
                 <InputElement
@@ -177,7 +204,16 @@ const TiredSurveyComponent01 = () => {
                   value="4"
                   name="qna4"
                 />
-                <label htmlFor="">매우 그렇다</label>
+                <label htmlFor="">상당히 그렇다</label>
+              </li>
+              <li>
+                <InputElement
+                  type="radio"
+                  className="radioButton"
+                  value="5"
+                  name="qna4"
+                />
+                <label htmlFor="">매우 상당히 그렇다</label>
               </li>
             </ul>
           </li>
@@ -200,7 +236,7 @@ const TiredSurveyComponent01 = () => {
                   value="2"
                   name="qna5"
                 />
-                <label htmlFor="">그렇지 않다</label>
+                <label htmlFor="">거의 그렇지 않다</label>
               </li>
               <li>
                 <InputElement
@@ -209,7 +245,7 @@ const TiredSurveyComponent01 = () => {
                   value="3"
                   name="qna5"
                 />
-                <label htmlFor="">그렇다</label>
+                <label htmlFor="">약간 그렇다</label>
               </li>
               <li>
                 <InputElement
@@ -218,7 +254,16 @@ const TiredSurveyComponent01 = () => {
                   value="4"
                   name="qna5"
                 />
-                <label htmlFor="">매우 그렇다</label>
+                <label htmlFor="">상당히 그렇다</label>
+              </li>
+              <li>
+                <InputElement
+                  type="radio"
+                  className="radioButton"
+                  value="5"
+                  name="qna5"
+                />
+                <label htmlFor="">매우 상당히 그렇다</label>
               </li>
             </ul>
           </li>

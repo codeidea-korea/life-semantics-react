@@ -2,8 +2,12 @@ import React, { useEffect, useState } from "react";
 import FrontPainComponent from "./pain/FrontPainComponent";
 import BackPainComponent from "./pain/BackPainComponent";
 import $ from "jquery";
+import ModalComponent from "@/components/modal/ModalComponent";
+import { useRecoilState } from "recoil";
+import { modalState } from "@/states/modalState";
 
 const PainComponent = ({ step }: { step: number }) => {
+  
   useEffect(() => {
     $(".pain")
       .off("click")
@@ -25,6 +29,25 @@ const PainComponent = ({ step }: { step: number }) => {
       });
   }, [step]);
 
+  const [modal, setModal] = useRecoilState(modalState);
+  const handleDuplicationNotice = () => {
+    setModal({
+        ...modal,
+        show: true,
+        title: "",
+        cancelShow: false,
+        content: (
+            <div>
+                선택이 불가합니다.<br />
+                아픈 부위 중에서만<br />
+                제일 아픈 부위 선택이 <br />
+                가능합니다.
+            </div>
+        ),
+        confirmText: "확인",
+    });
+};
+
   return (
     <React.Fragment>
       {step === 1 && (
@@ -36,7 +59,8 @@ const PainComponent = ({ step }: { step: number }) => {
       {step === 2 && (
         <p>
           2. 제일 아픈 부위를 선택해주세요
-          <br />(<b>한 곳만 선택</b>)
+          <br />(<b>한 곳만 선택</b>)<br/>
+          초록색 원 중에서만 선택 가능합니다
         </p>
       )}
 
@@ -44,6 +68,7 @@ const PainComponent = ({ step }: { step: number }) => {
         <FrontPainComponent />
         <BackPainComponent />
       </div>
+      <ModalComponent />
     </React.Fragment>
   );
 };
