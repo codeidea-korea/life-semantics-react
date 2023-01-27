@@ -282,7 +282,6 @@ const Survey = () => {
                     setTimeout(() => {
                         setEndPopup(false);
                         setIsBeforeSurveyInfo(true);
-                        if (resData.length === 0) handleNotOpen();
                     }, 3000);
                 }
             })
@@ -466,7 +465,7 @@ const Survey = () => {
             })
                 .then((response) => response.json())
                 .then((data) => {
-                    if (data.body.length === 0 && isBeforeSurvey) handleNotOpen();
+                    if (data.body.length === 0) handleNotOpen();
                     else if (data.result === 'true') {
                         setResData(data.body);
                         data.body.forEach((item: any, idx: number) => {
