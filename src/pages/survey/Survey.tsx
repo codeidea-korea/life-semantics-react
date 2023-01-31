@@ -581,7 +581,7 @@ const Survey = () => {
                                         </div>
                                 </div>
                                 <ul>
-                                    <li className={item.surveys.pre.length == 3 ? "active" : ""} onClick={(event) => handleNavigate(event, `/surveyBefore?pgNo=${item.pgNo}&type=goodBye&type2=pre&title=${item.pgTitle}`)}>
+                                    <li className={item.surveys.pre.length == 3 ? "active" : ""} onClick={(event) => handleNavigate(event, `/surveyBefore?pgNo=${item.pgNo}&type=${item.pgType}&type2=pre&title=${item.pgTitle}`)}>
                                         시작전 설문({item.surveys.pre.length}/3)
                                     </li>
                                     <li className="" onClick={(event) => handleNavigate(event, `/surveyToday?pgNo=${item.pgNo}`)}>
@@ -589,7 +589,7 @@ const Survey = () => {
                                         <br />
                                         <span className="recent_not_survey"></span>
                                     </li>
-                                    <li className={item.surveys.end.length == 3 ? "active" : ""} onClick={(event) => handleNavigate(event, `/surveyAfter?pgNo=${item.pgNo}&type=goodBye&type2=end&title=${item.pgTitle}`)}>
+                                    <li className={item.surveys.end.length == 3 ? "active" : ""} onClick={(event) => handleNavigate(event, `/surveyAfter?pgNo=${item.pgNo}&type=${item.pgType}&type2=end&title=${item.pgTitle}`)}>
                                         <Link to="">종료후 설문({item.surveys.end.length}/3)</Link>
                                     </li>
                                 </ul>
