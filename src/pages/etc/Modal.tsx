@@ -332,7 +332,7 @@ const Modal = () => {
 
       content: (
         <div>
-         로그아웃 하시겠습니까?
+          로그아웃 하시겠습니까?
         </div>
       ),
       cancelText: <div className="close">아니요</div>,
@@ -348,8 +348,8 @@ const Modal = () => {
 
       content: (
         <div>
-         회원 탈퇴를<br/>
-         중단하시겠습니까?
+          회원 탈퇴를<br />
+          중단하시겠습니까?
         </div>
       ),
       cancelText: <div className="close">아니요</div>,

@@ -113,6 +113,28 @@ const Tired = () => {
     if (step < 4 && step > 1) {
       setStep(step - 1);
     }
+
+    if (step === 1) {
+      setModal({
+        ...modal,
+        show: true,
+        title: "",
+        cancelShow: true,
+        callBackShow: true,
+        content: (
+          <div>
+            작성을 중단하시겠습니까?
+            <br />
+            중단하신 내용은
+            <br />
+            저장되지 않습니다.
+          </div>
+        ),
+        cancelText: <div className="close">이어서 설문할게요</div>,
+        confirmText: "네 중단할게요",
+        onConfirmCallback: moveSurveyMain
+      });
+    }
   };
 
   const moveSurveyMain = () => {
