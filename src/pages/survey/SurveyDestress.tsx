@@ -12,7 +12,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import $ from "jquery";
 import { modalState } from "@states/modalState";
 import { userState } from "@/states/userState";
-
+let isFirst = true;
 function getToday() {
     var date = new Date();
     var year = date.getFullYear();
@@ -117,6 +117,7 @@ const reqData: ReqData = {
 const SurveyDeStress = () => {
     const [modal, setModal] = useRecoilState(modalState);
     const [toast, setToast] = useState(false);
+    const [toast2, setToast2] = useState(false);
     const location = useLocation();
     const navigate = useNavigate();
     const [sample, setSample] = useRecoilState(sampleState);
@@ -145,6 +146,41 @@ const SurveyDeStress = () => {
             setToast(false);
         }, 3000);
     };
+
+    //뒤로가기시 클릭했던거 유지기능
+    function savePrev() {
+        setTimeout(() => {
+            if (step === 1) {
+                reqData.userSurveysAnswersDTO[0].saAnsList?.forEach((item: any, idx) => {
+                    console.log(reqData);
+                    const targetElement = document.querySelectorAll('.scoreRadio input')[item - 1] as HTMLInputElement
+                    targetElement.checked = true;
+                });
+
+                reqData.userSurveysAnswersDTO[1].saAnsList?.forEach((item: any, idx) => {
+                    console.log(reqData);
+                    const targetElement = document.querySelectorAll('.py_prob_list input')[item - 1] as HTMLInputElement
+                    targetElement.checked = true;
+                });
+            }
+            if (step === 2) {
+                reqData.userSurveysAnswersDTO[2].saAnsList?.forEach((item: any, idx) => {
+                    console.log(reqData);
+                    const targetElement = document.querySelectorAll('.survey_step_2_q_1 input')[item - 1] as HTMLInputElement
+                    targetElement.checked = true;
+                });
+
+                reqData.userSurveysAnswersDTO[3].saAnsList?.forEach((item: any, idx) => {
+                    console.log(reqData);
+                    const targetElement = document.querySelectorAll('.survey_step_2_q_2 input')[item - 1] as HTMLInputElement
+                    targetElement.checked = true;
+                });
+            }
+        }, 500);
+    }
+    useEffect(() => {
+        savePrev()
+    }, [step])
 
 
 
@@ -235,6 +271,7 @@ const SurveyDeStress = () => {
     }
 
     const handleSubmit = () => {
+
         fetch(`https://api.life.codeidea.io/usr/surveys`,
             {
                 method: 'POST',
@@ -283,6 +320,7 @@ const SurveyDeStress = () => {
     const handlePrevStep = () => {
         if (step < 4 && step > 1) {
             setStep(step - 1);
+
         }
     };
     useEffect(() => {
@@ -299,39 +337,50 @@ const SurveyDeStress = () => {
         });
     }, []);
 
+
+
     const handleDeStressSurveyComplete = () => {
-        const lastScoreElement = document.querySelectorAll('.survey_step_3_q_1 input:checked')[0]
-        const lastScoreElement2 = document.querySelectorAll('.survey_step_3_q_2 input:checked')[0]
-        const lastScoreElement3 = document.querySelectorAll('.survey_step_3_q_3')[0] as HTMLTextAreaElement;
-
-        if (lastScoreElement !== undefined && lastScoreElement2 !== undefined) {
-            reqData.userSurveysAnswersDTO[4].saQst = 5;
-            reqData.userSurveysAnswersDTO[4].saAnsList = [];
-
-            reqData.userSurveysAnswersDTO[5].saQst = 6;
-            reqData.userSurveysAnswersDTO[5].saAnsList = [];
-
-            reqData.userSurveysAnswersDTO[6].saQst = 7;
-            reqData.userSurveysAnswersDTO[6].saAnsList = [];
-
-            Array.from(document.querySelectorAll('.survey_step_3_q_1 input') as NodeListOf<HTMLInputElement>)
-                .forEach((item: HTMLInputElement, idx: number) => {
-                    if (item.checked == true) {
-                        reqData.userSurveysAnswersDTO[4].saAnsList.push(idx + 1)
-                    }
-                });
-            Array.from(document.querySelectorAll('.survey_step_3_q_2 input') as NodeListOf<HTMLInputElement>)
-                .forEach((item: HTMLInputElement, idx: number) => {
-                    if (item.checked == true) {
-                        reqData.userSurveysAnswersDTO[5].saAnsList.push(idx + 1)
-                    }
-                });
-
-            reqData.userSurveysAnswersDTO[6].saEtcAns = lastScoreElement3.value;
-            handleSubmit();
+        if (isFirst == true) {
+            setToast2(true)
+            setTimeout(() => {
+                setToast2(false)
+            }, 3000);
+            isFirst = false;
         } else {
-            handlePopup();
+            const lastScoreElement = document.querySelectorAll('.survey_step_3_q_1 input:checked')[0]
+            const lastScoreElement2 = document.querySelectorAll('.survey_step_3_q_2 input:checked')[0]
+            const lastScoreElement3 = document.querySelectorAll('.survey_step_3_q_3')[0] as HTMLTextAreaElement;
+
+            if (lastScoreElement !== undefined && lastScoreElement2 !== undefined) {
+                reqData.userSurveysAnswersDTO[4].saQst = 5;
+                reqData.userSurveysAnswersDTO[4].saAnsList = [];
+
+                reqData.userSurveysAnswersDTO[5].saQst = 6;
+                reqData.userSurveysAnswersDTO[5].saAnsList = [];
+
+                reqData.userSurveysAnswersDTO[6].saQst = 7;
+                reqData.userSurveysAnswersDTO[6].saAnsList = [];
+
+                Array.from(document.querySelectorAll('.survey_step_3_q_1 input') as NodeListOf<HTMLInputElement>)
+                    .forEach((item: HTMLInputElement, idx: number) => {
+                        if (item.checked == true) {
+                            reqData.userSurveysAnswersDTO[4].saAnsList.push(idx + 1)
+                        }
+                    });
+                Array.from(document.querySelectorAll('.survey_step_3_q_2 input') as NodeListOf<HTMLInputElement>)
+                    .forEach((item: HTMLInputElement, idx: number) => {
+                        if (item.checked == true) {
+                            reqData.userSurveysAnswersDTO[5].saAnsList.push(idx + 1)
+                        }
+                    });
+
+                reqData.userSurveysAnswersDTO[6].saEtcAns = lastScoreElement3.value;
+                handleSubmit();
+            } else {
+                handlePopup();
+            }
         }
+
     };
 
     const moveSurveyMain = () => {
@@ -383,6 +432,15 @@ const SurveyDeStress = () => {
             </div>
             <ModalComponent />
             <ToastPopup content={"모든 정보를 입력해주세요."} show={toast} />
+            <ToastPopup
+                content={
+                    <div>
+                        완료하시면 <b>수정</b>이 <b>불가</b>합니다. <br />
+                        내용을 확인하해주세요.
+                    </div>
+                }
+                show={toast2}
+            />
         </React.Fragment>
     );
 };

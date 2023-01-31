@@ -5,10 +5,10 @@ import ToastPopup from "@components/modal/ToastPopup";
 const ReligionStressComponent = () => {
   const [toast, setToast] = useState(false);
   const handlePopup = () => {
-    setToast(true);
-    setTimeout(() => {
-      setToast(false);
-    }, 3000);
+    // setToast(true);
+    // setTimeout(() => {
+    //   setToast(false);
+    // }, 3000);
   };
 
   return (
