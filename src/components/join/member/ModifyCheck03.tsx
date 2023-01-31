@@ -30,19 +30,30 @@ const ModifyCheck03 = () => {
   const checkBoxRef = useRef<HTMLInputElement[]>([]);
   const cancerInfoRef = useRef<HTMLSpanElement[]>([]);
   const now = new Date();
-  const [isCustomCancerName, setIsCustomCanerName] = useState(false);
-  const handleCancerNameChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const [isCustomCancerName, setIsCustomCanerName] = useState([false]);
+  const handleCancerNameChange = (event: React.ChangeEvent<HTMLSelectElement>, index: number) => {
     const target = event.target;
     const selectedOption = target.selectedOptions[0];
     if (selectedOption.textContent === "직접입력") {
-      setIsCustomCanerName(true);
+      let newIsCustomCancerName = [...isCustomCancerName];
+      newIsCustomCancerName[index] = true;
+      setIsCustomCanerName(newIsCustomCancerName);
     } else {
-      setIsCustomCanerName(false);
+      let newIsCustomCancerName = [...isCustomCancerName];
+      newIsCustomCancerName[index] = false;
+      let newDiagCancerList = { ...diagCancerList };
+      newDiagCancerList.userDiagName[index] = '';
+      setIsCustomCanerName(newIsCustomCancerName);
+      setDiagCancerList(newDiagCancerList)
     }
+
+    let newDiagCancerList = { ...diagCancerList };
+    newDiagCancerList.userDiagnosis[index] = target.value;
+    setDiagCancerList(newDiagCancerList);
 
     setBeforeSurveyInfo({
       ...beforeSurveyInfo,
-      [target.name]: target.value,
+      [target.name]: newDiagCancerList.userDiagnosis.join(','),
     })
   };
   const moveScroll = (dom: HTMLSpanElement) => {
@@ -75,6 +86,7 @@ const ModifyCheck03 = () => {
           setToast(true)
           setTimeout(() => {
             setToast(false);
+            navigate(-1)
           }, 3000);
         }
       });
@@ -207,8 +219,53 @@ const ModifyCheck03 = () => {
   useEffect(() => {
     console.log(user);
   }, [])
+  //신규추가
+  const handleDiagName = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    const { name, value } = event.target;
+    let newDiagCancerList = { ...diagCancerList };
+    newDiagCancerList.userDiagName[index] = value;
+    const newValue = newDiagCancerList.userDiagName.join(',');
 
+    setDiagCancerList(newDiagCancerList);
+    setBeforeSurveyInfo({
+      ...beforeSurveyInfo,
+      [name]: newValue
+    })
+  }
+  const addDiag = () => {
+    let tmp = { ...diagCancerList };
+    tmp.userDiagnosis.push('');
+    tmp.userDiagDate.push('');
+    tmp.userCureEndDate.push('');
+    setDiagCancerList(tmp);
+  }
 
+  const [diagCancerList, setDiagCancerList] = useState({
+    userDiagnosis: [''],
+    userDiagDate: [''],
+    userCureEndDate: [''],
+    userDiagName: [''],
+  });
+
+  const handleCancerDate = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    const { name, value } = event.target;
+    let newDiagCancerList = { ...diagCancerList };
+    let newValue = '';
+
+    if (name === 'userDiagDate') {
+      newDiagCancerList.userDiagDate[index] = value;
+      newValue = newDiagCancerList.userDiagDate.join(',');
+    }
+    else {
+      newDiagCancerList.userCureEndDate[index] = value;
+      newValue = newDiagCancerList.userCureEndDate.join(',');
+    }
+    setDiagCancerList(newDiagCancerList);
+    setBeforeSurveyInfo({
+      ...beforeSurveyInfo,
+      [name]: newValue
+    })
+  }
   return (
     <React.Fragment>
       <div className="surveyBefore_popup">
@@ -251,105 +308,73 @@ const ModifyCheck03 = () => {
                 </span>
               </div>
 
-              <label>
-                <span style={{ margin: "50px 0 20px 0" }} ref={(element) => (cancerInfoRef.current[1] = element as HTMLSpanElement)}>암 종(진단명) <i className="plusBtn">+</i></span>
-                <button type="button" className="plus"></button>
-              </label>
-              <p className="pointGreen">다른 암도 재발되었나요?<br />그러면 해당 암 종도 추가해주세요.</p>
-              <div>
-                <div className="selectBox">
-                  <select name="userDiagnosis" value={beforeSurveyInfo.userDiagnosis} onChange={handleCancerNameChange}>
-                    <option value="">암 종 선택</option>
-                    <option value="1">간암</option>
-                    <option value="2">갑상선암</option>
-                    <option value="3">담낭암</option>
-                    <option value="4">담도암</option>
-                    <option value="5">대장암</option>
-                    <option value="6">신장암</option>
-                    <option value="7">위암</option>
-                    <option value="8">유방암</option>
-                    <option value="9">전립선암</option>
-                    <option value="10">췌장암</option>
-                    <option value="11">폐암</option>
-                    <option value="etc">직접입력</option>
-                  </select>
-                </div>
+              {/* 작업중 */}
 
-                {isCustomCancerName && (
-                  <div className="manualInput">
-                    <label>직접입력</label>
-                    <InputElement
-                      type="text"
-                      placeholder="직접입력"
-                      id="custom_cancer_name"
-                      value={beforeSurveyInfo.userDiagName}
-                      name="userDiagName"
-                      onChange={handleUpdateCancerInfo}
-                    />
-                  </div>
-                )}
-              </div>
-              <div className="plusItem">
-                <label>
-                  <span style={{ margin: "50px 0 20px 0" }}>진단시기</span>
-                </label>
-                <InputElement
-                  type="text"
-                  placeholder="예) 2015년 01월"
-                  id="cancer_start"
-                  name="userDiagDate"
-                  value=""
-                  onChange={handleUpdateCancerInfo}
-                />
-                <label>
-                  <span style={{ margin: "50px 0 20px 0" }}>치료종료 시기</span>
-                </label>
-                <InputElement
-                  type="text"
-                  placeholder="예) 2015년 01월"
-                  id="cancer_end"
-                  name="userCureEndDate"
-                  value=""
-                  onChange={handleUpdateCancerInfo}
-                />
-              </div>
               {/* 추가되는 영역 : S */}
-              {/* <label>
-                        <span>암 종(진단명)</span>
+              {
+                diagCancerList.userDiagnosis.map((elem, idx) => (
+                  <React.Fragment key={idx}>
+                    <label>
+                      <span style={{ margin: "50px 0 20px 0" }} ref={(element) => (cancerInfoRef.current[idx + 1] = element as HTMLSpanElement)}>
+                        암 종(진단명)
+                        {idx === 0 && <i className="plusBtn" onClick={addDiag}>+</i>}
+                      </span>
                     </label>
-                    <select onChange={handleCancerNameChange}>
-                        <option>암 종 선택</option>
-                        <option>간암</option>
-                        <option>갑상선암</option>
-                        <option>담낭암</option>
-                        <option>담도암</option>
-                        <option>대장암</option>
-                        <option>신장암</option>
-                        <option>위암</option>
-                        <option>유방암</option>
-                        <option>전립선암</option>
-                        <option>췌장암</option>
-                        <option>폐암</option>
-                        <option>직접입력</option>
+                    <select name="userDiagnosis" onChange={(event) => handleCancerNameChange(event, idx)}>
+                      <option value="">암 종 선택</option>
+                      <option value="1">간암</option>
+                      <option value="2">갑상선암</option>
+                      <option value="3">담낭암</option>
+                      <option value="4">담도암</option>
+                      <option value="5">대장암</option>
+                      <option value="6">신장암</option>
+                      <option value="7">위암</option>
+                      <option value="8">유방암</option>
+                      <option value="9">전립선암</option>
+                      <option value="10">췌장암</option>
+                      <option value="11">폐암</option>
+                      <option value="etc">직접입력</option>
                     </select>
+                    {isCustomCancerName[idx] && (
+                      <div className="manualInput">
+                        <label>직접입력</label>
+                        <InputElement
+                          type="text"
+                          placeholder="직접입력"
+                          id="custom_cancer_name"
+                          value={diagCancerList.userDiagName[idx]}
+                          name="userDiagName"
+                          onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleDiagName(event, idx)}
+                        />
+                      </div>
+                    )}
                     <div className="plusItem">
-                        <label htmlFor="cancer_type">
-                            <span>진단시기</span>
-                        </label>
-                        <InputElement
-                            type="text"
-                            placeholder="예) 2015년 01월"
-                            id="cancer_type_start"
-                        />
-                        <label htmlFor="cancer_type_start">
-                            <span>치료종료 시기</span>
-                        </label>
-                        <InputElement
-                            type="text"
-                            placeholder="예) 2015년 01월"
-                            id="cancer_type_end"
-                        />
-                    </div> */}
+                      <label>
+                        <span style={{ margin: "50px 0 20px 0" }}>진단시기</span>
+                      </label>
+                      <InputElement
+                        type="text"
+                        placeholder="예) 2015년 01월"
+                        id="cancer_start"
+                        name="userDiagDate"
+                        value=""
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleCancerDate(event, idx)}
+                      />
+                      <label>
+                        <span style={{ margin: "50px 0 20px 0" }}>치료종료 시기</span>
+                      </label>
+                      <InputElement
+                        type="text"
+                        placeholder="예) 2015년 01월"
+                        id="cancer_end"
+                        name="userCureEndDate"
+                        value=""
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleCancerDate(event, idx)}
+                      />
+                    </div>
+                  </React.Fragment>
+                ))
+              }
               {/* 추가되는 영역 : E */}
 
               <label>

@@ -151,7 +151,8 @@ const ModifyCheck02 = ({ nextStep }: { nextStep: Function }) => {
         setToast(true);
         setTimeout(() => {
             setToast(false);
-            updateInfo();
+            navigate(-1)
+            // updateInfo();
         }, 3000);
     };
 
@@ -191,28 +192,27 @@ const ModifyCheck02 = ({ nextStep }: { nextStep: Function }) => {
         wasDrinkElement.checked == true ? (reqData.userWasDrink = "1") : (reqData.userWasDrink = "0")
 
 
-        if (String(smokeAmt.value).length !== 0 && String(smokingStartYear.value.length !== 0 && String(smokingEndYear.value).length !== 0 && drinkAmt.value.length !== 0 && String(drinkingStartYear.value).length !== 0 && String(drinkingEndYear.value).length !== 0)) {
-            fetch(`https://api.life.codeidea.io/users/health`,
-                {
-                    method: 'PUT',
-                    body: JSON.stringify(reqData),
-                    headers: {
-                        Authorization: 'Bearer ' + user.accessToken,
-                        'Content-Type': 'application/json'
-                    },
-                }).then((response) => {
-                    return response.json();
-                }).then((data) => {
-                    if (data.result == "true") {
-                        handlePopup();
-
-                    }
-                }).catch((error) => {
-                    console.log(error)
-                });
-        } else {
-            handleFocusBtn()
-        }
+        // if (String(smokeAmt.value).length !== 0 && String(smokingStartYear.value.length !== 0 && String(smokingEndYear.value).length !== 0 && drinkAmt.value.length !== 0 && String(drinkingStartYear.value).length !== 0 && String(drinkingEndYear.value).length !== 0)) {
+        fetch(`https://api.life.codeidea.io/users/health`,
+            {
+                method: 'PUT',
+                body: JSON.stringify(reqData),
+                headers: {
+                    Authorization: 'Bearer ' + user.accessToken,
+                    'Content-Type': 'application/json'
+                },
+            }).then((response) => {
+                return response.json();
+            }).then((data) => {
+                if (data.result == "true") {
+                    handlePopup();
+                }
+            }).catch((error) => {
+                console.log(error)
+            });
+        // } else {
+        //     handleFocusBtn()
+        // }
 
 
 

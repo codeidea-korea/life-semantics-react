@@ -78,7 +78,9 @@ const DeleteAccount = () => {
       ),
       confirmText: "아니요",
       cancelText: "네",
-      onCancelCallback: moveMain
+      onCancelCallback: () => {
+        navigate(-1)
+      }
     });
   };
   const moveMain = () => {
