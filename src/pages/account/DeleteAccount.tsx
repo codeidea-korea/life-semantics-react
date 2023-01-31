@@ -50,7 +50,7 @@ const DeleteAccount = () => {
                 return response.json();
               }).then((data) => {
                 if (data.result === "true") {
-                  navigate("/deleteComplete")
+                  navigate("/deleteAccountComplete")
                 }
               }).catch((error) => {
                 console.log(error)
