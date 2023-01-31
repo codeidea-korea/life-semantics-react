@@ -12,7 +12,7 @@ import TiredSurveyComponent02 from "@components/survey/surveylist/tired/TiredSur
 import TiredSurveyComponent03 from "@components/survey/surveylist/tired/TiredSurveyComponent03";
 import ModalComponent from "@components/modal/ModalComponent";
 import { userState } from "@/states/userState";
-
+let isFirst = true;
 function getToday() {
   var date = new Date();
   var year = date.getFullYear();
@@ -74,6 +74,7 @@ const Tired = () => {
   const [userListError, setUserListError] = useState(true);
   const [toast, setToast] = useState(false);
   const [toast2, setToast2] = useState(false);
+  const [toast3, setToast3] = useState(false);
   const [step, setStep] = useState(1);
 
   //url로 전달받은 데이터
@@ -114,6 +115,7 @@ const Tired = () => {
       setStep(step - 1);
     }
 
+
     if (step === 1) {
       setModal({
         ...modal,
@@ -153,41 +155,52 @@ const Tired = () => {
       }
     }
 
+
+
     if (Number(document.querySelectorAll('.surveyList input:checked').length) === Number(document.querySelectorAll('.surveyContent').length)) {
-      dataSet(Number(document.querySelectorAll('.surveyContent').length))
-      console.log(reqData);
-      fetch(`https://api.life.codeidea.io/usr/surveys`,
-        {
-          method: 'POST',
-          body: JSON.stringify(reqData),
-          headers: {
-            Authorization: 'Bearer ' + user.accessToken,
-            'Content-Type': 'application/json'
-          },
-        }).then((response) => {
-          return response.json();
-        }).then((data) => {
-          if (data.result == "true") {
-            setModal({
-              ...modal,
-              show: true,
-              title: "",
-              cancelShow: false,
-              callBackShow: true,
-              content: (
-                <div>
-                  피로 설문을
-                  <br />
-                  완료하셨습니다.
-                </div>
-              ),
-              confirmText: "확인",
-              onConfirmCallback: moveSurveyMain
-            });
-          }
-        }).catch((error) => {
-          console.log(error)
-        });
+      if (isFirst == true) {
+        setToast3(true)
+        setTimeout(() => {
+          setToast3(false)
+        }, 3000);
+        isFirst = false
+      } else {
+        dataSet(Number(document.querySelectorAll('.surveyContent').length))
+        console.log(reqData);
+        fetch(`https://api.life.codeidea.io/usr/surveys`,
+          {
+            method: 'POST',
+            body: JSON.stringify(reqData),
+            headers: {
+              Authorization: 'Bearer ' + user.accessToken,
+              'Content-Type': 'application/json'
+            },
+          }).then((response) => {
+            return response.json();
+          }).then((data) => {
+            if (data.result == "true") {
+              setModal({
+                ...modal,
+                show: true,
+                title: "",
+                cancelShow: false,
+                callBackShow: true,
+                content: (
+                  <div>
+                    피로 설문을
+                    <br />
+                    완료하셨습니다.
+                  </div>
+                ),
+                confirmText: "확인",
+                onConfirmCallback: moveSurveyMain
+              });
+            }
+          }).catch((error) => {
+            console.log(error)
+          });
+      }
+
     } else {
       setToast2(true)
       setTimeout(() => {
@@ -219,6 +232,33 @@ const Tired = () => {
       inner.innerText = "다음";
     }
   }, [step]);
+
+  //뒤로가기시 클릭했던거 유지기능
+  function savePrev() {
+    setTimeout(() => {
+      let stepCount = 0;
+      if (step == 1) {
+        stepCount = 0;
+      } else if (step == 2) {
+        stepCount = 5;
+      } else if (step == 3) {
+        stepCount = 10;
+      }
+      for (let i = stepCount; i < reqData.userSurveysAnswersDTO.length; i++) {
+        console.log(reqData)
+        reqData.userSurveysAnswersDTO[i].saAnsList?.forEach((item: any, idx) => {
+          const targetElement = document.querySelectorAll('.surveyContent')[i - stepCount].querySelectorAll("input")[item - 1];
+          console.log(targetElement);
+          targetElement.checked = true;
+
+        });
+      }
+    }, 500);
+  }
+  useEffect(() => {
+    savePrev();
+  }, [step])
+
 
   return (
     <React.Fragment>
@@ -275,6 +315,10 @@ const Tired = () => {
       </div>
 
       <ModalComponent />
+      <ToastPopup
+        content="완료하시면 수정이 불가합니다. 내용을 확인해주세요."
+        show={toast3}
+      />
     </React.Fragment>
   );
 };
