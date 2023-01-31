@@ -13,7 +13,7 @@ import TitleHeadComponent from "@components/head/TitleHeadComponent";
 import $ from "jquery";
 import { userState } from "@/states/userState";
 
-
+let isFirst = true;
 function getToday() {
     var date = new Date();
     var year = date.getFullYear();
@@ -87,6 +87,7 @@ const Pain = () => {
     const [modal, setModal] = useRecoilState(modalState);
     const [toast, setToast] = useState(false);
     const [toast2, setToast2] = useState(false);
+    const [toast3, setToast3] = useState(false);
     const [userListError, setUserListError] = useState(true);
     const increase = () => setCount(count + 1);
     const setTitle = () =>
@@ -138,6 +139,8 @@ const Pain = () => {
                 document.querySelectorAll('.dot.on').forEach((item, idx) => {
                     reqData.userSurveysAnswersDTO[0].saAnsList.push(Number(item.getAttribute("data-index")) + 1);
                 })
+            } else {
+                return false;
             }
         } else if (step === 2) {
             reqData.userSurveysAnswersDTO[1].saQst = 1;
@@ -146,6 +149,8 @@ const Pain = () => {
                 document.querySelectorAll('.dot.red').forEach((item, idx) => {
                     reqData.userSurveysAnswersDTO[1].saAnsList.push(Number(item.getAttribute("data-index")) + 1);
                 })
+            } else {
+                return false;
             }
         }
 
@@ -158,12 +163,27 @@ const Pain = () => {
             if (step < 3) {
                 setStep(step + 1);
             }
+        } else {
+            setToast2(true)
+            setTimeout(() => {
+                setToast2(false)
+            }, 3000);
         }
     };
 
     const handlePrevStep = () => {
         if (step < 4 && step > 1) {
             setStep(step - 1);
+        } else if (step === 1) {
+            navigate(-1)
+        }
+        if (step === 3) {
+            savePrev()
+        }
+        if (step === 2) {
+            document.querySelectorAll('.red').forEach((item, idx) => {
+                item.classList.remove("red");
+            });
         }
     };
     const handleDuplicationNotice = () => {
@@ -183,45 +203,84 @@ const Pain = () => {
             confirmText: "확인",
         });
     };
+
+    function savePrev() {
+        setTimeout(() => {
+            console.log(reqData)
+            document.querySelectorAll('.frontPain span').forEach((item: any, idx) => {
+                reqData.userSurveysAnswersDTO[0].saAnsList.forEach((item2: any, idx2) => {
+                    if (item.getAttribute("data-index") == item2 - 1) {
+                        item.classList.add("on")
+                    }
+                });
+                reqData.userSurveysAnswersDTO[1].saAnsList.forEach((item2: any, idx2) => {
+                    if (item.getAttribute("data-index") == item2 - 1) {
+                        item.classList.add("red")
+                    }
+                });
+            });
+            document.querySelectorAll('.backPain span').forEach((item: any, idx) => {
+                reqData.userSurveysAnswersDTO[0].saAnsList.forEach((item2: any, idx2) => {
+                    if (item.getAttribute("data-index") == item2 - 1) {
+                        item.classList.add("on")
+                    }
+                });
+                reqData.userSurveysAnswersDTO[1].saAnsList.forEach((item2: any, idx2) => {
+                    if (item.getAttribute("data-index") == item2 - 1) {
+                        item.classList.add("red")
+                    }
+                });
+            });
+        }, 500);
+    }
+
     const handlePainSurveyComplete = () => {
         if (document.querySelectorAll('.scoreRadio input:checked')[0] !== undefined) {
-            reqData.userSurveysAnswersDTO[2].saQst = 3;
-            reqData.userSurveysAnswersDTO[2].saAnsList = [];
-            const checkedIndex = Array.from(document.querySelectorAll('.scoreRadio input')).indexOf(document.querySelectorAll('.scoreRadio input:checked')[0])
-            reqData.userSurveysAnswersDTO[2].saAnsList.push(checkedIndex + 1)
+            if (isFirst == true) {
+                setToast3(true)
+                setTimeout(() => {
+                    setToast3(false);
+                }, 3000);
+                isFirst = false;
+            } else {
+                reqData.userSurveysAnswersDTO[2].saQst = 3;
+                reqData.userSurveysAnswersDTO[2].saAnsList = [];
+                const checkedIndex = Array.from(document.querySelectorAll('.scoreRadio input')).indexOf(document.querySelectorAll('.scoreRadio input:checked')[0])
+                reqData.userSurveysAnswersDTO[2].saAnsList.push(checkedIndex + 1)
 
 
-            fetch(`https://api.life.codeidea.io/usr/surveys`,
-                {
-                    method: 'POST',
-                    body: JSON.stringify(reqData),
-                    headers: {
-                        Authorization: 'Bearer ' + user.accessToken,
-                        'Content-Type': 'application/json'
-                    },
-                }).then((response) => {
-                    return response.json();
-                }).then((data) => {
-                    if (data.result == "true") {
-                        setModal({
-                            ...modal,
-                            show: true,
-                            title: "",
-                            cancelShow: false,
-                            callBackShow: true,
-                            content: (
-                                <div>
-                                    통증 설문을<br />
-                                    완료하셨습니다.
-                                </div>
-                            ),
-                            confirmText: "확인",
-                            onConfirmCallback: moveSurveyMain
-                        });
-                    }
-                }).catch((error) => {
-                    console.log(error)
-                });
+                fetch(`https://api.life.codeidea.io/usr/surveys`,
+                    {
+                        method: 'POST',
+                        body: JSON.stringify(reqData),
+                        headers: {
+                            Authorization: 'Bearer ' + user.accessToken,
+                            'Content-Type': 'application/json'
+                        },
+                    }).then((response) => {
+                        return response.json();
+                    }).then((data) => {
+                        if (data.result == "true") {
+                            setModal({
+                                ...modal,
+                                show: true,
+                                title: "",
+                                cancelShow: false,
+                                callBackShow: true,
+                                content: (
+                                    <div>
+                                        통증 설문을<br />
+                                        완료하셨습니다.
+                                    </div>
+                                ),
+                                confirmText: "확인",
+                                onConfirmCallback: moveSurveyMain
+                            });
+                        }
+                    }).catch((error) => {
+                        console.log(error)
+                    });
+            }
         } else {
             setToast2(true);
             setTimeout(() => {
@@ -275,8 +334,16 @@ const Pain = () => {
                     </span>}
                 show={toast}
             />
+            <ToastPopup
+                content={
+                    <span>
+                        완료하시면 <b>수정</b>이 <b>불가</b>합니다. <br />
+                        내용을 확인하해주세요.
+                    </span>}
+                show={toast3}
+            />
             <ModalComponent />
-            <ToastPopup content={"모든 정보를 입력해주세요."} show={toast2} />
+            <ToastPopup content={"모든 필수정보를 입력해주세요."} show={toast2} />
         </React.Fragment>
     );
 };
