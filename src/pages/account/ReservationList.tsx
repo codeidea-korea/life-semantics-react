@@ -23,6 +23,7 @@ const ReservationList = () => {
 
     const [modal, setModal] = useRecoilState(modalState);
     const [toast, setToast] = useState(false);
+    const [toast2, setToast2] = useState(false);
 
     const [dummy, setDummy] = useState([
         { seq: 0, programTitle: '굿바이 피로 1기', status: 'R' },
@@ -57,7 +58,6 @@ const ReservationList = () => {
             });
     }
     useEffect(() => {
-
         getUserReservationList("pgAppSttDate");
     }, [])
 
@@ -131,22 +131,29 @@ const ReservationList = () => {
     };
 
     const handleDeleteConfirm = () => {
-        setModal({
-            ...modal,
-            show: true,
-            title: "",
-            cancelShow: true,
-            callBackShow: true,
-            content: (
-                <div>
-                    선택하신 프로그램을 <br />
-                    취소하시겠습니까?
-                </div>
-            ),
-            confirmText: "네",
-            cancelText: "아니요",
-            onConfirmCallback: handleRemove,
-        });
+        if (!document.querySelectorAll('input:checked')[0]) {
+            setToast2(true)
+            setTimeout(() => {
+                setToast2(false)
+            }, 3000);
+        } else {
+            setModal({
+                ...modal,
+                show: true,
+                title: "",
+                cancelShow: true,
+                callBackShow: true,
+                content: (
+                    <div>
+                        선택하신 프로그램을 <br />
+                        취소하시겠습니까?
+                    </div>
+                ),
+                confirmText: "네",
+                cancelText: "아니요",
+                onConfirmCallback: handleRemove,
+            });
+        }
     };
 
     const handlePopup = () => {
@@ -235,7 +242,7 @@ const ReservationList = () => {
                         </tbody>
                     </table>
                     <ToastPopup content={"선택하신 프로그램을 취소했습니다."} show={toast} />
-                    <ToastPopup content={<span>프로그램을 취소하시려면, <br /> 해당 프로그램을 선택해주세요.</span>} show={toast} />
+                    <ToastPopup content={<span>프로그램을 취소하시려면, <br /> 해당 프로그램을 선택해주세요.</span>} show={toast2} />
                 </div>
             </div>
 

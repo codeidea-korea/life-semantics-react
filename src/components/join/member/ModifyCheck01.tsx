@@ -4,14 +4,15 @@ import InputElement from "../../elements/InputElement";
 import $ from "jquery";
 import { useNavigate } from "react-router-dom";
 import { userState } from '@states/userState';
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useRecoilState } from "recoil";
 import ToastPopup from "@components/modal/ToastPopup";
+import { modalState } from "@states/modalState";
 
 const ModifyCheck01 = () => {
   const navigate = useNavigate();
   const user = useRecoilValue(userState);
   const [toast, setToast] = useState(false);
-
+  const [modal, setModal] = useRecoilState(modalState);
   const handlePopup = () => {
     setToast(true);
     setTimeout(() => {
@@ -73,6 +74,7 @@ const ModifyCheck01 = () => {
                 setToast(true);
                 setTimeout(() => {
                   setToast(false);
+                  navigate(-1);
                 }, 3000);
               }
             }).catch((error) => {
@@ -95,7 +97,51 @@ const ModifyCheck01 = () => {
   }
 
 
+  useEffect(() => {
+    setModal({
+      ...modal,
+      show: false,
+      title: "",
+      cancelShow: true,
+      callBackShow: true,
+      content: (
+        <div>
+          작성을 중단하시겠습니까? <br />
+          중단하신 내용은
+          <br />
+          저장되지 않습니다.
+        </div>
+      ),
+      confirmText: "네",
+      cancelText: "아니요",
+      onConfirmCallback: () => {
+        navigate(-1)
+      }
+    });
 
+    document.querySelectorAll('.prev')[0].addEventListener('click', function () {
+      setModal({
+        ...modal,
+        show: true,
+        title: "",
+        cancelShow: true,
+        callBackShow: true,
+        content: (
+          <div>
+            작성을 중단하시겠습니까? <br />
+            중단하신 내용은
+            <br />
+            저장되지 않습니다.
+          </div>
+        ),
+        confirmText: "네",
+        cancelText: "아니요",
+        onConfirmCallback: () => {
+          navigate(-1)
+        }
+      });
+    });
+  }, [])
 
   return (
     <React.Fragment>
@@ -216,7 +262,7 @@ const ModifyCheck01 = () => {
         </div>
       </div>
       <div className="fixBtn ">
-        <button onClick={() => navigate(-1)} type="button" className="prev" >
+        <button type="button" className="prev" >
           이전
         </button>
         <button onClick={handleSubmit} type="button" className="next" >
