@@ -17,7 +17,6 @@ const DeleteAccount = () => {
   let [alertText, setAlert] = useState<JSX.Element | null>(null);
 
   const endUser = () => {
-
     const inputElement = document.querySelector('#end_user_pass') as HTMLInputElement;
     if (inputElement && inputElement.value.length !== 0) {
       const reqData = {
