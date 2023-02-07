@@ -22,10 +22,12 @@ const MemberChk01 = ({ nextStep, prevStep }: { nextStep: Function, prevStep: Fun
         userPass: [0, ''],
         userPassCheck: [0, ''],
         userEmail: [0, ''],
+        userName: [0, ''],
     })
     const idReg = /^.*(?=.*\d)(?=.*[a-zA-Z]).*$/;
     const passReg = /^.*(?=.*\d)(?=.*[a-zA-Z])(?=.*[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]).*$/;
     const emailReg = /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/;
+    const nameReg = /^[ㄱ-ㅎ|가-힣|a-z|A-Z|]*$/;
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.currentTarget;
@@ -69,6 +71,16 @@ const MemberChk01 = ({ nextStep, prevStep }: { nextStep: Function, prevStep: Fun
             else {
                 setAlertText({...alertText, [name]: [0, '']})
                 inputsRef.current[5].style.borderColor = "";
+            }
+        }
+        else if (name === 'userName') {
+            if (!nameReg.test(value)) {
+                setAlertText({...alertText, [name]: [1, '한글과 영문으로만 입력해주세요.']})
+                inputsRef.current[3].style.borderColor = "#f30909";
+            }
+            else {
+                setAlertText({...alertText, [name]: [0, '']})
+                inputsRef.current[3].style.borderColor = "";
             }
         }
         setJoinParam({ ...joinParam, [name]: value });
@@ -263,6 +275,7 @@ const MemberChk01 = ({ nextStep, prevStep }: { nextStep: Function, prevStep: Fun
                 </label>
                 <InputElement type="text" placeholder="이름 입력" name="userName" id="userName" style={{imeMode:'auto'}}
                         onChange={handleChange}ref={(element: HTMLInputElement) => (inputsRef.current[3] = element as HTMLInputElement)}/>
+                {!!alertText.userName[0] && <span className="alert_text">{alertText.userName[1]}</span>}
                 <label ref={(element: HTMLLabelElement) => (labelsRef.current[4] = element as HTMLLabelElement)}>
                     <span>생년월일</span>
                 </label>
@@ -273,7 +286,12 @@ const MemberChk01 = ({ nextStep, prevStep }: { nextStep: Function, prevStep: Fun
                     id="userBirth"
                     value={joinParam.userBirth}
                     onChange={handleChange}
-                    ref={(element: HTMLInputElement) => (inputsRef.current[4] = element as HTMLInputElement)}
+                    ref={(element: HTMLInputElement) => (inputsRef.current[4] = element as HTMLInputElement)} 
+                    maxlength={8} 
+                    onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        if (e.target.value.length > e.target.maxLength)
+                            e.target.value = e.target.value.slice(0, e.target.maxLength);
+                    }}
                 />
                 <label ref={(element: HTMLLabelElement) => (labelsRef.current[5] = element as HTMLLabelElement)}>
                     <span>문자 수신동의</span>
