@@ -30,39 +30,35 @@ interface reqObj {
   saRegDate: string;
 }
 interface ReqData {
-  svNo: Number,
-  svPgNo: Number,
-  svUserNo: unknown,
-  svType1: unknown,
-  svType2: string,
-  svStatus: string,
-  svRegDate: string,
-  userSurveysAnswersDTO: reqObj[]
+  svNo: Number;
+  svPgNo: Number;
+  svUserNo: unknown;
+  svType1: unknown;
+  svType2: string;
+  svStatus: string;
+  svRegDate: string;
+  userSurveysAnswersDTO: reqObj[];
 }
 
 const reqData: ReqData = {
-  "svNo": 0,
-  "svPgNo": 8,
-  "svUserNo": 0,
-  "svType1": "pre",
-  "svType2": "ISI",
-  "svStatus": "set",
-  "svRegDate": getToday(),
-  "userSurveysAnswersDTO": []
-}
+  svNo: 0,
+  svPgNo: 8,
+  svUserNo: 0,
+  svType1: "pre",
+  svType2: "ISI",
+  svStatus: "set",
+  svRegDate: getToday(),
+  userSurveysAnswersDTO: [],
+};
 for (let i = 0; i < 7; i++) {
-  reqData.userSurveysAnswersDTO.push(
-    {
-      "saSvNo": 0,
-      "saQst": 0,
-      "saAnsList": [
-
-      ],
-      "saAns": 0,
-      "saEtcAns": "string",
-      "saRegDate": getToday(),
-    }
-  )
+  reqData.userSurveysAnswersDTO.push({
+    saSvNo: 0,
+    saQst: 0,
+    saAnsList: [],
+    saAns: 0,
+    saEtcAns: "string",
+    saRegDate: getToday(),
+  });
 }
 const ISI = () => {
   const user = useRecoilValue(userState);
@@ -90,48 +86,66 @@ const ISI = () => {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
 
-  const pgNo = urlParams.get('pgNo');
-  const type = urlParams.get('type');
+  const pgNo = urlParams.get("pgNo");
+  const type = urlParams.get("type");
   reqData.svPgNo = Number(pgNo);
-  reqData.svType1 = type
+  reqData.svType1 = type;
 
   const handleModal = () => {
-    if (Number(document.querySelectorAll('.surveyContent input:checked').length) === Number(document.querySelectorAll('.surveyContent').length)) {
-      const qnaLength = Number(document.querySelectorAll('.surveyContent').length)
-      const checkedElementArray = document.querySelectorAll('.surveyContent input:checked');
+    if (
+      Number(
+        document.querySelectorAll(".surveyContent input:checked").length
+      ) === Number(document.querySelectorAll(".surveyContent").length)
+    ) {
+      const qnaLength = Number(
+        document.querySelectorAll(".surveyContent").length
+      );
+      const checkedElementArray = document.querySelectorAll(
+        ".surveyContent input:checked"
+      );
       for (let i = 0; i < qnaLength; i++) {
         let index: number;
-        const splitString = document.querySelectorAll('.survey_text')[i].textContent?.split(".")[0];
+        const splitString = document
+          .querySelectorAll(".survey_text")
+          [i].textContent?.split(".")[0];
         if (splitString == "a") {
-          index = 1
+          index = 1;
         } else if (splitString == "b") {
-          index = 2
+          index = 2;
         } else if (splitString == "c") {
-          index = 3
+          index = 3;
         } else {
-          index = Number(document.querySelectorAll('.survey_text')[i].textContent?.split(".")[0]) + 2;
+          index =
+            Number(
+              document
+                .querySelectorAll(".survey_text")
+                [i].textContent?.split(".")[0]
+            ) + 2;
         }
         reqData.userSurveysAnswersDTO[index - 1].saAnsList = [];
         reqData.userSurveysAnswersDTO[index - 1].saQst = index;
         console.log(checkedElementArray + " " + i);
-        reqData.userSurveysAnswersDTO[index - 1].saAnsList.push(Number(checkedElementArray[i].getAttribute("value")))
+        reqData.userSurveysAnswersDTO[index - 1].saAnsList.push(
+          Number(checkedElementArray[i].getAttribute("value"))
+        );
       }
       const moveSurveyMain = () => {
         setModal({ ...modal, show: false });
-        navigate('/surveyBefore');
+        type == "pre" ? navigate("/surveyBefore") : navigate("/surveyAfter");
       };
 
-      fetch(`https://api.life.codeidea.io/usr/surveys`,
-        {
-          method: 'POST',
-          body: JSON.stringify(reqData),
-          headers: {
-            Authorization: 'Bearer ' + user.accessToken,
-            'Content-Type': 'application/json'
-          },
-        }).then((response) => {
+      fetch(`https://api.life.codeidea.io/usr/surveys`, {
+        method: "POST",
+        body: JSON.stringify(reqData),
+        headers: {
+          Authorization: "Bearer " + user.accessToken,
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => {
           return response.json();
-        }).then((data) => {
+        })
+        .then((data) => {
           if (data.result == "true") {
             setModal({
               ...modal,
@@ -147,27 +161,26 @@ const ISI = () => {
                 </div>
               ),
               confirmText: "확인",
-              onConfirmCallback: moveSurveyMain
+              onConfirmCallback: moveSurveyMain,
             });
           }
-        }).catch((error) => {
-          console.log(error)
+        })
+        .catch((error) => {
+          console.log(error);
         });
     } else {
-      setToast2(true)
+      setToast2(true);
       setTimeout(() => {
-        setToast2(false)
+        setToast2(false);
       }, 3000);
     }
-
-
   };
 
   const handlePopup = () => {
     setToast(true);
     setTimeout(() => {
       setToast(false);
-    }, 3000)
+    }, 3000);
   };
 
   const handleNextStep = () => {
@@ -178,6 +191,29 @@ const ISI = () => {
   const handlePrevStep = () => {
     if (step !== 4) {
       setStep(step - 1);
+    }
+    if (step === 1) {
+      setModal({
+        ...modal,
+        show: true,
+        title: "",
+        cancelShow: true,
+        callBackShow: true,
+        content: (
+          <div>
+            작성을 중단하시겠습니까?
+            <br />
+            중단하신 내용은
+            <br />
+            저장되지 않습니다.
+          </div>
+        ),
+        cancelText: <div className="close">이어서 설문할게요</div>,
+        confirmText: "네 중단할게요",
+        onConfirmCallback: () => {
+          navigate(-1);
+        },
+      });
     }
   };
 
@@ -209,7 +245,8 @@ const ISI = () => {
       <ToastPopup
         content={
           <span>
-            완료하시면 <b>수정</b>이 <b>불가</b>합니다.<br />
+            완료하시면 <b>수정</b>이 <b>불가</b>합니다.
+            <br />
             내용을 확인해주세요.
           </span>
         }

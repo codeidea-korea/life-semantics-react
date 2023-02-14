@@ -30,39 +30,35 @@ interface reqObj {
   saRegDate: string;
 }
 interface ReqData {
-  svNo: Number,
-  svPgNo: Number,
-  svUserNo: unknown,
-  svType1: unknown,
-  svType2: string,
-  svStatus: string,
-  svRegDate: string,
-  userSurveysAnswersDTO: reqObj[]
+  svNo: Number;
+  svPgNo: Number;
+  svUserNo: unknown;
+  svType1: unknown;
+  svType2: string;
+  svStatus: string;
+  svRegDate: string;
+  userSurveysAnswersDTO: reqObj[];
 }
 
 const reqData: ReqData = {
-  "svNo": 0,
-  "svPgNo": 8,
-  "svUserNo": 0,
-  "svType1": "pre",
-  "svType2": "fatigue",
-  "svStatus": "set",
-  "svRegDate": getToday(),
-  "userSurveysAnswersDTO": []
-}
+  svNo: 0,
+  svPgNo: 8,
+  svUserNo: 0,
+  svType1: "pre",
+  svType2: "fatigue",
+  svStatus: "set",
+  svRegDate: getToday(),
+  userSurveysAnswersDTO: [],
+};
 for (let i = 0; i < 15; i++) {
-  reqData.userSurveysAnswersDTO.push(
-    {
-      "saSvNo": 0,
-      "saQst": 0,
-      "saAnsList": [
-
-      ],
-      "saAns": 0,
-      "saEtcAns": "string",
-      "saRegDate": getToday(),
-    }
-  )
+  reqData.userSurveysAnswersDTO.push({
+    saSvNo: 0,
+    saQst: 0,
+    saAnsList: [],
+    saAns: 0,
+    saEtcAns: "string",
+    saRegDate: getToday(),
+  });
 }
 
 const Tired = () => {
@@ -81,31 +77,42 @@ const Tired = () => {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
 
-  const pgNo = urlParams.get('pgNo');
-  const type = urlParams.get('type');
+  const pgNo = urlParams.get("pgNo");
+  const type = urlParams.get("type");
   reqData.svPgNo = Number(pgNo);
-  reqData.svType1 = type
+  reqData.svType1 = type;
 
   const dataSet = (qnaLength: number) => {
-    const checkedElementArray = document.querySelectorAll('.surveyList input:checked');
+    const checkedElementArray = document.querySelectorAll(
+      ".surveyList input:checked"
+    );
     for (let i = 0; i < qnaLength; i++) {
-      const index = Number(document.querySelectorAll('.surveyContent p')[i].textContent?.split(".")[0]);
+      const index = Number(
+        document
+          .querySelectorAll(".surveyContent p")
+          [i].textContent?.split(".")[0]
+      );
       reqData.userSurveysAnswersDTO[index - 1].saAnsList = [];
       reqData.userSurveysAnswersDTO[index - 1].saQst = index;
-      reqData.userSurveysAnswersDTO[index - 1].saAnsList.push(Number(checkedElementArray[i].getAttribute("value")))
+      reqData.userSurveysAnswersDTO[index - 1].saAnsList.push(
+        Number(checkedElementArray[i].getAttribute("value"))
+      );
     }
-  }
+  };
 
   const handleNextStep = () => {
-    if (Number(document.querySelectorAll('.surveyList input:checked').length) === Number(document.querySelectorAll('.surveyContent').length)) {
-      dataSet(Number(document.querySelectorAll('.surveyContent').length))
+    if (
+      Number(document.querySelectorAll(".surveyList input:checked").length) ===
+      Number(document.querySelectorAll(".surveyContent").length)
+    ) {
+      dataSet(Number(document.querySelectorAll(".surveyContent").length));
       if (step < 3) {
         setStep(step + 1);
       }
     } else {
-      setToast2(true)
+      setToast2(true);
       setTimeout(() => {
-        setToast2(false)
+        setToast2(false);
       }, 3000);
     }
   };
@@ -114,7 +121,6 @@ const Tired = () => {
     if (step < 4 && step > 1) {
       setStep(step - 1);
     }
-
 
     if (step === 1) {
       setModal({
@@ -134,50 +140,62 @@ const Tired = () => {
         ),
         cancelText: <div className="close">이어서 설문할게요</div>,
         confirmText: "네 중단할게요",
-        onConfirmCallback: moveSurveyMain
+        onConfirmCallback: () => {
+          navigate(-1);
+        },
       });
     }
   };
 
   const moveSurveyMain = () => {
     setModal({ ...modal, show: false });
-    navigate('/survey');
+    type == "pre" ? navigate("/surveyBefore") : navigate("/surveyAfter");
   };
 
   const handleTiredSurveyComplete = () => {
     const dataSet = (qnaLength: number) => {
-      const checkedElementArray = document.querySelectorAll('.surveyList input:checked');
+      const checkedElementArray = document.querySelectorAll(
+        ".surveyList input:checked"
+      );
       for (let i = 0; i < qnaLength; i++) {
-        const index = Number(document.querySelectorAll('.surveyContent p')[i].textContent?.split(".")[0]);
+        const index = Number(
+          document
+            .querySelectorAll(".surveyContent p")
+            [i].textContent?.split(".")[0]
+        );
         reqData.userSurveysAnswersDTO[index - 1].saAnsList = [];
         reqData.userSurveysAnswersDTO[index - 1].saQst = index;
-        reqData.userSurveysAnswersDTO[index - 1].saAnsList.push(Number(checkedElementArray[i].getAttribute("value")))
+        reqData.userSurveysAnswersDTO[index - 1].saAnsList.push(
+          Number(checkedElementArray[i].getAttribute("value"))
+        );
       }
-    }
+    };
 
-
-
-    if (Number(document.querySelectorAll('.surveyList input:checked').length) === Number(document.querySelectorAll('.surveyContent').length)) {
+    if (
+      Number(document.querySelectorAll(".surveyList input:checked").length) ===
+      Number(document.querySelectorAll(".surveyContent").length)
+    ) {
       if (isFirst == true) {
-        setToast3(true)
+        setToast3(true);
         setTimeout(() => {
-          setToast3(false)
+          setToast3(false);
         }, 3000);
-        isFirst = false
+        isFirst = false;
       } else {
-        dataSet(Number(document.querySelectorAll('.surveyContent').length))
+        dataSet(Number(document.querySelectorAll(".surveyContent").length));
         console.log(reqData);
-        fetch(`https://api.life.codeidea.io/usr/surveys`,
-          {
-            method: 'POST',
-            body: JSON.stringify(reqData),
-            headers: {
-              Authorization: 'Bearer ' + user.accessToken,
-              'Content-Type': 'application/json'
-            },
-          }).then((response) => {
+        fetch(`https://api.life.codeidea.io/usr/surveys`, {
+          method: "POST",
+          body: JSON.stringify(reqData),
+          headers: {
+            Authorization: "Bearer " + user.accessToken,
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => {
             return response.json();
-          }).then((data) => {
+          })
+          .then((data) => {
             if (data.result == "true") {
               setModal({
                 ...modal,
@@ -193,18 +211,18 @@ const Tired = () => {
                   </div>
                 ),
                 confirmText: "확인",
-                onConfirmCallback: moveSurveyMain
+                onConfirmCallback: moveSurveyMain,
               });
             }
-          }).catch((error) => {
-            console.log(error)
+          })
+          .catch((error) => {
+            console.log(error);
           });
       }
-
     } else {
-      setToast2(true)
+      setToast2(true);
       setTimeout(() => {
-        setToast2(false)
+        setToast2(false);
       }, 3000);
     }
   };
@@ -245,20 +263,22 @@ const Tired = () => {
         stepCount = 10;
       }
       for (let i = stepCount; i < reqData.userSurveysAnswersDTO.length; i++) {
-        console.log(reqData)
-        reqData.userSurveysAnswersDTO[i].saAnsList?.forEach((item: any, idx) => {
-          const targetElement = document.querySelectorAll('.surveyContent')[i - stepCount].querySelectorAll("input")[item - 1];
-          console.log(targetElement);
-          targetElement.checked = true;
-
-        });
+        console.log(reqData);
+        reqData.userSurveysAnswersDTO[i].saAnsList?.forEach(
+          (item: any, idx) => {
+            const targetElement = document
+              .querySelectorAll(".surveyContent")
+              [i - stepCount].querySelectorAll("input")[item - 1];
+            console.log(targetElement);
+            targetElement.checked = true;
+          }
+        );
       }
     }, 500);
   }
   useEffect(() => {
     savePrev();
-  }, [step])
-
+  }, [step]);
 
   return (
     <React.Fragment>
@@ -286,13 +306,13 @@ const Tired = () => {
         <ToastPopup
           content={
             <span>
-              완료하시면 <b>수정</b>이 <b>불가</b>합니다.<br />
+              완료하시면 <b>수정</b>이 <b>불가</b>합니다.
+              <br />
               내용을 확인해주세요.
             </span>
           }
           show={toast}
         />
-
       </div>
       <div className="fixBtn">
         <button type="button" className="prev" onClick={handlePrevStep}>
