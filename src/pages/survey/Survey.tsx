@@ -26,7 +26,7 @@ const Survey = () => {
 
     const navigate = useNavigate();
     const handleNavigate = (e: any, url: string) => {
-        if (e.target.classList.contains("active")) {
+        if (e.target.classList.contains("active") && !e.target.classList.contains("active2")) {
             setModal({
                 ...modal,
                 show: true,
@@ -41,7 +41,23 @@ const Survey = () => {
                 ),
                 confirmText: "확인",
             });
-        } else {
+        } else if (e.target.classList.contains("active2")) {
+            setModal({
+                ...modal,
+                show: true,
+                title: "",
+                cancelShow: false,
+                content: (
+                    <div>
+                        아직 열리지 않은
+                        <br />
+                        설문입니다.
+                    </div>
+                ),
+                confirmText: "확인",
+            });
+        }
+        else {
             navigate(url);
         }
 
@@ -550,7 +566,16 @@ const Survey = () => {
             [name]: newValue
         })
     }
+    const compareDates = (dateString: string) => {
 
+        const today = new Date();
+        const inputDate = new Date(dateString);
+        if (inputDate > today) {
+            return false;
+        } else {
+            return true;
+        }
+    }
     return (
         <React.Fragment>
             <TitleHeadComponent name="설문 작성" targetUrl="/main" />
@@ -583,11 +608,21 @@ const Survey = () => {
                                     <li className={item.surveys.pre.length == 3 ? "active" : ""} onClick={(event) => handleNavigate(event, `/surveyBefore?pgNo=${item.pgNo}&type=${item.pgType}&type2=pre&title=${item.pgTitle}`)}>
                                         시작전 설문({item.surveys.pre.length}/3)
                                     </li>
-                                    <li className="" onClick={(event) => handleNavigate(event, `/surveyToday?pgNo=${item.pgNo}`)}>
-                                        일일 설문
-                                        <br />
-                                        <span className="recent_not_survey"></span>
-                                    </li>
+
+                                    {
+
+                                        compareDates(item.pgSttDate) ? <li className="" onClick={(event) => handleNavigate(event, `/surveyToday?pgNo=${item.pgNo}`)}>
+                                            일일 설문
+                                            <br />
+                                            <span className="recent_not_survey"></span>
+                                        </li> : <li className="active active2" onClick={(event) => handleNavigate(event, `/surveyToday?pgNo=${item.pgNo}`)}>
+                                            일일 설문
+                                            <br />
+                                            <span className="recent_not_survey"></span>
+                                        </li>
+                                    }
+
+
                                     <li className={item.surveys.end.length == 3 ? "active" : ""} onClick={(event) => handleNavigate(event, `/surveyAfter?pgNo=${item.pgNo}&type=${item.pgType}&type2=end&title=${item.pgTitle}`)}>
                                         <Link to="">종료후 설문({item.surveys.end.length}/3)</Link>
                                     </li>

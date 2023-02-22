@@ -204,16 +204,10 @@ const SurveyToday = () => {
             });
             startDate.setDate(startDate.getDate() + 1);
         }
+
         return result;
     }
 
-    function getToday() {
-        var date = new Date();
-        var year = date.getFullYear();
-        var month = ("0" + (1 + date.getMonth())).slice(-2);
-        var day = ("0" + date.getDate()).slice(-2);
-        return year + "-" + month + "-" + day;
-    }
     const [selectedDate, setSelectedDate] = useState<Array<{ year: string; month: string; day: string; total: string }>>([]);
     const [selectedIndex, setSelectedIndex] = useState<any>(0);
     const [ingData, setIngData] = useState<any>([])
@@ -248,7 +242,8 @@ const SurveyToday = () => {
         console.log(ingData);
         ingData?.forEach((item2: any, idx: number) => {
             item2.forEach((item3: any, idx: number) => {
-                if (selectedDate[selectedIndex].total == item3.svType2) {
+
+                if (selectedDate[selectedIndex]?.total == item3.svType2) {
                     const el = document.querySelectorAll('.scoreRadio input')[item3.qnaList[0].saAnsList[0] - 1] as HTMLInputElement
                     el.checked = true;
                 }
