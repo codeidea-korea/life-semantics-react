@@ -362,14 +362,24 @@ const ModifyCheck02 = ({ nextStep }: { nextStep: Function }) => {
                                         <InputElement
                                             type="number"
                                             placeholder="시작"
-                                            id="smoking_start"
+                                            id="smoking_start" 
+                                            maxlength={4} 
+                                            onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                                if (e.target.value.length > e.target.maxLength)
+                                                    e.target.value = e.target.value.slice(0, e.target.maxLength);
+                                            }}
                                         />
                                         <label>년</label>
                                         <b>~</b>
                                         <InputElement
                                             type="number"
                                             placeholder="마지막"
-                                            id="smoking_end"
+                                            id="smoking_end" 
+                                            maxlength={4} 
+                                            onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                                if (e.target.value.length > e.target.maxLength)
+                                                    e.target.value = e.target.value.slice(0, e.target.maxLength);
+                                            }}
                                         />
                                         <label>년</label>
                                     </span>
@@ -448,14 +458,24 @@ const ModifyCheck02 = ({ nextStep }: { nextStep: Function }) => {
                                         <InputElement
                                             type="number"
                                             placeholder="시작"
-                                            id="drinking_start"
+                                            id="drinking_start" 
+                                            maxlength={4} 
+                                            onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                                if (e.target.value.length > e.target.maxLength)
+                                                    e.target.value = e.target.value.slice(0, e.target.maxLength);
+                                            }}
                                         />
                                         <label>년</label>
                                         <b>~</b>
                                         <InputElement
                                             type="number"
                                             placeholder="마지막"
-                                            id="drinking_end"
+                                            id="drinking_end" 
+                                            maxlength={4} 
+                                            onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                                if (e.target.value.length > e.target.maxLength)
+                                                    e.target.value = e.target.value.slice(0, e.target.maxLength);
+                                            }}
                                         />
                                         <label>년</label>
                                     </span>

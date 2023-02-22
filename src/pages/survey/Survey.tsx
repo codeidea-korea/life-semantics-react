@@ -9,6 +9,7 @@ import { SurveyListInterface } from "@interfaces/surveyListInterface";
 import InputElement from "@/components/elements/InputElement";
 import { BeforeSurveyInfoInterface } from "@/interfaces/surveyInterface";
 import { userState } from "@states/userState";
+import imgQuestion from "@public/images/question.svg"
 
 const Survey = () => {
     const [modal, setModal] = useRecoilState(modalState);
@@ -587,7 +588,7 @@ const Survey = () => {
                                 <div className="surveyName">
                                     <p>{item.pgTitle}</p>
                                     <div className="noticeIco" onClick={handleToolTip}>
-                                        <img src="public/images/question.svg" alt="" className="" />
+                                        <img src="/images/question.svg" alt="" className="" />
                                         {/* {isShow && ( */}
                                         <div className="noticeBox">
                                             <ul>

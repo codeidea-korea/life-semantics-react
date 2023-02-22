@@ -10,7 +10,6 @@ import { modalState } from "@states/modalState";
 import ToastPopup from "@components/modal/ToastPopup";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
-
 const IndexPage = () => {
   const [modal, setModal] = useRecoilState(modalState);
   const location = useLocation();
@@ -20,29 +19,48 @@ const IndexPage = () => {
   const [userListError, setUserListError] = useState(true);
   const [toast, setToast] = useState(false);
   let [alertState, setAlert] = useState<JSX.Element | null>(null);
+  const [userInfoForTempPass, setUserInfoForTempPass] = useState({
+    find_name: "",
+    find_phone: "",
+  });
 
   const findUserId = () => {
-    const name = document.querySelector('#find_name') as HTMLInputElement;
-    const phone = document.querySelector('#find_phone') as HTMLInputElement;
+    const name = document.querySelector("#find_name") as HTMLInputElement;
+    const phone = document.querySelector("#find_phone") as HTMLInputElement;
     if (String(name.value).length > 0 && String(phone.value).length > 0) {
-      fetch(`https://api.life.codeidea.io/users/find-id?name=${name.value}&phone=${phone.value}`,
+      fetch(
+        `https://api.life.codeidea.io/users/find-id?name=${
+          name.value
+        }&phone=${phone.value.replaceAll("-", "")}`,
         {
-          method: 'GET',
-        }).then((response) => {
+          method: "GET",
+        }
+      )
+        .then((response) => {
           return response.json();
-        }).then((data) => {
+        })
+        .then((data) => {
           if (data.result == "true") {
-            handleModal01(name.value, data.body.userId)
+            let tid2 = data.body.userId.length;
+            let tid3 = Math.floor(tid2 / 2);
+            let tid4 = tid2 - tid3;
+            let tid = data.body.userId.substring(0, tid4);
+            for (let i = 0; i < tid3; i++) {
+              tid += "*";
+            }
+            //handleModal01(name.value, data.body.userId)
+            handleModal01(name.value, tid);
           } else {
-            handleModal()
+            handleModal();
           }
-        }).catch((error) => {
-          console.log(error)
+        })
+        .catch((error) => {
+          console.log(error);
         });
     } else {
-      handleModal()
+      handleModal();
     }
-  }
+  };
 
   const increase = () => setCount(count + 1);
   const setTitle = () =>
@@ -57,7 +75,12 @@ const IndexPage = () => {
       show: true,
       title: "안내",
       cancelShow: false,
-      content: <div>이름 또는 전화번호를<br /> 다시 확인해 주세요</div>,
+      content: (
+        <div>
+          이름 또는 전화번호를
+          <br /> 다시 확인해 주세요
+        </div>
+      ),
       confirmText: "확인",
     });
   };
@@ -68,15 +91,27 @@ const IndexPage = () => {
       show: true,
       title: "안내",
       cancelShow: false,
-      content:
+      callBackShow: true,
+      content: (
         <div>
           {userName}님의 아이디는 <br />
-          {userId}입니다.<br />
-          <Link onClick={() => {
-            navigator.clipboard.writeText(userId);
-          }} to="" className="copy">아이디 복사</Link>
-        </div>,
-      confirmText: "확인",
+          {userId}입니다.
+          <br />
+          <Link
+            onClick={() => {
+              navigator.clipboard.writeText(userId);
+            }}
+            to=""
+            className="copy"
+          >
+            아이디 복사
+          </Link>
+        </div>
+      ),
+      confirmText: "로그인하러가기",
+      onConfirmCallback: () => {
+        navigate("/login");
+      },
     });
   };
 
@@ -84,7 +119,31 @@ const IndexPage = () => {
     setToast(true);
     setTimeout(() => {
       setToast(false);
-    }, 3000)
+    }, 3000);
+  };
+
+  const handlePhoneNumber = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.currentTarget;
+    let reducePhoneNumber = value
+      .replace(/[^0-9]/g, "")
+      .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, "$1-$2-$3")
+      .replace(/(\-{1,2})$/g, "");
+    setUserInfoForTempPass({
+      ...userInfoForTempPass,
+      find_phone: reducePhoneNumber,
+    });
+  };
+
+  const handleName = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.currentTarget;
+    let reduceUserName = value
+      .replace(/[^ㄱ-ㅎ가-힣|a-zA-Z]/g, "")
+      .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, "$1-$2-$3")
+      .replace(/(\-{1,2})$/g, "");
+    setUserInfoForTempPass({
+      ...userInfoForTempPass,
+      find_name: reduceUserName,
+    });
   };
 
   return (
@@ -101,8 +160,22 @@ const IndexPage = () => {
               동일하게 입력해 주세요.
             </p>
             <div className="loginInput">
-              <InputElement id="find_name" type="text" placeholder="이름 입력" />
-              <InputElement id="find_phone" type="number" placeholder="전화번호(숫자만 입력)" />
+              <input
+                id="find_name"
+                type="text"
+                placeholder="이름 입력"
+                value={userInfoForTempPass.find_name}
+                onChange={handleName}
+              />
+              <input
+                id="find_phone"
+                type="text"
+                placeholder="전화번호(숫자만 입력)"
+                value={userInfoForTempPass.find_phone}
+                maxLength={13}
+                pattern="\d*"
+                onChange={handlePhoneNumber}
+              />
               {alertState}
             </div>
           </div>
@@ -111,7 +184,6 @@ const IndexPage = () => {
           아이디 찾기
         </button>
       </div>
-
     </WebLayout>
   );
 };
