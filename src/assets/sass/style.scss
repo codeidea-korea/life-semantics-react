@@ -1242,7 +1242,10 @@ select {
             }
         }
         .prg-head.unBook {
-            padding: 65px 38px 35px;
+            // padding: 65px 38px 35px;
+            .d-day {
+                padding-bottom: 10px;
+            }
         }
         .prg-head.sky {
             background-color: #e8f7ff;
