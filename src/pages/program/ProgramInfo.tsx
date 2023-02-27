@@ -8,7 +8,7 @@ import { ViewInterface } from "@interfaces/viewInterface";
 import useAxios from "@hooks/useAxios";
 import { ProgramInterface } from "@interfaces/programInterface";
 import { modalState } from "@states/modalState";
-import {userState} from '@states/userState';
+import { userState } from '@states/userState';
 import { useRecoilState, useRecoilValue } from "recoil";
 import ModalComponent from "@components/modal/ModalComponent";
 
@@ -19,7 +19,7 @@ const ProgramInfo = () => {
   const api = useAxios();
   const [program, setProgram] = useState<ProgramInterface>();
   const user = useRecoilValue(userState);
-  
+
 
   const getProgram = async () => {
     await api
@@ -64,47 +64,47 @@ const ProgramInfo = () => {
       onCancelCallback: handleCancelModal
     });
   }
-  
+
   const requestMakeReservation = () => {
     api
-        .post(`/usr/programs/apply?pgNo=${program?.pgNo}&userNo=${user.userNo}`, null, {headers: {Authorization: `Bearer ${user.accessToken}`}})
-        .then((res) => {
-          console.log(res);
-          setModal({
-            ...modal,
-            show: true,
-            cancelShow: false,
-            callBackShow: true,
-            content: <div>프로그램 예약이 완료됐습니다.</div>,
-            confirmText: "확인",
+      .post(`/usr/programs/apply?pgNo=${program?.pgNo}&userNo=${user.userNo}`, null, { headers: { Authorization: `Bearer ${user.accessToken}` } })
+      .then((res) => {
+        console.log(res);
+        setModal({
+          ...modal,
+          show: true,
+          cancelShow: false,
+          callBackShow: true,
+          content: <div>프로그램 예약이 완료됐습니다.</div>,
+          confirmText: "확인",
 
-            onConfirmCallback: handleMoveReservation
-          });
-        })
-        .catch((err) => {
-            console.log(err);
+          onConfirmCallback: handleMoveReservation
         });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const requestCancelReservation = () => {
     api
-        .patch(`/usr/programs/cancel?pgNoList=${program?.pgNo}`, null, {headers: {Authorization: `Bearer ${user.accessToken}`}})
-        .then((res) => {
-          console.log(res);
-          setModal({
-            ...modal,
-            show: true,
-            cancelShow: false,
-            callBackShow: true,
-            content: <div>프로그램 취소가 완료됐습니다.</div>,
-            confirmText: "확인",
+      .patch(`/usr/programs/cancel?pgNoList=${program?.pgNo}`, null, { headers: { Authorization: `Bearer ${user.accessToken}` } })
+      .then((res) => {
+        console.log(res);
+        setModal({
+          ...modal,
+          show: true,
+          cancelShow: false,
+          callBackShow: true,
+          content: <div>프로그램 취소가 완료됐습니다.</div>,
+          confirmText: "확인",
 
-            onConfirmCallback: handleMoveReservation
-          });
-        })
-        .catch((err) => {
-            console.log(err);
+          onConfirmCallback: handleMoveReservation
         });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   const handleMoveReservation = () => {
@@ -121,16 +121,20 @@ const ProgramInfo = () => {
       await getProgram();
     })();
   }, []);
-  
+
   return (
     <React.Fragment>
       <HeaderComponent />
       <div className="programInfo" id="programContent">
         <h2>프로그램 정보</h2>
         <p className="programName">{program?.pgTitle}</p>
-        <div className="videoWrap">
-          <video></video>
-        </div>
+        {program?.pgVideoSaveName &&
+          <div className="videoWrap">
+            <video controls muted={true}>
+              <source type="video/mp4" src={`${import.meta.env.VITE_PUBLIC_STREAMING_SERVER_URL}${program?.pgVideoSaveName}`} />
+            </video>
+          </div>
+        }
         <div className="textContents">
           <ul>
             <li>
@@ -188,8 +192,8 @@ const ProgramInfo = () => {
           </ul>
         </div>
         {/*<ProgramDetailComponent/>*/}
-        <DownLoadComponent />
-        <ProgramNumberComponent roundList={program?.roundList || []}/>
+        <DownLoadComponent fileList={program?.fileList || []} />
+        <ProgramNumberComponent roundList={program?.roundList || []} />
         <div>
           <h3>기타정보</h3>
           <span>• 주의 사항</span>
@@ -257,7 +261,7 @@ const ProgramInfo = () => {
           </div>
         </React.Fragment>
       )}
-      <ModalComponent id="flexModal"/>
+      <ModalComponent id="flexModal" />
     </React.Fragment>
   );
 };
