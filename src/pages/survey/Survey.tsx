@@ -27,41 +27,44 @@ const Survey = () => {
 
     const navigate = useNavigate();
     const handleNavigate = (e: any, url: string) => {
-        if (e.target.classList.contains("active") && !e.target.classList.contains("active2")) {
-            setModal({
-                ...modal,
-                show: true,
-                title: "",
-                cancelShow: false,
-                content: (
-                    <div>
-                        이미 참여 완료한
-                        <br />
-                        설문입니다.
-                    </div>
-                ),
-                confirmText: "확인",
-            });
-        } else if (e.target.classList.contains("active2")) {
-            setModal({
-                ...modal,
-                show: true,
-                title: "",
-                cancelShow: false,
-                content: (
-                    <div>
-                        아직 열리지 않은
-                        <br />
-                        설문입니다.
-                    </div>
-                ),
-                confirmText: "확인",
-            });
-        }
-        else {
-            navigate(url);
-        }
+        setTimeout(() => {
 
+
+            if (e.target.classList.contains("active") && !e.target.classList.contains("active2")) {
+                setModal({
+                    ...modal,
+                    show: true,
+                    title: "",
+                    cancelShow: false,
+                    content: (
+                        <div>
+                            이미 참여 완료한
+                            <br />
+                            설문입니다.
+                        </div>
+                    ),
+                    confirmText: "확인",
+                });
+            } else if (e.target.classList.contains("active2")) {
+                setModal({
+                    ...modal,
+                    show: true,
+                    title: "",
+                    cancelShow: false,
+                    content: (
+                        <div>
+                            아직 열리지 않은
+                            <br />
+                            설문입니다.
+                        </div>
+                    ),
+                    confirmText: "확인",
+                });
+            }
+            else {
+                navigate(url);
+            }
+        }, 100)
     };
 
     const handlePopup = () => {
@@ -568,7 +571,6 @@ const Survey = () => {
         })
     }
     const compareDates = (dateString: string) => {
-
         const today = new Date();
         const inputDate = new Date(dateString);
         if (inputDate > today) {
@@ -611,7 +613,6 @@ const Survey = () => {
                                     </li>
 
                                     {
-
                                         compareDates(item.pgSttDate) ? <li className="" onClick={(event) => handleNavigate(event, `/surveyToday?pgNo=${item.pgNo}`)}>
                                             일일 설문
                                             <br />
