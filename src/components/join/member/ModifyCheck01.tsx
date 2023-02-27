@@ -115,7 +115,9 @@ const ModifyCheck01 = () => {
       confirmText: "네",
       cancelText: "아니요",
       onConfirmCallback: () => {
+
         navigate(-1)
+        setModal({ ...modal, show: false })
       }
     });
 
@@ -137,6 +139,7 @@ const ModifyCheck01 = () => {
         confirmText: "네",
         cancelText: "아니요",
         onConfirmCallback: () => {
+          setModal({ ...modal, show: false })
           navigate(-1)
         }
       });
