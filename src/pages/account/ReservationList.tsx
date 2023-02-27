@@ -50,9 +50,10 @@ const ReservationList = () => {
                 return response.json();
             }).then((data) => {
                 console.log(data);
-                data.body.forEach((item: Reservation) => {
-                    setListData([...listData, item])
-                })
+                // data.body.forEach((item: Reservation) => {
+                //     setListData([...listData, item])
+                // })
+                setListData(data.body);
             }).catch((error) => {
                 console.log(error)
             });
@@ -60,8 +61,6 @@ const ReservationList = () => {
     useEffect(() => {
         getUserReservationList("pgAppSttDate");
     }, [])
-
-
 
     useEffect(() => {
         $(".dropDown .selected span").click(function () {
@@ -167,9 +166,9 @@ const ReservationList = () => {
         const target = document.querySelectorAll('input:checked');
         const selectedOrderByValue = document.querySelectorAll('.reservationList .tabelDropdown .dropDown .selected span')[0].textContent as string
         let reqData = {}
-        fetch(`https://api.life.codeidea.io/usr/programs/cancel?pgNo=${target[0].getAttribute("pg-no")}&userNo=${user.userNo}`,
+        fetch(`https://api.life.codeidea.io/usr/programs/cancel?pgNoList=${target[0].getAttribute("pg-no")}&userNo=${user.userNo}`,
             {
-                method: 'POST',
+                method: 'PATCH',
                 headers: {
                     Authorization: 'Bearer ' + user.accessToken,
                     'Content-Type': 'application/json'
