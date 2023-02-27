@@ -1,5 +1,5 @@
 import { ProgramNumberDetailInterface } from "./programNumberDetailInterface";
-
+import { ProgramFileInterface } from "./programFileInterface";
 export interface ProgramInterface {
   pgPlaceText: string,
   pgType: string,
@@ -23,6 +23,9 @@ export interface ProgramInterface {
   pgMainAct: string,
   pgExpect: string,
   roundList: ProgramNumberDetailInterface[],
+  fileList: ProgramFileInterface[],
+  pgVideoSaveName?: string,
+  pgVideoRealName?: string
 
   // pgIdx: string,
   // type: string,

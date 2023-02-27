@@ -17,4 +17,14 @@ export default defineConfig({
       '@components': '/src/components',
     },
   },
+  server: {
+    proxy: {
+      "/proxyApi": {
+        target: "https://api.life.codeidea.io",
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path.replace(/^\/proxyApi/, ""),
+      },
+    },
+  }
 });
