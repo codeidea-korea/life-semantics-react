@@ -603,7 +603,7 @@ const ModifyCheck03 = () => {
       </div>
 
       <div style={{ zIndex: 100 }} className="fixBtn ">
-        <button type="button" className="prev">
+        <button onClick={() => { navigate(-1) }} type="button" className="prev">
           이전
         </button>
         <button onClick={handlePopupEnd} type="button" className="next">
