@@ -216,9 +216,7 @@ const ModifyCheck03 = () => {
       })
     }
   }
-  useEffect(() => {
-    console.log(user);
-  }, [])
+
   //신규추가
   const handleDiagName = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
     const { name, value } = event.target;
@@ -266,6 +264,84 @@ const ModifyCheck03 = () => {
       [name]: newValue
     })
   }
+
+  const updateInfo = () => {
+    fetch(`https://api.life.codeidea.io/users/view?userNo=${user.userNo}`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: 'Bearer ' + user.accessToken,
+          'Content-Type': 'application/json'
+        },
+      }).then((response) => {
+        return response.json();
+      }).then((data) => {
+        setBeforeSurveyInfo({
+          ...beforeSurveyInfo,
+          ['userDiagnosis']: data.body.userDiagnosis,
+          ['userDiagName']: data.body.userDiagName,
+          ['userDiagDate']: data.body.userDiagDate,
+          ['userCureType']: data.body.userCureType,
+          ['userCureName']: data.body.userCureName,
+          ['userCureEndDate']: data.body.userCureEndDate,
+          ['userDiagEtc']: data.body.userDiagEtc,
+          ['userDiagEtcName']: data.body.userDiagEtcName,
+          ['userNowHealStat']: data.body.userNowHealStat,
+          ['userGender']: data.body.userGender
+        });
+        
+        //성별
+        if (data.body.userGender == 'm') {
+          (document.getElementById('man') as HTMLInputElement).checked = true;
+        } else {
+          (document.getElementById('woman') as HTMLInputElement).checked = true;
+        }
+        
+        //암 종
+        
+        //치료유형
+        const userCureTypeCheckbox = document.getElementsByName("userCureType") as NodeList;
+        const userCureType = data.body.userCureType.split(',');
+        userCureTypeCheckbox.forEach((checkbox: any) => {
+          userCureType.map((item: number) => {
+            if(checkbox.value == item){
+              (document.getElementById(checkbox.id) as HTMLInputElement).checked = true;
+            }
+          })
+        })
+
+        //암 이외의 질환
+        const userDiagEtcCheckbox = document.getElementsByName("userDiagEtc") as NodeList;
+        const userDiagEtc = data.body.userDiagEtc.split(',');
+        userDiagEtcCheckbox.forEach((checkbox: any) => {
+          userDiagEtc.map((item: number) => {
+            if(checkbox.value == item){
+              (document.getElementById(checkbox.id) as HTMLInputElement).checked = true;
+            }
+          })
+        })
+
+        //현재 건강상태
+        const userNowHealStatRadio = document.getElementsByName("userNowHealStat") as NodeList;
+        userNowHealStatRadio.forEach((checkbox: any) => {
+          if(checkbox.value == data.body.userNowHealStat){
+            (document.getElementById(checkbox.id) as HTMLInputElement).checked = true;
+          }
+        })
+
+        //암 이외의 질환
+      }).catch((error) => {
+        console.log(error)
+      });
+  }
+  useEffect(() => {
+    updateInfo();
+  }, []);
+
+  useEffect(() => {
+    console.log(beforeSurveyInfo)
+  }, [beforeSurveyInfo])
+
   return (
     <React.Fragment>
       <div className="surveyBefore_popup">
@@ -322,18 +398,18 @@ const ModifyCheck03 = () => {
                     </label>
                     <select name="userDiagnosis" onChange={(event) => handleCancerNameChange(event, idx)}>
                       <option value="">암 종 선택</option>
-                      <option value="1">간암</option>
-                      <option value="2">갑상선암</option>
-                      <option value="3">담낭암</option>
-                      <option value="4">담도암</option>
-                      <option value="5">대장암</option>
-                      <option value="6">신장암</option>
-                      <option value="7">위암</option>
-                      <option value="8">유방암</option>
-                      <option value="9">전립선암</option>
-                      <option value="10">췌장암</option>
-                      <option value="11">폐암</option>
-                      <option value="etc">직접입력</option>
+                      <option value="1" selected={beforeSurveyInfo.userDiagnosis == '1' && true}>간암</option>
+                      <option value="2" selected={beforeSurveyInfo.userDiagnosis == '2' && true}>갑상선암</option>
+                      <option value="3" selected={beforeSurveyInfo.userDiagnosis == '3' && true}>담낭암</option>
+                      <option value="4" selected={beforeSurveyInfo.userDiagnosis == '4' && true}>담도암</option>
+                      <option value="5" selected={beforeSurveyInfo.userDiagnosis == '5' && true}>대장암</option>
+                      <option value="6" selected={beforeSurveyInfo.userDiagnosis == '6' && true}>신장암</option>
+                      <option value="7" selected={beforeSurveyInfo.userDiagnosis == '7' && true}>위암</option>
+                      <option value="8" selected={beforeSurveyInfo.userDiagnosis == '8' && true}>유방암</option>
+                      <option value="9" selected={beforeSurveyInfo.userDiagnosis == '9' && true}>전립선암</option>
+                      <option value="10" selected={beforeSurveyInfo.userDiagnosis == '10' && true}>췌장암</option>
+                      <option value="11" selected={beforeSurveyInfo.userDiagnosis == '11' && true}>폐암</option>
+                      <option value="etc" selected={beforeSurveyInfo.userDiagnosis == 'etc' && true}>직접입력</option>
                     </select>
                     {isCustomCancerName[idx] && (
                       <div className="manualInput">
@@ -357,7 +433,7 @@ const ModifyCheck03 = () => {
                         placeholder="예) 2015년 01월"
                         id="cancer_start"
                         name="userDiagDate"
-                        value=""
+                        value={beforeSurveyInfo.userDiagDate ? beforeSurveyInfo.userDiagDate : ""}
                         onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleCancerDate(event, idx)}
                       />
                       <label>
@@ -368,7 +444,7 @@ const ModifyCheck03 = () => {
                         placeholder="예) 2015년 01월"
                         id="cancer_end"
                         name="userCureEndDate"
-                        value=""
+                        value={beforeSurveyInfo.userDiagDate ? beforeSurveyInfo.userDiagDate : ""}
                         onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleCancerDate(event, idx)}
                       />
                     </div>
