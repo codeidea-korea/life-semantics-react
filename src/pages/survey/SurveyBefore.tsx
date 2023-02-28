@@ -84,7 +84,7 @@ const SurveyBefore = () => {
           <div className="surveyName">
             <p>{title}</p>
             <div className="noticeIco on" onClick={handleToolTip}>
-              <img src="public/images/question.svg" alt="" className="" />
+              <img src="/images/question.svg" alt="" className="" />
               {isShow && (
                 <div className="noticeBox">
                   <ul>
@@ -123,7 +123,7 @@ const SurveyBefore = () => {
                 <li
                   data-title="destress"
                   onClick={(event) =>
-                    handleNavigate(event, `/deStress?pgNo=${pgNo}&type=pre`)
+                    handleNavigate(event, `/deStress?pgNo=${pgNo}&type=pre&status=goodBye`)
                   }
                 >
                   디스트레스
@@ -150,13 +150,13 @@ const SurveyBefore = () => {
                 <li
                   data-title="destress"
                   onClick={(event) =>
-                    handleNavigate(event, `/deStress?pgNo=${pgNo}&type=pre`)
+                    handleNavigate(event, `/deStress?pgNo=${pgNo}&type=pre&status=goodNight`)
                   }
                 >
                   디스트레스
                 </li>
                 <li
-                  data-title="isi"
+                  data-title="ISI"
                   onClick={(event) =>
                     handleNavigate(event, `/isi?pgNo=${pgNo}&type=pre`)
                   }
@@ -164,7 +164,7 @@ const SurveyBefore = () => {
                   불면(ISI)
                 </li>
                 <li
-                  data-title="nccn"
+                  data-title="NCCN"
                   onClick={(event) =>
                     handleNavigate(event, `/nccn?pgNo=${pgNo}&type=pre`)
                   }

@@ -236,7 +236,7 @@ const NCCN = () => {
 
   const moveSurveyMain = () => {
     setModal({ ...modal, show: false });
-    type == "pre" ? navigate("/surveyBefore") : navigate("/surveyAfter");
+    type == "pre" ? navigate("/surveyBefore?pgNo="+pgNo+"&type=goodNight") : navigate("/surveyAfter?pgNo="+pgNo+"&type=goodNight");
   };
 
   const handleModal01 = () => {

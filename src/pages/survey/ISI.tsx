@@ -131,7 +131,7 @@ const ISI = () => {
       }
       const moveSurveyMain = () => {
         setModal({ ...modal, show: false });
-        type == "pre" ? navigate("/surveyBefore") : navigate("/surveyAfter");
+        type == "pre" ? navigate("/surveyBefore?pgNo="+pgNo+"&type=goodNight") : navigate("/surveyAfter?pgNo="+pgNo+"&type=goodNight");
       };
 
       fetch(`https://api.life.codeidea.io/usr/surveys`, {

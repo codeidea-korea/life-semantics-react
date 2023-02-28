@@ -95,6 +95,28 @@ const Survey = () => {
         });
     };
 
+    const handleNotNavigate = () => {
+        setModal({
+            ...modal,
+            show: true,
+            title: "",
+            cancelShow: false,
+            callBackShow: true,
+            content: (
+                <div>
+                    아직 설문이
+                    <br />
+                    열리지 않았습니다.
+                </div>
+            ),
+            confirmText: "확인",
+
+            onConfirmCallback: () => {
+                setModal({ ...modal, show: false })
+            },
+        });
+    };
+
     const getSurvey = async () => {
         await api
             .post("/surveys/list", { userNo: "1" })
@@ -624,10 +646,15 @@ const Survey = () => {
                                         </li>
                                     }
 
-
-                                    <li className={item.surveys.end.length == 3 ? "active" : ""} onClick={(event) => handleNavigate(event, `/surveyAfter?pgNo=${item.pgNo}&type=${item.pgType}&type2=end&title=${item.pgTitle}`)}>
+                                    {item.surveys.end.length == 3 ? 
+                                    <li className="" onClick={(event) => handleNavigate(event, `/surveyAfter?pgNo=${item.pgNo}&type=${item.pgType}&type2=end&title=${item.pgTitle}`)}>
+                                        <Link to="">종료후 설문({item.surveys.end.length}/3)</Link>
+                                    </li> 
+                                    : 
+                                    <li className="active" onClick={(event) => handleNotNavigate()}>
                                         <Link to="">종료후 설문({item.surveys.end.length}/3)</Link>
                                     </li>
+                                    }
                                 </ul>
                             </div>
 

@@ -78,7 +78,7 @@ const SurveyBefore = () => {
                     <div className="surveyName">
                         <p>{title}</p>
                         <div className="noticeIco on" onClick={handleToolTip}>
-                            <img src="public/images/question.svg" alt="" className="" />
+                            <img src="/images/question.svg" alt="" className="" />
                             {isShow &&
                                 <div className="noticeBox">
                                     <ul>
@@ -108,9 +108,10 @@ const SurveyBefore = () => {
                         {/*설문을 완료 했을때 회색으로 변경 active */}
                         {type == "goodBye" ? <><li data-title="destress" onClick={event => handleNavigate(event, `/deStress?pgNo=${pgNo}&type=end`)}>디스트레스</li>
                             <li data-title="ache" onClick={event => handleNavigate(event, `/pain?pgNo=${pgNo}&type=end`)}>통증</li>
-                            <li data-title="fatigue" onClick={event => handleNavigate(event, `/tired?pgNo=${pgNo}&type=end`)}>피로</li></> : <>            <li data-title="destress" onClick={event => handleNavigate(event, `/deStress?pgNo=${pgNo}&type=end`)}>디스트레스</li>
-                            <li data-title="isi" onClick={event => handleNavigate(event, `/isi?pgNo=${pgNo}&type=end`)}>불면(ISI)</li>
-                            <li data-title="nccn" onClick={event => handleNavigate(event, `/nccn?pgNo=${pgNo}&type=end`)}>수면위생(NCCN)</li></>}
+                            <li data-title="fatigue" onClick={event => handleNavigate(event, `/tired?pgNo=${pgNo}&type=end`)}>피로</li></> : <>            
+                            <li data-title="destress" onClick={event => handleNavigate(event, `/deStress?pgNo=${pgNo}&type=end`)}>디스트레스</li>
+                            <li data-title="ISI" onClick={event => handleNavigate(event, `/isi?pgNo=${pgNo}&type=end`)}>불면(ISI)</li>
+                            <li data-title="NCCN" onClick={event => handleNavigate(event, `/nccn?pgNo=${pgNo}&type=end`)}>수면위생(NCCN)</li></>}
                         {/* <li className="active">피로</li> */}
                     </ul>
                 </div>

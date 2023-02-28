@@ -126,6 +126,7 @@ const SurveyDeStress = () => {
 
   const pgNo = urlParams.get("pgNo");
   const type = urlParams.get("type");
+  const status = urlParams.get("status");
   reqData.svPgNo = Number(pgNo);
   reqData.svType1 = type;
 
@@ -444,7 +445,7 @@ const SurveyDeStress = () => {
 
   const moveSurveyMain = () => {
     setModal({ ...modal, show: false });
-    type == "pre" ? navigate("/surveyBefore") : navigate("/surveyAfter");
+    type == "pre" ? navigate("/surveyBefore?pgNo="+pgNo+"&type="+status) : navigate("/surveyAfter?pgNo="+pgNo+"&type="+status);
   };
 
   return (

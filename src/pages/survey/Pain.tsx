@@ -330,7 +330,7 @@ const Pain = () => {
 
   const moveSurveyMain = () => {
     setModal({ ...modal, show: false });
-    type == "pre" ? navigate("/surveyBefore") : navigate("/surveyAfter");
+    type == "pre" ? navigate("/surveyBefore?pgNo="+pgNo+"&type=goodBye") : navigate("/surveyAfter?pgNo="+pgNo+"&type=goodBye");
   };
 
   return (
