@@ -115,7 +115,12 @@ const JoinModify = () => {
 
     return (
         <React.Fragment>
-            <TitleHeadComponent name={stepTitle} targetUrl="" />
+            {step === 2 ?
+                <TitleHeadComponent name='개인정보 수정' targetUrl="" />
+                :
+                <TitleHeadComponent name={stepTitle} targetUrl="" />
+            }
+
             <div className="modify">
                 {step === 1 && <ModifyCheck01 />}
                 {step === 2 && <ModifyCheck02 nextStep={handleNextStep} />}
