@@ -130,7 +130,7 @@ const ProgramInfo = () => {
         <p className="programName">{program?.pgTitle}</p>
         {program?.pgVideoSaveName &&
           <div className="videoWrap">
-            <video controls muted={true}>
+            <video controls muted={true} style={{maxHeight: '100%'}}>
               <source type="video/mp4" src={`${import.meta.env.VITE_PUBLIC_STREAMING_SERVER_URL}${program?.pgVideoSaveName}`} />
             </video>
           </div>
