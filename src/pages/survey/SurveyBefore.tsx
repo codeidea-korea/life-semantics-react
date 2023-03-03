@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import TitleHeadComponent from "@components/head/TitleHeadComponent";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue, useRecoilState } from "recoil";
@@ -19,6 +19,7 @@ const SurveyBefore = () => {
   const handleToolTip = () => {
     setShow(!isShow);
   };
+  const handleToolTipRef = useRef<HTMLDivElement>(null);
   const [modal, setModal] = useRecoilState(modalState);
   const handleNavigate = (e: any, url: string) => {
     if (e.target.classList.contains("active")) {
@@ -76,6 +77,16 @@ const SurveyBefore = () => {
       });
   }, []);
 
+  useEffect(() => {
+    const handleClick = (e: any) => {
+      if (isShow && (!handleToolTipRef.current || !handleToolTipRef.current.contains(e.target)) ) {
+        setShow(false);
+      }
+    };
+    window.addEventListener('mousedown', handleClick);
+    return () => window.removeEventListener('mousedown', handleClick);
+  }, [isShow]);
+
   return (
     <React.Fragment>
       <TitleHeadComponent name="시작 전 설문" targetUrl="/survey" />
@@ -83,10 +94,10 @@ const SurveyBefore = () => {
         <div className="surveyMain">
           <div className="surveyName">
             <p>{title}</p>
-            <div className="noticeIco on" onClick={handleToolTip}>
-              <img src="/images/question.svg" alt="" className="" />
+            <div className="noticeIco on" ref={handleToolTipRef}>
+              <img src="/images/question.svg" alt="" className="" onClick={handleToolTip}/>
               {isShow && (
-                <div className="noticeBox">
+                <div className="noticeBox" >
                   <ul>
                     <li>
                       <span>디스트레스</span>는 지난 일주일 동안 염려되는 항목을

@@ -22,8 +22,14 @@ const Survey = () => {
 
     const handleToolTip = (e: any) => {
         // setShow(!isShow);
-        e.target.parentNode.classList.toggle('on')
+        // e.target.parentNode.classList.toggle('on')
+        if(e.target.parentNode.classList.contains('on')){
+            e.target.parentNode.classList.remove('on');
+        }else{
+            e.target.parentNode.classList.add('on');
+        }
     };
+    const handleToolTipRef = useRef<HTMLDivElement>(null);
 
     const navigate = useNavigate();
     const handleNavigate = (e: any, url: string) => {
@@ -601,6 +607,20 @@ const Survey = () => {
             return true;
         }
     }
+
+    useEffect(() => {
+        const handleClick = (e: any) => {
+            if(!e.target.classList.contains('nonTarget')){
+                const noti = document.querySelectorAll(".noticeIco");
+                noti.forEach((element: Element) => {
+                    element.classList.remove('on');
+                })   
+            }
+        };
+        window.addEventListener('mousedown', handleClick);
+        return () => window.removeEventListener('mousedown', handleClick);
+    }, [handleToolTipRef]);
+
     return (
         <React.Fragment>
             <TitleHeadComponent name="설문 작성" targetUrl="/main" />
@@ -611,10 +631,10 @@ const Survey = () => {
                             <div key={index}>
                                 <div className="surveyName">
                                     <p>{item.pgTitle}</p>
-                                    <div className="noticeIco" onClick={handleToolTip}>
-                                        <img src="/images/question.svg" alt="" className="" />
+                                    <div className="noticeIco" onClick={handleToolTip} >
+                                        <img src="/images/question.svg" alt="" className="nonTarget" />
                                         {/* {isShow && ( */}
-                                        <div className="noticeBox">
+                                        <div className="noticeBox" ref={handleToolTipRef}>
                                             <ul>
                                                 <li>
                                                     <span>매일 입력 설문</span>은 8주 간(56일간)매일 간단한
@@ -646,14 +666,14 @@ const Survey = () => {
                                         </li>
                                     }
 
-                                    {item.surveys.end.length == 3 ? 
-                                    <li className="" onClick={(event) => handleNavigate(event, `/surveyAfter?pgNo=${item.pgNo}&type=${item.pgType}&type2=end&title=${item.pgTitle}`)}>
-                                        <Link to="">종료후 설문({item.surveys.end.length}/3)</Link>
-                                    </li> 
-                                    : 
-                                    <li className="active" onClick={(event) => handleNotNavigate()}>
-                                        <Link to="">종료후 설문({item.surveys.end.length}/3)</Link>
-                                    </li>
+                                    {item.surveys.end.length == 3 ?
+                                        <li className="" onClick={(event) => handleNavigate(event, `/surveyAfter?pgNo=${item.pgNo}&type=${item.pgType}&type2=end&title=${item.pgTitle}`)}>
+                                            <Link to="">종료후 설문({item.surveys.end.length}/3)</Link>
+                                        </li>
+                                        :
+                                        <li className="active" onClick={(event) => handleNotNavigate()}>
+                                            <Link to="">종료후 설문({item.surveys.end.length}/3)</Link>
+                                        </li>
                                     }
                                 </ul>
                             </div>
