@@ -135,7 +135,8 @@ const BookComponent = ({programFilter}: {programFilter?: ProgramFilterInterface}
                                             (모집인원: {item.pgAppAll}명)
                                         </li>
                                     )}
-                                    <li className="">장소: {item.pgPlace === "etc" ? item.pgPlaceText : item.pgPlace}</li>
+                                    {/* <li className="">장소: {item.pgPlace === "etc" ? item.pgPlaceText : item.pgPlace}</li> */}
+                                    <li className="">장소: {item.pgPlace === "etc" ? item.pgPlaceText : item.pgPlaceText}</li>
                                 </ul>
                             </div>
                             {

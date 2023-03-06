@@ -175,7 +175,8 @@ const ProgramInfo = () => {
             </li>
             <li>
               <span>진행장소</span>
-              <Link to="/forestView">{program?.pgPlace === "etc" ? program?.pgPlaceText : program?.pgPlace}</Link>
+              {/* <Link to="/forestView">{program?.pgPlace === "etc" ? program?.pgPlaceText : program?.pgPlace}</Link> */}
+              <span>{program?.pgPlace === "etc" ? program?.pgPlaceText : program?.pgPlaceText}</span>
             </li>
             <li>
               <span>진행방법</span>

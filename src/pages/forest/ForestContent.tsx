@@ -24,6 +24,7 @@ const ForestContent = () => {
       .then((res) => {
         console.log(res);
         if (res.status === 200) {
+          window.scrollTo(0, 0);
           setForestInfo(res.data.forest);
         }
       })
