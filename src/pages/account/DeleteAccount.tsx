@@ -37,10 +37,9 @@ const DeleteAccount = () => {
           if (data.body.result === false) {
             setAlert(<span className="alert_text">비밀번호가 일치하지 않습니다.</span>)
           } else if (data.body.result === true) {
-            fetch(`https://api.life.codeidea.io/users/withdrawal`,
+            fetch(`https://api.life.codeidea.io/users?password=${inputElement.value}`,
               {
-                method: 'POST',
-                body: JSON.stringify(reqData),
+                method: 'DELETE',
                 headers: {
                   Authorization: 'Bearer ' + user.accessToken,
                   'Content-Type': 'application/json'

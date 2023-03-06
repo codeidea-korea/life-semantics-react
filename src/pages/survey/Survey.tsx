@@ -633,63 +633,75 @@ const Survey = () => {
             <div className="survey">
                 <div className="surveyMain">
                     {
-                        resData.map((item: any, index: number) =>
-                            <div key={index}>
-                                <div className="surveyName">
-                                    <p>{item.pgTitle}</p>
-                                    <div className="noticeIco" onClick={handleToolTip} >
-                                        <img src="/images/question.svg" alt="" className="nonTarget" />
-                                        {/* {isShow && ( */}
-                                        <div className="noticeBox" ref={handleToolTipRef}>
-                                            <ul>
-                                                <li>
-                                                    <span>매일 입력 설문</span>은 8주 간(56일간)매일 간단한
-                                                    수치를 입력하는 설문입니다.
-                                                </li>
-                                                <li>
-                                                    <span>사전/사후 설문</span>은 프로그램 시작전, 종료 후에
-                                                    선택형 및 서술형으로 작성하는 설문입니다.
-                                                </li>
-                                            </ul>
+                        resData.map((item: any, index: number) => {
+                            /**TODO 백에 사용자관련 설문만 보내달라고 요청할것 */
+                            let exceptCnt = 0;
+                            if(item.surveys.pre.length > 0){
+                                item.surveys.pre.map((item2: any, index2: number) => {
+                                    if(item2.svType2 == 'healer'){
+                                        exceptCnt += 1;
+                                    }
+                                })
+                            }
+
+                            return (
+                                <div key={index}>
+                                    <div className="surveyName">
+                                        <p>{item.pgTitle}</p>
+                                        <div className="noticeIco" onClick={handleToolTip} >
+                                            <img src="/images/question.svg" alt="" className="nonTarget" />
+                                            {/* {isShow && ( */}
+                                            <div className="noticeBox" ref={handleToolTipRef}>
+                                                <ul>
+                                                    <li>
+                                                        <span>매일 입력 설문</span>은 8주 간(56일간)매일 간단한
+                                                        수치를 입력하는 설문입니다.
+                                                    </li>
+                                                    <li>
+                                                        <span>사전/사후 설문</span>은 프로그램 시작전, 종료 후에
+                                                        선택형 및 서술형으로 작성하는 설문입니다.
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            {/* )} */}
                                         </div>
-                                        {/* )} */}
                                     </div>
+                                    <ul>
+                                        <li className={item.surveys.pre.length == 3 ? "active" : ""} onClick={(event) => handleNavigate(event, `/surveyBefore?pgNo=${item.pgNo}&type=${item.pgType}&type2=pre&title=${item.pgTitle}`)}>
+                                            시작전 설문({item.surveys.pre.length - exceptCnt}/3)
+                                        </li>
+
+                                        {
+                                            compareDates(item.pgSttDate) ? <li className="" onClick={(event) => handleNavigate(event, `/surveyToday?pgNo=${item.pgNo}`)}>
+                                                일일 설문
+                                                <br />
+                                                <span className="recent_not_survey"></span>
+                                            </li> : 
+                                            // <li className="active active2" onClick={(event) => handleNavigate(event, `/surveyToday?pgNo=${item.pgNo}`)}>
+                                            //     일일 설문
+                                            //     <br />
+                                            //     <span className="recent_not_survey"></span>
+                                            // </li>
+                                            <li className="active" onClick={(event) => handleNotNavigate()}>
+                                                일일 설문
+                                                <br />
+                                                <span className="recent_not_survey"></span>
+                                            </li>
+                                        }
+
+                                        {item.surveys.end.length == 3 ?
+                                            <li className="" onClick={(event) => handleNavigate(event, `/surveyAfter?pgNo=${item.pgNo}&type=${item.pgType}&type2=end&title=${item.pgTitle}`)}>
+                                                <Link to="">종료후 설문({item.surveys.end.length}/3)</Link>
+                                            </li>
+                                            :
+                                            <li className="active" onClick={(event) => handleNotNavigate()}>
+                                                <Link to="">종료후 설문({item.surveys.end.length}/3)</Link>
+                                            </li>
+                                        }
+                                    </ul>
                                 </div>
-                                <ul>
-                                    <li className={item.surveys.pre.length == 3 ? "active" : ""} onClick={(event) => handleNavigate(event, `/surveyBefore?pgNo=${item.pgNo}&type=${item.pgType}&type2=pre&title=${item.pgTitle}`)}>
-                                        시작전 설문({item.surveys.pre.length}/3)
-                                    </li>
-
-                                    {
-                                        compareDates(item.pgSttDate) ? <li className="" onClick={(event) => handleNavigate(event, `/surveyToday?pgNo=${item.pgNo}`)}>
-                                            일일 설문
-                                            <br />
-                                            <span className="recent_not_survey"></span>
-                                        </li> : 
-                                        // <li className="active active2" onClick={(event) => handleNavigate(event, `/surveyToday?pgNo=${item.pgNo}`)}>
-                                        //     일일 설문
-                                        //     <br />
-                                        //     <span className="recent_not_survey"></span>
-                                        // </li>
-                                        <li className="active" onClick={(event) => handleNotNavigate()}>
-                                            일일 설문
-                                            <br />
-                                            <span className="recent_not_survey"></span>
-                                        </li>
-                                    }
-
-                                    {item.surveys.end.length == 3 ?
-                                        <li className="" onClick={(event) => handleNavigate(event, `/surveyAfter?pgNo=${item.pgNo}&type=${item.pgType}&type2=end&title=${item.pgTitle}`)}>
-                                            <Link to="">종료후 설문({item.surveys.end.length}/3)</Link>
-                                        </li>
-                                        :
-                                        <li className="active" onClick={(event) => handleNotNavigate()}>
-                                            <Link to="">종료후 설문({item.surveys.end.length}/3)</Link>
-                                        </li>
-                                    }
-                                </ul>
-                            </div>
-
+                                )
+                            }
                         )
 
                     }

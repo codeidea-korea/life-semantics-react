@@ -16,7 +16,7 @@ const ProgramNumberDetailComponent = ({roundDetail}: {roundDetail: ProgramNumber
               일시 : <span>{month[0] === '0' ? month[1] : month}/{day} {weekDay} {roundDetail.prSttTime}~{roundDetail.prEndTime}</span>
             </li>
             <li>
-              장소 : <span>{roundDetail.prPlace === "etc" ? roundDetail.prPlaceText : roundDetail.prPlace}</span>
+              장소 : <span>{roundDetail.prPlace === "etc" ? roundDetail.prPlaceText : roundDetail.prPlaceText}</span>
             </li>
             <li>
               세부활동 : <span>{roundDetail.prActs}</span>

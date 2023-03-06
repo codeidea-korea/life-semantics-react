@@ -179,6 +179,10 @@ const ReservationList = () => {
                 if (data.result == "true") {
                     getUserReservationList(selectedOrderByValue);
                     setModal({ ...modal, show: false });
+                    setToast(true)
+                    setTimeout(() => {
+                        setToast(false)
+                    }, 3000);
                 }
             }).catch((error) => {
                 console.log(error)
