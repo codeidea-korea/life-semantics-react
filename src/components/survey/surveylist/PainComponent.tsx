@@ -24,6 +24,8 @@ const PainComponent = ({ step }: { step: number }) => {
               $(".dot.red").removeClass("red");
               $(this).addClass("red");
             }
+          }else{
+            handleDuplicationNotice();
           }
         }
       });
