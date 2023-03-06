@@ -47,6 +47,9 @@ const PainComponent = ({ step }: { step: number }) => {
             </div>
         ),
         confirmText: "확인",
+        onConfirmCallback: () => {
+          setModal({ ...modal, show: false });
+        },
     });
 };
 

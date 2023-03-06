@@ -189,9 +189,10 @@ const ISI = () => {
     }
   };
   const handlePrevStep = () => {
-    if (step !== 4) {
+    if (step < 3 && step > 1) {
       setStep(step - 1);
     }
+
     if (step === 1) {
       setModal({
         ...modal,
@@ -201,18 +202,20 @@ const ISI = () => {
         callBackShow: true,
         content: (
           <div>
-            작성을 중단하시겠습니까?
+            설문을 종료하시겠습니까?
             <br />
-            중단하신 내용은
-            <br />
-            저장되지 않습니다.
+            완료한 설문 페이지까지만 저장됩니다.
           </div>
         ),
         cancelText: <div className="close">이어서 설문할게요</div>,
         confirmText: "네 중단할게요",
         onConfirmCallback: () => {
+          setModal({ ...modal, show: false });
           navigate(-1);
         },
+        onCancelCallback: () => {
+          setModal({ ...modal, show: false });
+        }
       });
     }
   };

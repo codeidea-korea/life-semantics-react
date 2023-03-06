@@ -93,7 +93,6 @@ const NCCN = () => {
     const inner = document.querySelector(".next") as HTMLButtonElement;
     const text = document.querySelector(".explainText") as HTMLBodyElement;
 
-    console.log(text);
     if (step === 2) {
       inner.innerText = "작성완료";
     } else if (step !== 2) {
@@ -257,12 +256,41 @@ const NCCN = () => {
       ),
       confirmText: "네,중단할게요.",
       onConfirmCallback: moveSurveyMain,
+      onCancelCallback: () => {
+        setModal({ ...modal, show: false });
+      }
     });
   };
+
+  //뒤로가기시 클릭했던거 유지기능
+  function savePrev() {
+    setTimeout(() => {
+      let stepCount = 0;
+      if (step == 1) {
+        stepCount = 0;
+      } else if (step == 2) {
+        stepCount = 6;
+      }
+      for (let i = stepCount; i < reqData.userSurveysAnswersDTO.length; i++) {
+        reqData.userSurveysAnswersDTO[i].saAnsList?.forEach(
+          (item: any, idx) => {
+            const targetElement = document
+              .querySelectorAll(".surveyContent")
+              [i - stepCount].querySelectorAll("input")[item - 1];
+            targetElement.checked = true;
+          }
+        );
+      }
+    }, 500);
+  }
+
+  useEffect(() => {
+    savePrev();
+  }, [step]);
+
   useEffect(() => {
     $(window).on("scroll", function () {
       const height = $(document).scrollTop();
-      console.log(height);
       if (this.scrollY > 300) {
         $(".Step").addClass("fixed");
       } else {

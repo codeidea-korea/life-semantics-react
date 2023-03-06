@@ -35,6 +35,9 @@ const SurveyBefore = () => {
                     </div>
                 ),
                 confirmText: "확인",
+                onConfirmCallback: () => {
+                    setModal({ ...modal, show: false })
+                }
             });
         } else {
             navigate(url);

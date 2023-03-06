@@ -145,6 +145,9 @@ const Pain = () => {
       reqData.userSurveysAnswersDTO[1].saQst = 1;
       reqData.userSurveysAnswersDTO[1].saAnsList = [];
       if (selectedElement !== undefined) {
+        if(document.querySelectorAll(".dot.red").length === 0){
+          return false;
+        }
         document.querySelectorAll(".dot.red").forEach((item, idx) => {
           reqData.userSurveysAnswersDTO[1].saAnsList.push(
             Number(item.getAttribute("data-index")) + 1
@@ -175,16 +178,16 @@ const Pain = () => {
   const handlePrevStep = () => {
     if (step < 4 && step > 1) {
       setStep(step - 1);
-    } else if (step === 1) {
-      navigate(-1);
     }
+    
     if (step === 3) {
-      savePrev();
+      savePrev(step);
     }
     if (step === 2) {
       document.querySelectorAll(".red").forEach((item, idx) => {
-        item.classList.remove("red");
+        item.className = 'dot on';
       });
+      savePrev(step);
     }
     if (step === 1) {
       setModal({
@@ -195,18 +198,20 @@ const Pain = () => {
         callBackShow: true,
         content: (
           <div>
-            작성을 중단하시겠습니까?
+            설문을 종료하시겠습니까?
             <br />
-            중단하신 내용은
-            <br />
-            저장되지 않습니다.
+            완료한 설문 페이지까지만 저장됩니다.
           </div>
         ),
         cancelText: <div className="close">이어서 설문할게요</div>,
         confirmText: "네 중단할게요",
         onConfirmCallback: () => {
+          setModal({ ...modal, show: false });
           navigate(-1);
         },
+        onCancelCallback: () => {
+          setModal({ ...modal, show: false });
+        }
       });
     }
   };
@@ -230,7 +235,7 @@ const Pain = () => {
     });
   };
 
-  function savePrev() {
+  function savePrev(step : number) {
     setTimeout(() => {
       console.log(reqData);
       document.querySelectorAll(".frontPain span").forEach((item: any, idx) => {
@@ -244,7 +249,11 @@ const Pain = () => {
         reqData.userSurveysAnswersDTO[1].saAnsList.forEach(
           (item2: any, idx2) => {
             if (item.getAttribute("data-index") == item2 - 1) {
-              item.classList.add("red");
+              if(step == 3){
+                item.classList.add("red");
+              }else{
+                item.classList.remove("red");
+              }
             }
           }
         );
@@ -260,7 +269,11 @@ const Pain = () => {
         reqData.userSurveysAnswersDTO[1].saAnsList.forEach(
           (item2: any, idx2) => {
             if (item.getAttribute("data-index") == item2 - 1) {
-              item.classList.add("red");
+              if(step == 3){
+                item.classList.add("red");
+              }else{
+                item.classList.remove("red");
+              }
             }
           }
         );
@@ -314,6 +327,9 @@ const Pain = () => {
                 ),
                 confirmText: "확인",
                 onConfirmCallback: moveSurveyMain,
+                onCancelCallback: () => {
+                  setModal({ ...modal, show: false });
+                }
               });
             }
           })
@@ -333,6 +349,12 @@ const Pain = () => {
     setModal({ ...modal, show: false });
     type == "pre" ? navigate("/surveyBefore?pgNo="+pgNo+"&type=goodBye") : navigate("/surveyAfter?pgNo="+pgNo+"&type=goodBye");
   };
+
+  useEffect(() => {
+    if(step === 1){
+      savePrev(step);
+    }
+  }, [step])
 
   return (
     <React.Fragment>

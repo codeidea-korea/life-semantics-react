@@ -50,6 +50,9 @@ const Survey = () => {
                         </div>
                     ),
                     confirmText: "확인",
+                    onConfirmCallback: () => {
+                        setModal({ ...modal, show: false })
+                    }
                 });
             } else if (e.target.classList.contains("active2")) {
                 setModal({
@@ -65,6 +68,9 @@ const Survey = () => {
                         </div>
                     ),
                     confirmText: "확인",
+                    onConfirmCallback: () => {
+                        setModal({ ...modal, show: false })
+                    }
                 });
             }
             else {

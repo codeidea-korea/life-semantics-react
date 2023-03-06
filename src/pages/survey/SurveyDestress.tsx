@@ -219,9 +219,9 @@ const SurveyDeStress = () => {
     if (step === 1) {
       if (
         document.querySelectorAll(".scoreRadio input:checked")[0] !==
-          undefined &&
+        undefined &&
         document.querySelectorAll(".py_prob_list input:checked")[0] !==
-          undefined
+        undefined
       ) {
         //1번
         reqData.userSurveysAnswersDTO[0].saQst = 1;
@@ -356,18 +356,20 @@ const SurveyDeStress = () => {
         callBackShow: true,
         content: (
           <div>
-            작성을 중단하시겠습니까?
+            설문을 종료하시겠습니까?
             <br />
-            중단하신 내용은
-            <br />
-            저장되지 않습니다.
+            완료한 설문 페이지까지만 저장됩니다.
           </div>
         ),
         cancelText: <div className="close">이어서 설문할게요</div>,
         confirmText: "네 중단할게요",
         onConfirmCallback: () => {
+          setModal({ ...modal, show: false });
           navigate(-1);
         },
+        onCancelCallback: () => {
+          setModal({ ...modal, show: false });
+        }
       });
     }
 
@@ -446,7 +448,7 @@ const SurveyDeStress = () => {
 
   const moveSurveyMain = () => {
     setModal({ ...modal, show: false });
-    type == "pre" ? navigate("/surveyBefore?pgNo="+pgNo+"&type="+status) : navigate("/surveyAfter?pgNo="+pgNo+"&type="+status);
+    type == "pre" ? navigate("/surveyBefore?pgNo=" + pgNo + "&type=" + status) : navigate("/surveyAfter?pgNo=" + pgNo + "&type=" + status);
   };
 
   return (
