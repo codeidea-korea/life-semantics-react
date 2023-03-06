@@ -23,9 +23,9 @@ const Survey = () => {
     const handleToolTip = (e: any) => {
         // setShow(!isShow);
         // e.target.parentNode.classList.toggle('on')
-        if(e.target.parentNode.classList.contains('on')){
+        if (e.target.parentNode.classList.contains('on')) {
             e.target.parentNode.classList.remove('on');
-        }else{
+        } else {
             e.target.parentNode.classList.add('on');
         }
     };
@@ -87,9 +87,9 @@ const Survey = () => {
             callBackShow: true,
             content: (
                 <div>
-                    아직 설문이
+                    아직 열리지 않은
                     <br />
-                    열리지 않았습니다.
+                    설문입니다.
                 </div>
             ),
             confirmText: "확인",
@@ -610,11 +610,11 @@ const Survey = () => {
 
     useEffect(() => {
         const handleClick = (e: any) => {
-            if(!e.target.classList.contains('nonTarget')){
+            if (!e.target.classList.contains('nonTarget')) {
                 const noti = document.querySelectorAll(".noticeIco");
                 noti.forEach((element: Element) => {
                     element.classList.remove('on');
-                })   
+                })
             }
         };
         window.addEventListener('mousedown', handleClick);
@@ -659,7 +659,13 @@ const Survey = () => {
                                             일일 설문
                                             <br />
                                             <span className="recent_not_survey"></span>
-                                        </li> : <li className="active active2" onClick={(event) => handleNavigate(event, `/surveyToday?pgNo=${item.pgNo}`)}>
+                                        </li> : 
+                                        // <li className="active active2" onClick={(event) => handleNavigate(event, `/surveyToday?pgNo=${item.pgNo}`)}>
+                                        //     일일 설문
+                                        //     <br />
+                                        //     <span className="recent_not_survey"></span>
+                                        // </li>
+                                        <li className="active" onClick={(event) => handleNotNavigate()}>
                                             일일 설문
                                             <br />
                                             <span className="recent_not_survey"></span>

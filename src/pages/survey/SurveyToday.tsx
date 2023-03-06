@@ -225,8 +225,10 @@ const SurveyToday = () => {
                 data.body.forEach((item: any, idx: number) => {
                     if (pgNo == item.pgNo) {
                         setIngData([...ingData, item.surveys.ing]);
-                        setSelectedDate(getDates(item.pgSttDate))
-                        setSelectedIndex(getDates(item.pgSttDate).length - 1);
+                        // const sDate = getDates(item.pgSttDate);
+                        const sDate = getDates(item.pgSttDate).filter((e : any) => e.total <= getToday());
+                        setSelectedDate(sDate)
+                        setSelectedIndex(sDate.length - 1);
                     }
                 });
             }).catch((error) => {
@@ -305,6 +307,9 @@ const SurveyToday = () => {
 
     }
 
+    useEffect(() => {
+        console.log(selectedDate)
+    }, [selectedDate])
 
     return (
         <React.Fragment>
@@ -318,7 +323,7 @@ const SurveyToday = () => {
                     {selectedDate.map((date, index) => (
                         index == selectedIndex
                             ?
-                            <span className='today' key={index}>
+                            <span style={getToday() == date.total ? {} : { background: 'white', color: 'black', fontWeight: '300' }}  className='today' key={index}>
                                 {date.month}월{date.day}일
                             </span>
                             :
