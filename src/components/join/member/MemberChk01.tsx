@@ -294,7 +294,7 @@ const MemberChk01 = ({ nextStep, prevStep }: { nextStep: Function, prevStep: Fun
                     }}
                 />
                 <label ref={(element: HTMLLabelElement) => (labelsRef.current[5] = element as HTMLLabelElement)}>
-                    <span>문자 수신동의</span>
+                    <span className="no_dot">문자 수신동의</span>
                 </label>
                 <div className="chk_radio">
                     <span>
@@ -319,7 +319,7 @@ const MemberChk01 = ({ nextStep, prevStep }: { nextStep: Function, prevStep: Fun
                     </span>
                 </div>
                 <label ref={(element: HTMLLabelElement) => (labelsRef.current[6] = element as HTMLLabelElement)}>
-                    <span>이메일</span>
+                    <span className="no_dot">이메일</span>
                 </label>
                 <div>
                     <span>
@@ -335,7 +335,7 @@ const MemberChk01 = ({ nextStep, prevStep }: { nextStep: Function, prevStep: Fun
                     {!!alertText.userEmail[0] && <span className="alert_text">{alertText.userEmail[1]}</span>}
                 </div>
                 <label ref={(element: HTMLLabelElement) => (labelsRef.current[7] = element as HTMLLabelElement)}>
-                    <span>이메일 수신동의</span>
+                    <span className="no_dot">이메일 수신동의</span>
                 </label>
                 <div className="chk_radio">
                     <span>

@@ -103,7 +103,7 @@ const HeaderComponent = () => {
                                     <li className="">
                                         <Link to="/forest">치유의 숲 찾기</Link>
                                     </li>
-                                    <li>
+                                    {/* <li>
                                         <Link to="/" className="arrow" onClick={handleMenuClick}>
                                             자료실
                                         </Link>
@@ -117,7 +117,7 @@ const HeaderComponent = () => {
                                                 </li>
                                             </ul>
                                         </div>
-                                    </li>
+                                    </li> */}
                                     {user.accessToken && (
                                         <React.Fragment>
                                             <li>

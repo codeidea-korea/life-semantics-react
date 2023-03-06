@@ -409,6 +409,7 @@ const ModifyCheck03 = () => {
                         {idx === 0 && <i className="plusBtn" onClick={addDiag}>+</i>}
                       </span>
                     </label>
+                    <p className="pointGreen">다른 암도 재발되었나요?<br />그러면 해당 암 종도 추가해주세요.</p>
                     <select name="userDiagnosis" onChange={(event) => handleCancerNameChange(event, idx)} value={elem}>
                       <option value="">암 종 선택</option>
                       <option value="1">간암</option>

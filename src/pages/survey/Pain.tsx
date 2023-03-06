@@ -390,7 +390,7 @@ const Pain = () => {
         content={
           <span>
             완료하시면 <b>수정</b>이 <b>불가</b>합니다. <br />
-            내용을 확인하해주세요.
+            내용을 확인해주세요.
           </span>
         }
         show={toast3}

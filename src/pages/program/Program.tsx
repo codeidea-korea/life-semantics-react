@@ -61,7 +61,7 @@ const Program = () => {
 
             <div className="customerBox">
                 <p>
-                    고객센터 : <span>02 - 123 - 4567</span> <br />
+                    고객센터 : <span>032-820-4209</span> <br />
                     문의하실 내용이 있으면, 고객센터로 연락바랍니다.
                 </p>
                 <Link to="/agreement">이용약관</Link>
