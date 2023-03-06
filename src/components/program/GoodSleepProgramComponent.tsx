@@ -15,7 +15,7 @@ const GoodSleepComponent = () => {
     <React.Fragment>
         <div className='good' id='goodSleep' onClick={moveProgramList}>
             <p>웰컴 굿잠</p>
-            <span>숲 활동, 운동, 명상 프로그램이 각 10-30분 정도로 총 4~6가지의 활동으로 운영.</span>
+            <span>수면 장애로 인해 일상 활동이 제한되는 암 경험자에게 숲 활동, 운동, 명상 중심의 수면 증진 8단계 산림치유 프로그램을 수면을 증진시키고 신체적 심리적 건강의 향상을 도모하는 프로그램.</span>
         </div>
     </React.Fragment>
   );
