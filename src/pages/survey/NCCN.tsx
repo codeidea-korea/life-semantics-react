@@ -132,6 +132,7 @@ const NCCN = () => {
       dataSet(Number(document.querySelectorAll(".surveyContent").length));
       if (step !== 2) {
         setStep(step + 1);
+        window.scrollTo(0, 0);
       }
     } else {
       setToast2(true);

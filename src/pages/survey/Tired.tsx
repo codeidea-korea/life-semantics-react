@@ -108,6 +108,7 @@ const Tired = () => {
       dataSet(Number(document.querySelectorAll(".surveyContent").length));
       if (step < 3) {
         setStep(step + 1);
+        window.scrollTo(0, 0);
       }
     } else {
       setToast2(true);

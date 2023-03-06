@@ -339,6 +339,7 @@ const SurveyDeStress = () => {
     if (isVaildAnswer(step) === true) {
       if (step < 3) {
         setStep(step + 1);
+        window.scrollTo(0, 0);
       }
     } else {
       handlePopup();
