@@ -163,23 +163,22 @@ const MemberChk01 = ({ nextStep, prevStep }: { nextStep: Function, prevStep: Fun
                     return
                 }
             }
-            else if (i === 5 && joinParam.userSmsAgree === "") {
-                // moveScroll(labelsRef.current[i]);
-                // return
-                console.log(11);
-                setJoinParam({ ...joinParam, ['userSmsAgree']: '0' });
-            }
-            else if (i === 6 && joinParam.userEmail === "") {
-                // inputsRef.current[i-1].focus();
-                // moveScroll(labelsRef.current[i]);
-                // return
-                setJoinParam({ ...joinParam, ['userEmail']: '' });
-            }
-            else if (i === 7 && joinParam.userEmailAgree === "") {
-                // moveScroll(labelsRef.current[i]);
-                // return
-                setJoinParam({ ...joinParam, ['userEmailAgree']: '0' });
-            }
+            // else if (i === 5 && joinParam.userSmsAgree === "") {
+            //     // moveScroll(labelsRef.current[i]);
+            //     // return
+            //     setJoinParam({ ...joinParam, ['userSmsAgree']: '0' });
+            // }
+            // else if (i === 6 && joinParam.userEmail === "") {
+            //     // inputsRef.current[i-1].focus();
+            //     // moveScroll(labelsRef.current[i]);
+            //     // return
+            //     setJoinParam({ ...joinParam, ['userEmail']: '' });
+            // }
+            // else if (i === 7 && joinParam.userEmailAgree === "") {
+            //     // moveScroll(labelsRef.current[i]);
+            //     // return
+            //     setJoinParam({ ...joinParam, ['userEmailAgree']: '0' });
+            // }
             else if (i < 5 && inputsRef.current[i].value === "") {
                 inputsRef.current[i].focus();
                 moveScroll(labelsRef.current[i]);
