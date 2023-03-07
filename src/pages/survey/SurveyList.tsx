@@ -3,7 +3,7 @@ import TitleHeadComponent from "@/components/head/TitleHeadComponent";
 import useAxios from "@/hooks/useAxios";
 import { useRecoilValue, useRecoilState } from "recoil";
 import { userState } from "@/states/userState";
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { modalState } from "@states/modalState";
 import ModalComponent from "@components/modal/ModalComponent";
 import Chart from 'chart.js/auto';
@@ -48,9 +48,9 @@ const SurveyList = () => {
             callBackShow: true,
             content: (
                 <div>
-                    아직 프로그램이 없습니다.
+                    참여한 프로그램이 없거나
                     <br />
-                    프로그램을 신청해주세요.
+                    완료된 일일설문이 없습니다.
                 </div>
             ),
             confirmText: "확인",
@@ -65,10 +65,23 @@ const SurveyList = () => {
         await api
             .get(`/usr/surveys/daily-history?week=${week}`, { headers: { Authorization: `Bearer ${user.accessToken}` } })
             .then((res) => {
-                //console.log(res)
                 if (res.data.result) {
-                    if (res.data.body[0].history.length === 0){
-                        handleNotOpen(); 
+                    // if (res.data.body[0].history.length === 0) {
+                    //     handleNotOpen();
+                    // } else {
+                    //     setSurveyList(res.data.body);
+                    //     setIsSurveyPrint(true);
+                    // }
+                    const max_length = res.data.body.length;
+                    let compare_count = 0;
+                    res.data.body.forEach((item2: any, idx2: number) => {
+                        if (res.data.body[idx2].history.length === 0) {
+                            compare_count += 1;
+                        }
+                    });
+                    
+                    if(max_length === compare_count){
+                        handleNotOpen();
                     }else{
                         setSurveyList(res.data.body);
                         setIsSurveyPrint(true);
@@ -128,7 +141,7 @@ const SurveyList = () => {
             <ModalComponent />
             <TitleHeadComponent name="일일 설문 내역" targetUrl="" />
             {isSurveyPrint && (
-                surveyList.map((elem, idx) => (elem.history.length && (
+                surveyList.filter((elem, idx) => elem.history.length != 0).map((elem, idx) => (
                     <div className="surveyList" key={elem.pgNo}>
                         <div className="surveyList_title">
                             <h3>{elem.pgTitle}</h3>
@@ -172,7 +185,7 @@ const SurveyList = () => {
                             />
                         </div>
                     </div>
-                )))
+                ))
             )}
         </React.Fragment>
     );

@@ -246,7 +246,9 @@ const SurveyToday = () => {
             item2.forEach((item3: any, idx: number) => {
 
                 if (selectedDate[selectedIndex]?.total == item3.svType2) {
-                    const el = document.querySelectorAll('.scoreRadio input')[item3.qnaList[0].saAnsList[0] - 1] as HTMLInputElement
+                    //왜 -1이 되어있었는지 잘모르겠음..ㅠㅠ
+                    // const el = document.querySelectorAll('.scoreRadio input')[item3.qnaList[0].saAnsList[0] - 1] as HTMLInputElement
+                    const el = document.querySelectorAll('.scoreRadio input')[item3.qnaList[0].saAnsList[0]] as HTMLInputElement
                     el.checked = true;
                 }
             });
@@ -280,7 +282,9 @@ const SurveyToday = () => {
     const handleSubmit = () => {
         if (document.querySelectorAll('.scoreRadio input:checked')[0]) {
             reqData.userSurveysAnswersDTO[0].saAnsList = [];
-            reqData.userSurveysAnswersDTO[0].saAnsList.push(Number(Array.from(document.querySelectorAll('.scoreRadio input')).indexOf(document.querySelectorAll('.scoreRadio input:checked')[0])) + 1)
+            //왜 +1이 되어있는지 잘 모르겠음
+            // reqData.userSurveysAnswersDTO[0].saAnsList.push(Number(Array.from(document.querySelectorAll('.scoreRadio input')).indexOf(document.querySelectorAll('.scoreRadio input:checked')[0])) + 1)
+            reqData.userSurveysAnswersDTO[0].saAnsList.push(Number(Array.from(document.querySelectorAll('.scoreRadio input')).indexOf(document.querySelectorAll('.scoreRadio input:checked')[0])))
             fetch(`https://api.life.codeidea.io/usr/surveys`,
                 {
                     method: 'POST',
