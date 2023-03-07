@@ -634,10 +634,19 @@ const Survey = () => {
                         resData.map((item: any, index: number) => {
                             /**TODO 백에 사용자관련 설문만 보내달라고 요청할것 */
                             let exceptCnt = 0;
+                            let afterExceptCnt = 0;
                             if(item.surveys.pre.length > 0){
                                 item.surveys.pre.map((item2: any, index2: number) => {
                                     if(item2.svType2 == 'healer'){
                                         exceptCnt += 1;
+                                    }
+                                })
+                            }
+
+                            if(item.surveys.end.length > 0){
+                                item.surveys.end.map((item2: any, index2: number) => {
+                                    if(item2.svType2 == 'healer'){
+                                        afterExceptCnt += 1;
                                     }
                                 })
                             }
@@ -687,13 +696,13 @@ const Survey = () => {
                                             </li>
                                         }
 
-                                        {item.surveys.end.length == 3 ?
+                                        {item.surveys.end.length - afterExceptCnt == 3 ?
                                             <li className="" onClick={(event) => handleNavigate(event, `/surveyAfter?pgNo=${item.pgNo}&type=${item.pgType}&type2=end&title=${item.pgTitle}`)}>
-                                                <Link to="">종료후 설문({item.surveys.end.length}/3)</Link>
+                                                <Link to="">종료후 설문({item.surveys.end.length - afterExceptCnt}/3)</Link>
                                             </li>
                                             :
                                             <li className="active" onClick={(event) => handleNotNavigate()}>
-                                                <Link to="">종료후 설문({item.surveys.end.length}/3)</Link>
+                                                <Link to="">종료후 설문({item.surveys.end.length - afterExceptCnt}/3)</Link>
                                             </li>
                                         }
                                     </ul>

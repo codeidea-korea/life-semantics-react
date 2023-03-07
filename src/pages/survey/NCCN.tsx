@@ -11,7 +11,7 @@ import $ from "jquery";
 import ToastPopup from "@components/modal/ToastPopup";
 import NCCNComponent01 from "@components/survey/surveylist/nccn/NCCNComponent01";
 import NCCNComponent02 from "@components/survey/surveylist/nccn/NCCNComponent02";
-
+let isFirst = true;
 function getToday() {
   var date = new Date();
   var year = date.getFullYear();
@@ -113,7 +113,7 @@ const NCCN = () => {
       const index = Number(
         document
           .querySelectorAll(".surveyContent p")
-          [i].textContent?.split(".")[0]
+        [i].textContent?.split(".")[0]
       );
       reqData.userSurveysAnswersDTO[index - 1].saAnsList = [];
       reqData.userSurveysAnswersDTO[index - 1].saQst = index;
@@ -178,7 +178,7 @@ const NCCN = () => {
         const index = Number(
           document
             .querySelectorAll(".surveyContent p")
-            [i].textContent?.split(".")[0]
+          [i].textContent?.split(".")[0]
         );
         reqData.userSurveysAnswersDTO[index - 1].saAnsList = [];
         reqData.userSurveysAnswersDTO[index - 1].saQst = index;
@@ -187,45 +187,54 @@ const NCCN = () => {
         );
       }
     };
+
     if (
       Number(document.querySelectorAll(".surveyList input:checked").length) ===
       Number(document.querySelectorAll(".surveyContent").length)
     ) {
-      dataSet(Number(document.querySelectorAll(".surveyContent").length));
-      fetch(`https://api.life.codeidea.io/usr/surveys`, {
-        method: "POST",
-        body: JSON.stringify(reqData),
-        headers: {
-          Authorization: "Bearer " + user.accessToken,
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => {
-          return response.json();
+      if (isFirst == true) { //작성완료 버튼 클릭시 토스트 팝업창 3초 표시
+        setToast(true);
+        setTimeout(() => {
+          setToast(false);
+        }, 3000);
+        isFirst = false;
+      } else {
+        dataSet(Number(document.querySelectorAll(".surveyContent").length));
+        fetch(`https://api.life.codeidea.io/usr/surveys`, {
+          method: "POST",
+          body: JSON.stringify(reqData),
+          headers: {
+            Authorization: "Bearer " + user.accessToken,
+            "Content-Type": "application/json",
+          },
         })
-        .then((data) => {
-          if (data.result == "true") {
-            setModal({
-              ...modal,
-              show: true,
-              cancelShow: false,
-              callBackShow: true,
-              title: "",
-              content: (
-                <div>
-                  수면(NCCN) 설문을
-                  <br />
-                  완료하셨습니다.
-                </div>
-              ),
-              confirmText: "확인",
-              onConfirmCallback: moveSurveyMain,
-            });
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+          .then((response) => {
+            return response.json();
+          })
+          .then((data) => {
+            if (data.result == "true") {
+              setModal({
+                ...modal,
+                show: true,
+                cancelShow: false,
+                callBackShow: true,
+                title: "",
+                content: (
+                  <div>
+                    수면(NCCN) 설문을
+                    <br />
+                    완료하셨습니다.
+                  </div>
+                ),
+                confirmText: "확인",
+                onConfirmCallback: moveSurveyMain,
+              });
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
     } else {
       setToast2(true);
       setTimeout(() => {
@@ -236,7 +245,7 @@ const NCCN = () => {
 
   const moveSurveyMain = () => {
     setModal({ ...modal, show: false });
-    type == "pre" ? navigate("/surveyBefore?pgNo="+pgNo+"&type=goodNight") : navigate("/surveyAfter?pgNo="+pgNo+"&type=goodNight");
+    type == "pre" ? navigate("/surveyBefore?pgNo=" + pgNo + "&type=goodNight") : navigate("/surveyAfter?pgNo=" + pgNo + "&type=goodNight");
   };
 
   const handleModal01 = () => {
@@ -276,7 +285,7 @@ const NCCN = () => {
           (item: any, idx) => {
             const targetElement = document
               .querySelectorAll(".surveyContent")
-              [i - stepCount].querySelectorAll("input")[item - 1];
+            [i - stepCount].querySelectorAll("input")[item - 1];
             targetElement.checked = true;
           }
         );
