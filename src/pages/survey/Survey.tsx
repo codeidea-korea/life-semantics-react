@@ -665,7 +665,7 @@ const Survey = () => {
                                         </div>
                                     </div>
                                     <ul>
-                                        <li className={item.surveys.pre.length == 3 ? "active" : ""} onClick={(event) => handleNavigate(event, `/surveyBefore?pgNo=${item.pgNo}&type=${item.pgType}&type2=pre&title=${item.pgTitle}`)}>
+                                        <li className={item.surveys.pre.length - exceptCnt == 3 ? "active" : ""} onClick={(event) => handleNavigate(event, `/surveyBefore?pgNo=${item.pgNo}&type=${item.pgType}&type2=pre&title=${item.pgTitle}`)}>
                                             시작전 설문({item.surveys.pre.length - exceptCnt}/3)
                                         </li>
 
