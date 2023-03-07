@@ -200,7 +200,7 @@ const ModifyCheck01 = () => {
             </li>
             <li>
               <label>
-                <span>문자 수신동의</span>
+                <span className="no_dot">문자 수신동의</span>
               </label>
               <div className="radioCheck">
                 {user.userSmsAgree == "1" ? <><span>
@@ -226,7 +226,7 @@ const ModifyCheck01 = () => {
             </li>
             <li>
               <label>
-                <span>이메일</span>
+                <span className="no_dot">이메일</span>
               </label>
               <span className="">
                 <InputElement
@@ -239,7 +239,7 @@ const ModifyCheck01 = () => {
             </li>
             <li>
               <label>
-                <span>이메일 수신동의</span>
+                <span className="no_dot">이메일 수신동의</span>
               </label>
               <div className="radioCheck" id="">
 
