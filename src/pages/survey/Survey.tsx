@@ -113,7 +113,6 @@ const Survey = () => {
             show: true,
             title: "",
             cancelShow: false,
-            callBackShow: true,
             content: (
                 <div>
                     아직 설문이
@@ -122,7 +121,6 @@ const Survey = () => {
                 </div>
             ),
             confirmText: "확인",
-
             onConfirmCallback: () => {
                 setModal({ ...modal, show: false })
             },
