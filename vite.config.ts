@@ -20,7 +20,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/proxyApi": {
-        target: "https://api.life.codeidea.io",
+        target: process.env.VITE_PUBLIC_API_SERVER_URL,
         changeOrigin: true,
         secure: false,
         rewrite: (path) => path.replace(/^\/proxyApi/, ""),

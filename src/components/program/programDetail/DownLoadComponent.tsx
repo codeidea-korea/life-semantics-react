@@ -9,7 +9,7 @@ import axios from "axios";
 const DownLoadComponent = ({ fileList }: { fileList: ProgramFileInterface[] }) => {
   const downloadFile = (url: string, name: string) => {
     axios({
-      url: import.meta.env.VITE_PUBLIC_API_SERVER_URL + 'proxyApi' + url,
+      url: import.meta.env.VITE_PUBLIC_APP_URL + 'proxyApi' + url,
       method: "GET",
       responseType: "blob",
     }).then((response) => {
