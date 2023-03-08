@@ -134,7 +134,7 @@ const ISI = () => {
         type == "pre" ? navigate("/surveyBefore?pgNo="+pgNo+"&type=goodNight") : navigate("/surveyAfter?pgNo="+pgNo+"&type=goodNight");
       };
 
-      fetch(`https://api.life.codeidea.io/usr/surveys`, {
+      fetch(`${import.meta.env.VITE_PUBLIC_API_SERVER_URL}usr/surveys`, {
         method: "POST",
         body: JSON.stringify(reqData),
         headers: {

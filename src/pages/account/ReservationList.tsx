@@ -39,7 +39,7 @@ const ReservationList = () => {
         // pgAppSttDate -  최신 등록순
         // inApply - 참여 우선 순
         // inOper - 예약 우선 순
-        fetch(`https://api.life.codeidea.io/usr/programs/myList?paUserNo=${user.userNo}&orderBy=${orderBy}`,
+        fetch(`${import.meta.env.VITE_PUBLIC_API_SERVER_URL}usr/programs/myList?paUserNo=${user.userNo}&orderBy=${orderBy}`,
             {
                 method: 'POST',
                 headers: {
@@ -166,7 +166,7 @@ const ReservationList = () => {
         const target = document.querySelectorAll('input:checked');
         const selectedOrderByValue = document.querySelectorAll('.reservationList .tabelDropdown .dropDown .selected span')[0].textContent as string
         let reqData = {}
-        fetch(`https://api.life.codeidea.io/usr/programs/cancel?pgNoList=${target[0].getAttribute("pg-no")}&userNo=${user.userNo}`,
+        fetch(`${import.meta.env.VITE_PUBLIC_API_SERVER_URL}usr/programs/cancel?pgNoList=${target[0].getAttribute("pg-no")}&userNo=${user.userNo}`,
             {
                 method: 'PATCH',
                 headers: {

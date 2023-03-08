@@ -24,7 +24,7 @@ const Modify = () => {
         "userID": user.userID,
         "userPass": inputElement.value
       }
-      fetch(`https://api.life.codeidea.io/users/update/pwd-check`,
+      fetch(`${import.meta.env.VITE_PUBLIC_API_SERVER_URL}users/update/pwd-check`,
         {
           method: 'POST',
           body: JSON.stringify(reqData),

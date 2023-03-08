@@ -200,7 +200,7 @@ const NCCN = () => {
         isFirst = false;
       } else {
         dataSet(Number(document.querySelectorAll(".surveyContent").length));
-        fetch(`https://api.life.codeidea.io/usr/surveys`, {
+        fetch(`${import.meta.env.VITE_PUBLIC_API_SERVER_URL}usr/surveys`, {
           method: "POST",
           body: JSON.stringify(reqData),
           headers: {

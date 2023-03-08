@@ -187,7 +187,7 @@ const Tired = () => {
       } else {
         dataSet(Number(document.querySelectorAll(".surveyContent").length));
         console.log(reqData);
-        fetch(`https://api.life.codeidea.io/usr/surveys`, {
+        fetch(`${import.meta.env.VITE_PUBLIC_API_SERVER_URL}usr/surveys`, {
           method: "POST",
           body: JSON.stringify(reqData),
           headers: {

@@ -77,7 +77,7 @@ const ModifyCheck03 = () => {
       ['userDiagName']: diagCancerList.userDiagName.join(','),
     };
 
-    fetch(`https://api.life.codeidea.io/users/cancer`, {
+    fetch(`${import.meta.env.VITE_PUBLIC_API_SERVER_URL}users/cancer`, {
       method: 'PUT',
       body: JSON.stringify(requestBody),
       headers: {
@@ -279,7 +279,7 @@ const ModifyCheck03 = () => {
   }
 
   const updateInfo = () => {
-    fetch(`https://api.life.codeidea.io/users/view?userNo=${user.userNo}`,
+    fetch(`${import.meta.env.VITE_PUBLIC_API_SERVER_URL}users/view?userNo=${user.userNo}`,
       {
         method: 'POST',
         headers: {

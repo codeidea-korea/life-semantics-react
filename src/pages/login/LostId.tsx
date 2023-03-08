@@ -29,7 +29,7 @@ const IndexPage = () => {
     const phone = document.querySelector("#find_phone") as HTMLInputElement;
     if (String(name.value).length > 0 && String(phone.value).length > 0) {
       fetch(
-        `https://api.life.codeidea.io/users/find-id?name=${
+        `${import.meta.env.VITE_PUBLIC_API_SERVER_URL}users/find-id?name=${
           name.value
         }&phone=${phone.value.replaceAll("-", "")}`,
         {

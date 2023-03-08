@@ -46,7 +46,7 @@ const ModifyCheck02 = ({ nextStep }: { nextStep: Function }) => {
         "userWasDrink": 0
     };
     const updateInfo = () => {
-        fetch(`https://api.life.codeidea.io/users/view?userNo=${user.userNo}`,
+        fetch(`${import.meta.env.VITE_PUBLIC_API_SERVER_URL}users/view?userNo=${user.userNo}`,
             {
                 method: 'POST',
                 headers: {
@@ -193,7 +193,7 @@ const ModifyCheck02 = ({ nextStep }: { nextStep: Function }) => {
 
 
         // if (String(smokeAmt.value).length !== 0 && String(smokingStartYear.value.length !== 0 && String(smokingEndYear.value).length !== 0 && drinkAmt.value.length !== 0 && String(drinkingStartYear.value).length !== 0 && String(drinkingEndYear.value).length !== 0)) {
-        fetch(`https://api.life.codeidea.io/users/health`,
+        fetch(`${import.meta.env.VITE_PUBLIC_API_SERVER_URL}users/health`,
             {
                 method: 'PUT',
                 body: JSON.stringify(reqData),

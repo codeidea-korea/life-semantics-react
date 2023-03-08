@@ -212,7 +212,7 @@ const SurveyToday = () => {
     const [selectedIndex, setSelectedIndex] = useState<any>(0);
     const [ingData, setIngData] = useState<any>([])
     useEffect(() => {
-        fetch(`https://api.life.codeidea.io/usr/programs/myList?paUserNo=${user.userNo}`,
+        fetch(`${import.meta.env.VITE_PUBLIC_API_SERVER_URL}usr/programs/myList?paUserNo=${user.userNo}`,
             {
                 method: 'POST',
                 headers: {
@@ -285,7 +285,7 @@ const SurveyToday = () => {
             //왜 +1이 되어있는지 잘 모르겠음
             // reqData.userSurveysAnswersDTO[0].saAnsList.push(Number(Array.from(document.querySelectorAll('.scoreRadio input')).indexOf(document.querySelectorAll('.scoreRadio input:checked')[0])) + 1)
             reqData.userSurveysAnswersDTO[0].saAnsList.push(Number(Array.from(document.querySelectorAll('.scoreRadio input')).indexOf(document.querySelectorAll('.scoreRadio input:checked')[0])))
-            fetch(`https://api.life.codeidea.io/usr/surveys`,
+            fetch(`${import.meta.env.VITE_PUBLIC_API_SERVER_URL}usr/surveys`,
                 {
                     method: 'POST',
                     body: JSON.stringify(reqData),

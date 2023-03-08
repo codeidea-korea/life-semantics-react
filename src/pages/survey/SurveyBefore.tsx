@@ -46,7 +46,7 @@ const SurveyBefore = () => {
   };
   useEffect(() => {
     fetch(
-      `https://api.life.codeidea.io/usr/programs/myList?paUserNo=${user.userNo}`,
+      `${import.meta.env.VITE_PUBLIC_API_SERVER_URL}usr/programs/myList?paUserNo=${user.userNo}`,
       {
         method: "POST",
         headers: {

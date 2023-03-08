@@ -23,7 +23,7 @@ const DeleteAccount = () => {
         "userID": user.userID,
         "userPass": inputElement.value
       }
-      fetch(`https://api.life.codeidea.io/users/update/pwd-check`,
+      fetch(`${import.meta.env.VITE_PUBLIC_API_SERVER_URL}users/update/pwd-check`,
         {
           method: 'POST',
           body: JSON.stringify(reqData),
@@ -37,7 +37,7 @@ const DeleteAccount = () => {
           if (data.body.result === false) {
             setAlert(<span className="alert_text">비밀번호가 일치하지 않습니다.</span>)
           } else if (data.body.result === true) {
-            fetch(`https://api.life.codeidea.io/users?password=${inputElement.value}`,
+            fetch(`${import.meta.env.VITE_PUBLIC_API_SERVER_URL}users?password=${inputElement.value}`,
               {
                 method: 'DELETE',
                 headers: {

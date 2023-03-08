@@ -299,7 +299,7 @@ const Pain = () => {
         ).indexOf(document.querySelectorAll(".scoreRadio input:checked")[0]);
         reqData.userSurveysAnswersDTO[2].saAnsList.push(checkedIndex + 1);
 
-        fetch(`https://api.life.codeidea.io/usr/surveys`, {
+        fetch(`${import.meta.env.VITE_PUBLIC_API_SERVER_URL}usr/surveys`, {
           method: "POST",
           body: JSON.stringify(reqData),
           headers: {

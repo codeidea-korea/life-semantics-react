@@ -507,7 +507,7 @@ const Survey = () => {
         if (!user.accessToken) navigate('/login');
 
         requestIsBeforeSurvey().then((isBeforeSurvey) => {
-            fetch(`https://api.life.codeidea.io/usr/programs/myList?paUserNo=${user.userNo}`, {
+            fetch(`${import.meta.env.VITE_PUBLIC_API_SERVER_URL}usr/programs/myList?paUserNo=${user.userNo}`, {
                 method: 'POST',
                 headers: {
                     Authorization: 'Bearer ' + user.accessToken,
@@ -521,7 +521,7 @@ const Survey = () => {
                         setResData(data.body);
                         data.body.forEach((item: any, idx: number) => {
                             fetch(
-                                `https://api.life.codeidea.io/usr/surveys/not-created-ing?pgNo=${item.pgNo}`,
+                                `${import.meta.env.VITE_PUBLIC_API_SERVER_URL}usr/surveys/not-created-ing?pgNo=${item.pgNo}`,
                                 {
                                     method: 'GET',
                                     headers: {

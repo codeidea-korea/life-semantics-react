@@ -31,7 +31,7 @@ const ModifyCheck01 = () => {
 
 
   const handleSubmit = () => {
-    fetch(`https://api.life.codeidea.io/users/view?userNo=${user.userNo}`,
+    fetch(`${import.meta.env.VITE_PUBLIC_API_SERVER_URL}users/view?userNo=${user.userNo}`,
       {
         method: 'POST',
         headers: {
@@ -58,7 +58,7 @@ const ModifyCheck01 = () => {
           radioAgree1.checked == true ? (modifyData.userSmsAgree = "1") : (modifyData.userSmsAgree = "0")
           radioAgree2.checked == true ? (modifyData.userEmailAgree = "1") : (modifyData.userEmailAgree = "0")
           modifyData.userEmail = userEmail.value;
-          fetch(`https://api.life.codeidea.io/users/info`,
+          fetch(`${import.meta.env.VITE_PUBLIC_API_SERVER_URL}users/info`,
             {
               method: 'PUT',
               body: JSON.stringify(modifyData),

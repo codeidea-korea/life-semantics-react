@@ -49,7 +49,7 @@ const DateComponent = () => {
     const [selectedDate, setSelectedDate] = useState<Array<{ year: string; month: string; day: string; total: string }>>([]);
     const [selectedIndex, setSelectedIndex] = useState<any>(0);
     useEffect(() => {
-        fetch(`https://api.life.codeidea.io/usr/programs/myList?paUserNo=${user.userNo}`,
+        fetch(`${import.meta.env.VITE_PUBLIC_API_SERVER_URL}usr/programs/myList?paUserNo=${user.userNo}`,
             {
                 method: 'POST',
                 headers: {
