@@ -16,8 +16,6 @@ const MostPainListComponent = () => {
             });
     }, []);
 
-    console.log(painColor);
-
     return (
         <React.Fragment>
             <p>

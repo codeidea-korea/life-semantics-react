@@ -12,29 +12,29 @@ const BackPainComponent = () => {
         <React.Fragment>
             <div className="backPain">
                 <img src="images/back.svg" alt="뒷모습" />
-                <span data-index={27} className="dot" data-name="backHead"></span>
-                <span data-index={28} className="dot" data-name="neck"></span>
-                <span data-index={30} className="dot" data-name="rightBack"></span>
-                <span data-index={29} className="dot" data-name="leftBack"></span>
-                <span data-index={32} className="dot" data-name="rightElbow"></span>
-                <span data-index={31} className="dot" data-name="leftElbow"></span>
-                <span data-index={33} className="dot" data-name="waist"></span>
-                <span data-index={35} className="dot" data-name="rightHip"></span>
-                <span data-index={34} className="dot" data-name="leftHip"></span>
-                <span data-index={36} className="dot" data-name="tailbone"></span>
+                <span data-index={27} className="dot" data-name="backHead" data-title="후두부"></span>
+                <span data-index={28} className="dot" data-name="neck" data-title="목"></span>
+                <span data-index={30} className="dot" data-name="rightBack" data-title="오른쪽 등"></span>
+                <span data-index={29} className="dot" data-name="leftBack" data-title="왼쪽 등"></span>
+                <span data-index={32} className="dot" data-name="rightElbow" data-title="오른쪽 팔꿈치"></span>
+                <span data-index={31} className="dot" data-name="leftElbow" data-title="왼쪽 팔꿈치"></span>
+                <span data-index={33} className="dot" data-name="waist" data-title="허리"></span>
+                <span data-index={35} className="dot" data-name="rightHip" data-title="오른쪽 엉덩이"></span>
+                <span data-index={34} className="dot" data-name="leftHip" data-title="왼쪽 엉덩이"></span>
+                <span data-index={36} className="dot" data-name="tailbone" data-title="꼬리뼈"></span>
 
 
-                <span data-index={44} className="dot" data-name="rightHeel"></span>
-                <span data-index={43} className="dot" data-name="leftHeel"></span>
+                <span data-index={44} className="dot" data-name="rightHeel" data-title="오른쪽 발뒤꿈치"></span>
+                <span data-index={43} className="dot" data-name="leftHeel" data-title="왼쪽 발뒤꿈치"></span>
 
-                <span data-index={38} className="dot" data-name="rightThigh"></span>
-                <span data-index={37} className="dot" data-name="leftThigh"></span>
+                <span data-index={38} className="dot" data-name="rightThigh" data-title="오른쪽 허벅지 뒤쪽"></span>
+                <span data-index={37} className="dot" data-name="leftThigh" data-title="왼쪽 허벅지 뒤쪽"></span>
 
-                <span data-index={41} className="dot" data-name="leftShin"></span>
-                <span data-index={42} className="dot" data-name="rightShin"></span>
+                <span data-index={41} className="dot" data-name="leftShin" data-title="왼쪽 종아리"></span>
+                <span data-index={42} className="dot" data-name="rightShin" data-title="오른쪽 종아리"></span>
 
-                <span data-index={39} className="dot" data-name="leftKnee"></span>
-                <span data-index={40} className="dot" data-name="rightKnee"></span>
+                <span data-index={39} className="dot" data-name="leftKnee" data-title="왼쪽 오금"></span>
+                <span data-index={40} className="dot" data-name="rightKnee" data-title="오른쪽 오금"></span>
             </div>
         </React.Fragment>
     );
