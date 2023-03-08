@@ -135,14 +135,15 @@ const Pain = () => {
       if (selectedElement !== undefined) {
         document.querySelectorAll(".dot.on").forEach((item, idx) => {
           reqData.userSurveysAnswersDTO[0].saAnsList.push(
-            Number(item.getAttribute("data-index")) + 1
+            // Number(item.getAttribute("data-index")) + 1
+            Number(item.getAttribute("data-index"))
           );
         });
       } else {
         return false;
       }
     } else if (step === 2) {
-      reqData.userSurveysAnswersDTO[1].saQst = 1;
+      reqData.userSurveysAnswersDTO[1].saQst = 2;
       reqData.userSurveysAnswersDTO[1].saAnsList = [];
       if (selectedElement !== undefined) {
         if(document.querySelectorAll(".dot.red").length === 0){
@@ -150,7 +151,8 @@ const Pain = () => {
         }
         document.querySelectorAll(".dot.red").forEach((item, idx) => {
           reqData.userSurveysAnswersDTO[1].saAnsList.push(
-            Number(item.getAttribute("data-index")) + 1
+            // Number(item.getAttribute("data-index")) + 1
+            Number(item.getAttribute("data-index"))
           );
         });
       } else {
@@ -297,7 +299,8 @@ const Pain = () => {
         const checkedIndex = Array.from(
           document.querySelectorAll(".scoreRadio input")
         ).indexOf(document.querySelectorAll(".scoreRadio input:checked")[0]);
-        reqData.userSurveysAnswersDTO[2].saAnsList.push(checkedIndex + 1);
+        // reqData.userSurveysAnswersDTO[2].saAnsList.push(checkedIndex + 1);
+        reqData.userSurveysAnswersDTO[2].saAnsList.push(checkedIndex);
 
         fetch(`${import.meta.env.VITE_PUBLIC_API_SERVER_URL}usr/surveys`, {
           method: "POST",
