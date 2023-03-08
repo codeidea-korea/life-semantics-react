@@ -704,8 +704,8 @@ select {
             margin: 50px 0 20px 0;
             &::after {
                 position: absolute;
-                top: -5px;
-                right: -6px;
+                top: 3px;
+                right: -7px;
                 content: "";
                 display: block;
                 background-color: red;
