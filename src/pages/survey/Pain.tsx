@@ -94,6 +94,7 @@ const Pain = () => {
       title: String(document.querySelector("input")?.value),
     });
   const [step, setStep] = useState(1);
+  const [mostPain, setMostPain] = useState<string | null>('');
 
   //url로 전달받은 데이터
   const queryString = window.location.search;
@@ -154,6 +155,8 @@ const Pain = () => {
             // Number(item.getAttribute("data-index")) + 1
             Number(item.getAttribute("data-index"))
           );
+
+          setMostPain(item.getAttribute("data-title"));
         });
       } else {
         return false;
@@ -243,14 +246,15 @@ const Pain = () => {
       document.querySelectorAll(".frontPain span").forEach((item: any, idx) => {
         reqData.userSurveysAnswersDTO[0].saAnsList.forEach(
           (item2: any, idx2) => {
-            if (item.getAttribute("data-index") == item2 - 1) {
+            // if (item.getAttribute("data-index") == item2 - 1) {
+            if (item.getAttribute("data-index") == item2) {
               item.classList.add("on");
             }
           }
         );
         reqData.userSurveysAnswersDTO[1].saAnsList.forEach(
           (item2: any, idx2) => {
-            if (item.getAttribute("data-index") == item2 - 1) {
+            if (item.getAttribute("data-index") == item2) {
               if(step == 3){
                 item.classList.add("red");
               }else{
@@ -263,14 +267,14 @@ const Pain = () => {
       document.querySelectorAll(".backPain span").forEach((item: any, idx) => {
         reqData.userSurveysAnswersDTO[0].saAnsList.forEach(
           (item2: any, idx2) => {
-            if (item.getAttribute("data-index") == item2 - 1) {
+            if (item.getAttribute("data-index") == item2) {
               item.classList.add("on");
             }
           }
         );
         reqData.userSurveysAnswersDTO[1].saAnsList.forEach(
           (item2: any, idx2) => {
-            if (item.getAttribute("data-index") == item2 - 1) {
+            if (item.getAttribute("data-index") == item2) {
               if(step == 3){
                 item.classList.add("red");
               }else{
@@ -371,7 +375,7 @@ const Pain = () => {
             <ProgressComponent active={step >= 3} />
           </ul>
         </div>
-        {step === 3 ? <MostPainListComponent /> : <PainComponent step={step} />}
+        {step === 3 ? <MostPainListComponent mostPain= {mostPain} /> : <PainComponent step={step} />}
       </div>
       <div className="fixBtn">
         <button type="button" className="prev" onClick={handlePrevStep}>

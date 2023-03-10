@@ -118,7 +118,7 @@ const SurveyBefore = () => {
                       설문입니다.
                     </li>
                     <li>
-                      <span>수면(ISI)</span>는 총 5문항이며, 각각의 문항에 대해
+                      <span>불면(ISI)</span>는 총 5문항이며, 각각의 문항에 대해
                       응답하는 설문입니다.
                     </li>
                     <li>

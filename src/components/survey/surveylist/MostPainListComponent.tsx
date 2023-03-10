@@ -3,7 +3,7 @@ import RangeComponent from "../todaySurvey/RangeComponent";
 import $ from "jquery";
 import RangeArrowComponent from "../todaySurvey/RangeArrowComponent ";
 
-const MostPainListComponent = () => {
+const MostPainListComponent = ({mostPain}:{mostPain:string|null}) => {
     const dots = ["foreHead", ""];
     const [painColor, setPainColor] = useState<number[]>([]);
 
@@ -19,7 +19,7 @@ const MostPainListComponent = () => {
     return (
         <React.Fragment>
             <p>
-                3. <strong>오른쪽 발목</strong>의 통증을 나타내는 숫자 <br />에 표시해주세요 (0점:
+                3. <strong>{mostPain}</strong>의 통증을 나타내는 숫자 <br />에 표시해주세요 (0점:
                 통증 낮음, 10점: 통증 높음)
             </p>
             <ul className="scoreRadio">

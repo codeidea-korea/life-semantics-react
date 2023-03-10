@@ -148,9 +148,12 @@ const SurveyDeStress = () => {
         reqData.userSurveysAnswersDTO[0].saAnsList?.forEach(
           (item: any, idx) => {
             console.log(reqData);
+            // const targetElement = document.querySelectorAll(
+            //   ".scoreRadio input"
+            // )[item - 1] as HTMLInputElement;
             const targetElement = document.querySelectorAll(
               ".scoreRadio input"
-            )[item - 1] as HTMLInputElement;
+            )[item] as HTMLInputElement;
             targetElement.checked = true;
           }
         );
@@ -229,7 +232,8 @@ const SurveyDeStress = () => {
         const checkedIndex = Array.from(
           document.querySelectorAll(".scoreRadio input")
         ).indexOf(document.querySelectorAll(".scoreRadio input:checked")[0]);
-        reqData.userSurveysAnswersDTO[0].saAnsList.push(checkedIndex + 1);
+        // reqData.userSurveysAnswersDTO[0].saAnsList.push(checkedIndex + 1);
+        reqData.userSurveysAnswersDTO[0].saAnsList.push(checkedIndex);
         //2번
         reqData.userSurveysAnswersDTO[1].saQst = 2;
         reqData.userSurveysAnswersDTO[1].saAnsList = [];
@@ -439,6 +443,8 @@ const SurveyDeStress = () => {
         });
 
         reqData.userSurveysAnswersDTO[6].saEtcAns = lastScoreElement3.value;
+        console.log(reqData);
+        return false;
         handleSubmit();
       } else {
         handlePopup();
