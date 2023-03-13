@@ -110,6 +110,7 @@ const IndexPage = () => {
       ),
       confirmText: "로그인하러가기",
       onConfirmCallback: () => {
+        setModal({ ...modal, show: false })
         navigate("/login");
       },
     });

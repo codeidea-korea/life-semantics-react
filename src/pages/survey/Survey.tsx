@@ -661,7 +661,7 @@ const Survey = () => {
                                             <div className="noticeBox" ref={handleToolTipRef}>
                                                 <ul>
                                                     <li>
-                                                        <span>매일 입력 설문</span>은 8주 간(56일간)매일 간단한
+                                                        <span>일일 설문</span>은 8주 간(56일간)매일 간단한
                                                         수치를 입력하는 설문입니다.
                                                     </li>
                                                     <li>
@@ -675,11 +675,11 @@ const Survey = () => {
                                     </div>
                                     <ul>
                                         <li className={item.surveys.pre.length - exceptCnt == 3 ? "active" : ""} onClick={(event) => handleNavigate(event, `/surveyBefore?pgNo=${item.pgNo}&type=${item.pgType}&type2=pre&title=${item.pgTitle}`)}>
-                                            시작전 설문({item.surveys.pre.length - exceptCnt}/3)
+                                            사전 설문({item.surveys.pre.length - exceptCnt}/3)
                                         </li>
 
                                         {
-                                            compareDates(item.pgSttDate) ? <li className="" onClick={(event) => handleNavigate(event, `/surveyToday?pgNo=${item.pgNo}`)}>
+                                            compareDates(item.pgSttDate) ? <li className="" onClick={(event) => handleNavigate(event, `/surveyToday?pgNo=${item.pgNo}&type=${item.pgType}`)}>
                                                 일일 설문
                                                 <br />
                                                 <span className="recent_not_survey"></span>
@@ -698,11 +698,11 @@ const Survey = () => {
 
                                         {item.surveys.end.length - afterExceptCnt == 3 ?
                                             <li className="" onClick={(event) => handleNavigate(event, `/surveyAfter?pgNo=${item.pgNo}&type=${item.pgType}&type2=end&title=${item.pgTitle}`)}>
-                                                <Link to="">종료후 설문({item.surveys.end.length - afterExceptCnt}/3)</Link>
+                                                <Link to="">사후 설문({item.surveys.end.length - afterExceptCnt}/3)</Link>
                                             </li>
                                             :
                                             <li className="active" onClick={(event) => handleNotNavigate()}>
-                                                <Link to="">종료후 설문({item.surveys.end.length - afterExceptCnt}/3)</Link>
+                                                <Link to="">사후 설문({item.surveys.end.length - afterExceptCnt}/3)</Link>
                                             </li>
                                         }
                                     </ul>

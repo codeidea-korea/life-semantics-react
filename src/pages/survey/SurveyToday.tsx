@@ -81,6 +81,7 @@ const SurveyToday = () => {
 
     const pgNo = urlParams.get('pgNo');
     reqData.svPgNo = Number(pgNo);
+    const type = urlParams.get('type');
 
     const handleUseNotice = () => {
         setModal({
@@ -226,7 +227,7 @@ const SurveyToday = () => {
                     if (pgNo == item.pgNo) {
                         setIngData([...ingData, item.surveys.ing]);
                         // const sDate = getDates(item.pgSttDate);
-                        const sDate = getDates(item.pgSttDate).filter((e : any) => e.total <= getToday());
+                        const sDate = getDates(item.pgSttDate).filter((e: any) => e.total <= getToday());
                         setSelectedDate(sDate)
                         setSelectedIndex(sDate.length - 1);
                     }
@@ -327,7 +328,7 @@ const SurveyToday = () => {
                     {selectedDate.map((date, index) => (
                         index == selectedIndex
                             ?
-                            <span style={getToday() == date.total ? {} : { background: 'white', color: 'black', fontWeight: '300' }}  className='today' key={index}>
+                            <span style={getToday() == date.total ? {} : { background: 'white', color: 'black', fontWeight: '300' }} className='today' key={index}>
                                 {date.month}월{date.day}일
                             </span>
                             :
@@ -337,12 +338,13 @@ const SurveyToday = () => {
                     ))}
                     <button type='button' onClick={handleNextDate}> </button>
                 </div>
-                
-                {/* 웰컴굿잠 */}
-                {/* <p>어젯 밤 수면의 만족도를 나타내는 숫자를 선택해주세요. (0점: 수면만족도 낮음, 10점: 수면만족도 높음)</p> */}
-                {/* 굿바이피로 */}
-                {/* <p>지난 24시간 동안의 피로를 나타내는 숫자를 선택해주세요. (0점: 피로도 낮음, 10점: 피로도 높음)</p> */}
-                
+
+                {type === 'goodBye' ?
+                    <p>지난 24시간 동안의 피로를 나타내는 숫자를 선택해주세요. (0점: 피로도 낮음, 10점: 피로도 높음)</p>
+                    :
+                    <p>어젯 밤 수면의 만족도를 나타내는 숫자를 선택해주세요. (0점: 수면만족도 낮음, 10점: 수면만족도 높음)</p>
+                }
+
                 {/* <p>
                     지난 24시간 동안의 피로를 나타내는 <br />
                     숫자에 원을 놓아주세요.
