@@ -10,8 +10,8 @@ const PainComponent = ({ step }: { step: number }) => {
   
   useEffect(() => {
     $(".pain")
-      .off("click")
-      .on("click", ".dot", function (event) {
+      .off("click touchstart")
+      .on("click touchstart", ".dot", function (event) {
         event.preventDefault();
         console.log(step);
         if (step === 1) {

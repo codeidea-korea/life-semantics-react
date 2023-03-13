@@ -308,9 +308,12 @@ const Survey = () => {
         // const newUserDiagDate = beforeSurveyInfo.userDiagDate.slice(0, 4) + '-' + beforeSurveyInfo.userDiagDate.slice(6, 8);
         // const newUserCureEndDate = beforeSurveyInfo.userCureEndDate.slice(0, 4) + '-' + beforeSurveyInfo.userCureEndDate.slice(6, 8);
 
-        let newUserDiagDate = diagCancerList.userDiagDate.map(elem => elem.slice(0, 4) + '-' + elem.slice(6, 8));
-        let newUserCureEndDate = diagCancerList.userCureEndDate.map(elem => elem.slice(0, 4) + '-' + elem.slice(6, 8));
-        let newUserDiagName = diagCancerList.userDiagName.filter(elem => elem !== '');
+        // let newUserDiagDate = diagCancerList.userDiagDate.map(elem => elem.slice(0, 4) + '-' + elem.slice(6, 8));
+        // let newUserCureEndDate = diagCancerList.userCureEndDate.map(elem => elem.slice(0, 4) + '-' + elem.slice(6, 8));
+        // let newUserDiagName = diagCancerList.userDiagName.filter(elem => elem !== '');
+        let newUserDiagDate = diagCancerList.userDiagDate.map(elem => elem);
+        let newUserCureEndDate = diagCancerList.userCureEndDate.map(elem => elem);
+        let newUserDiagName = diagCancerList.userDiagName.map(elem => elem);
 
         let requestBody = {
             ...beforeSurveyInfo,
@@ -567,6 +570,7 @@ const Survey = () => {
         tmp.userDiagnosis.push('');
         tmp.userDiagDate.push('');
         tmp.userCureEndDate.push('');
+        tmp.userDiagName.push('');
         setDiagCancerList(tmp);
     }
 
