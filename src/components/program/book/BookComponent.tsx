@@ -7,6 +7,22 @@ import {userState} from '@states/userState';
 import {useRecoilValue} from "recoil";
 import { useQuery } from "react-query";
 
+function dateFormat(date: Date) {
+    let month: string | number = date.getMonth() + 1;
+    let day: string | number = date.getDate();
+    let hour: string | number = date.getHours();
+    let minute: string | number = date.getMinutes();
+    let second: string | number = date.getSeconds();
+
+    month = month >= 10 ? month : '0' + month;
+    day = day >= 10 ? day : '0' + day;
+    hour = hour >= 10 ? hour : '0' + hour;
+    minute = minute >= 10 ? minute : '0' + minute;
+    second = second >= 10 ? second : '0' + second;
+
+    return date.getFullYear() + '/' + month + '/' + day;
+}
+
 const BookComponent = ({programFilter}: {programFilter?: ProgramFilterInterface}) => {
     const navigate = useNavigate();
     const api = useAxios();
@@ -39,8 +55,15 @@ const BookComponent = ({programFilter}: {programFilter?: ProgramFilterInterface}
     const result = useQuery(['programList', requestData], () => getProgramList());
 
     const getDayCount = (endDay: string) => {
-        const nowDate = new Date();
-        const endDate = new Date(endDay);
+        // const nowDate = new Date();
+        // const endDate = new Date(endDay);
+        // const dateDiff = endDate.getTime() - nowDate.getTime();
+        // return Math.ceil(dateDiff / 1000 / 60 / 60 / 24);
+
+        const tmpDate = dateFormat(new Date());
+        const tmpDate2 = endDay.replace(/\./g, '/');
+        const nowDate = new Date(tmpDate);
+        const endDate = new Date(tmpDate2);
         const dateDiff = endDate.getTime() - nowDate.getTime();
         return Math.ceil(dateDiff / 1000 / 60 / 60 / 24);
     };
