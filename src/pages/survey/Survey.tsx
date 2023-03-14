@@ -131,7 +131,7 @@ const Survey = () => {
         await api
             .post("/surveys/list", { userNo: "1" })
             .then((res) => {
-                console.log(res.data.data);
+                //console.log(res.data.data);
                 if (res.data.result === "success") setSurvey(res.data.data);
             })
             .catch((err) => {
@@ -274,6 +274,9 @@ const Survey = () => {
             moveScroll(cancerInfoRef.current[0])
             return
         }
+
+        var regex = /[^0-9]/g;
+
         for (let i = 0; i < diagCancerList.userDiagnosis.length; i++) {
             if (diagCancerList.userDiagnosis[i] !== 'etc' && !diagCancerList.userDiagnosis[i]) {
                 moveScroll(cancerInfoRef.current[i + 1])
@@ -287,7 +290,14 @@ const Survey = () => {
                 moveScroll(cancerInfoRef.current[i + 1])
                 return
             }
+
+            if (diagCancerList.userDiagDate[i].replace(regex, "") > diagCancerList.userCureEndDate[i].replace(regex, "")) {
+                moveScroll(cancerInfoRef.current[i + 1]);
+                alert('진단시기가 치료종료 시기보다 이전이어야 합니다');
+                return
+            }
         }
+
         if (!beforeSurveyInfo.userCureType) {
             moveScroll(cancerInfoRef.current[diagCancerList.userDiagnosis.length + 1])
             return
@@ -331,7 +341,7 @@ const Survey = () => {
         api
             .post('/users/health-and-cancer', requestBody, { headers: { Authorization: `Bearer ${user.accessToken}` } })
             .then((res) => {
-                console.log(res);
+                //console.log(res);
                 if (res.status === 200) {
                     setEndPopup(true);
                     setTimeout(() => {
@@ -418,7 +428,7 @@ const Survey = () => {
     }
 
     useEffect(() => {
-        console.log(beforeSurveyInfo);
+        //console.log(beforeSurveyInfo);
         const now = new Date();
         const age = Number(now.getFullYear()) - Number(user.userBirth?.substr(0, 4)) + 1
     }, [beforeSurveyInfo]);
@@ -579,12 +589,44 @@ const Survey = () => {
         let newDiagCancerList = { ...diagCancerList };
         let newValue = '';
 
+        let ymd = "";
+
+        var regex = /[^0-9]/g;	
+
+        const reValue = value.replace(regex, ""); 
+
+        if(reValue.length < 4) {
+
+            return value;
+
+        } else if(reValue.length < 6){
+
+            ymd += reValue.substr(0, 4);
+
+            ymd += "년";
+
+            ymd += reValue.substr(4);
+
+        } else {
+
+            ymd += reValue.substr(0, 4);
+
+            ymd += "년";
+
+            ymd += reValue.substr(4, 2);
+
+            ymd += "월";
+
+            ymd += reValue.substr(6);
+
+        }
+
         if (name === 'userDiagDate') {
-            newDiagCancerList.userDiagDate[index] = value;
+            newDiagCancerList.userDiagDate[index] = ymd;
             newValue = newDiagCancerList.userDiagDate.join(',');
         }
         else {
-            newDiagCancerList.userCureEndDate[index] = value;
+            newDiagCancerList.userCureEndDate[index] = ymd;
             newValue = newDiagCancerList.userCureEndDate.join(',');
         }
         setDiagCancerList(newDiagCancerList);
@@ -597,7 +639,40 @@ const Survey = () => {
     const handleDiagName = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
         const { name, value } = event.target;
         let newDiagCancerList = { ...diagCancerList };
-        newDiagCancerList.userDiagName[index] = value;
+
+        let ymd = "";
+
+        var regex = /[^0-9]/g;	
+
+        const reValue = value.replace(regex, ""); 
+
+        if(reValue.length < 4) {
+
+            return value;
+
+        } else if(reValue.length < 6){
+
+            ymd += reValue.substr(0, 4);
+
+            ymd += "년";
+
+            ymd += reValue.substr(4);
+
+        } else {
+
+            ymd += reValue.substr(0, 4);
+
+            ymd += "년";
+
+            ymd += reValue.substr(4, 2);
+
+            ymd += "월";
+
+            ymd += reValue.substr(6);
+
+        }
+
+        newDiagCancerList.userDiagName[index] = ymd;
         const newValue = newDiagCancerList.userDiagName.join(',');
 
         setDiagCancerList(newDiagCancerList);
@@ -1120,7 +1195,7 @@ const Survey = () => {
                                                         placeholder="예) 2015년 01월"
                                                         id="cancer_start"
                                                         name="userDiagDate"
-                                                        value=""
+                                                        value={diagCancerList.userDiagDate[idx]}
                                                         onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleCancerDate(event, idx)}
                                                     />
                                                     <label>
@@ -1131,7 +1206,7 @@ const Survey = () => {
                                                         placeholder="예) 2015년 01월"
                                                         id="cancer_end"
                                                         name="userCureEndDate"
-                                                        value=""
+                                                        value={diagCancerList.userCureEndDate[idx]}
                                                         onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleCancerDate(event, idx)}
                                                     />
                                                 </div>
