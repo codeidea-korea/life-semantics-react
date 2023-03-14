@@ -76,27 +76,27 @@ const RoundTextComponent = () => {
 
   return (
     <React.Fragment>
-      <Swiper
-        spaceBetween={10}
-        slidesPerView={'auto'}
-        onSlideChange={() => console.log('slide change')}
-        onSwiper={(swiper) => console.log(swiper)}
+      <div
+        className='swiper swiper-initialized swiper-horizontal swiper-ios'
       >
-        <SwiperSlide
-          className="roundNumber"
+        <div className='swiper-wrapper'>
+          
+        <div
+          className="swiper-slide roundNumber"
           onClick={(event) => setDetail(event, 0, '#41b946', '#fff')}
         >
           전체
-        </SwiperSlide>
+        </div>
         {categoryList.map((elem, idx) => (
-          <SwiperSlide
+          <div
             key={idx}
-            className="roundNumber"
+            className="swiper-slide roundNumber"
             onClick={(event) => setDetail(event, idx+1, '#41b946', '#fff')}
           >
             {elem}
-          </SwiperSlide>
+          </div>
         ))}
+        </div>
 
         {/* <SwiperSlide
           className="roundNumber"
@@ -146,7 +146,7 @@ const RoundTextComponent = () => {
         >
           대관령
         </SwiperSlide> */}
-      </Swiper>
+      </div>
     </React.Fragment>
   );
 };
