@@ -443,8 +443,6 @@ const SurveyDeStress = () => {
         });
 
         reqData.userSurveysAnswersDTO[6].saEtcAns = lastScoreElement3.value;
-        console.log(reqData);
-        return false;
         handleSubmit();
       } else {
         handlePopup();
