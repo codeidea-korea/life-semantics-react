@@ -639,46 +639,13 @@ const Survey = () => {
     const handleDiagName = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
         const { name, value } = event.target;
         let newDiagCancerList = { ...diagCancerList };
-
-        let ymd = "";
-
-        var regex = /[^0-9]/g;	
-
-        const reValue = value.replace(regex, ""); 
-
-        if(reValue.length < 4) {
-
-            return value;
-
-        } else if(reValue.length < 6){
-
-            ymd += reValue.substr(0, 4);
-
-            ymd += "년";
-
-            ymd += reValue.substr(4);
-
-        } else {
-
-            ymd += reValue.substr(0, 4);
-
-            ymd += "년";
-
-            ymd += reValue.substr(4, 2);
-
-            ymd += "월";
-
-            ymd += reValue.substr(6);
-
-        }
-
-        newDiagCancerList.userDiagName[index] = ymd;
+        newDiagCancerList.userDiagName[index] = value;
         const newValue = newDiagCancerList.userDiagName.join(',');
 
         setDiagCancerList(newDiagCancerList);
         setBeforeSurveyInfo({
-            ...beforeSurveyInfo,
-            [name]: newValue
+        ...beforeSurveyInfo,
+        [name]: newValue
         })
     }
     const compareDates = (dateString: string) => {
