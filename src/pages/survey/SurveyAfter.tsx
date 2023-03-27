@@ -100,7 +100,7 @@ const SurveyBefore = () => {
                                             <span>불면(ISI)</span>는 총 5문항이며, 각각의 문항에 대해 응답하는 설문입니다.
                                         </li>
                                         <li>
-                                            <span>수면위생(NCCN)</span>는 총 11문항이며, 최근 1주일 동안의 각각의 문항에 응답하는 설문입니다.
+                                            <span>수면위생</span>는 총 11문항이며, 최근 1주일 동안의 각각의 문항에 응답하는 설문입니다.
                                         </li>
                                     </ul>
                                 </div>
@@ -114,7 +114,7 @@ const SurveyBefore = () => {
                             <li data-title="fatigue" onClick={event => handleNavigate(event, `/tired?pgNo=${pgNo}&type=end`)}>피로</li></> : <>            
                             <li data-title="destress" onClick={event => handleNavigate(event, `/deStress?pgNo=${pgNo}&type=end`)}>디스트레스</li>
                             <li data-title="ISI" onClick={event => handleNavigate(event, `/isi?pgNo=${pgNo}&type=end`)}>불면(ISI)</li>
-                            <li data-title="NCCN" onClick={event => handleNavigate(event, `/nccn?pgNo=${pgNo}&type=end`)}>수면위생(NCCN)</li></>}
+                            <li data-title="NCCN" onClick={event => handleNavigate(event, `/nccn?pgNo=${pgNo}&type=end`)}>수면위생</li></>}
                         {/* <li className="active">피로</li> */}
                     </ul>
                 </div>

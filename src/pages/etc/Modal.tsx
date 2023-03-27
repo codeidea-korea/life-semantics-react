@@ -225,7 +225,7 @@ const Modal = () => {
       title: "",
       content: (
         <div>
-          수면(NCCN) 설문을
+          수면 설문을
           <br />
           완료하셨습니다.
         </div>
@@ -404,7 +404,7 @@ const Modal = () => {
           수면(ISI) 설문 완료
         </button>
         <button type="button" onClick={handleModal14}>
-          수면(NCCN) 설문 완료
+          수면 설문 완료
         </button>
         <button type="button" onClick={handleModal15}>
           설문종료 하시겠습니까

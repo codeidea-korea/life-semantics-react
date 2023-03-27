@@ -221,7 +221,7 @@ const NCCN = () => {
                 title: "",
                 content: (
                   <div>
-                    수면(NCCN) 설문을
+                    수면 설문을
                     <br />
                     완료하셨습니다.
                   </div>
@@ -310,10 +310,10 @@ const NCCN = () => {
 
   return (
     <div>
-      <TitleHeadComponent name="수면위생(NCCN)" targetUrl="" />
+      <TitleHeadComponent name="수면위생" targetUrl="" />
       <div className="tired painBox" id="NCCN">
         <ModalComponent />
-        <h2>시작전 설문 - 수면위생(NCCN)</h2>
+        <h2>시작전 설문 - 수면위생</h2>
         <div className="Step">
           <div>
             <ul>
