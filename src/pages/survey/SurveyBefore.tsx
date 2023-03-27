@@ -183,7 +183,7 @@ const SurveyBefore = () => {
                     handleNavigate(event, `/nccn?pgNo=${pgNo}&type=pre`)
                   }
                 >
-                  수면위생(NCCN)
+                  수면위생
                 </li>
               </>
             )}

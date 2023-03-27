@@ -126,7 +126,7 @@ const NCCNComponent01 = () => {
                   type="radio"
                   className="radioButton"
                   value="4"
-                  name="qna4"
+                  name="qna3"
                 />
                 <label htmlFor="">매우 그렇다</label>
               </li>

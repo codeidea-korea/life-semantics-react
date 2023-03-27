@@ -218,7 +218,71 @@ const SurveyDeStress = () => {
     }
   }, [step]);
 
-  const isVaildAnswer = (step: number) => {
+    const isVaildAnswer = (step: number) => {
+        if (step === 1) {
+            if (document.querySelectorAll(".scoreRadio input:checked")[0] !== undefined) {
+                //1번
+                reqData.userSurveysAnswersDTO[0].saQst = 1;
+                reqData.userSurveysAnswersDTO[0].saAnsList = [];
+
+                const checkedIndex = Array.from(
+                    document.querySelectorAll(".scoreRadio input")
+                ).indexOf(document.querySelectorAll(".scoreRadio input:checked")[0]);
+
+                reqData.userSurveysAnswersDTO[0].saAnsList.push(checkedIndex);
+
+                //2번
+                reqData.userSurveysAnswersDTO[1].saQst = 2;
+                reqData.userSurveysAnswersDTO[1].saAnsList = [];
+
+                Array.from(
+                    document.querySelectorAll(
+                        ".py_prob_list input"
+                    ) as NodeListOf<HTMLInputElement>
+                ).forEach((item: HTMLInputElement, idx: number) => {
+                    if (item.checked) {
+                        reqData.userSurveysAnswersDTO[1].saAnsList.push(idx + 1);
+                    }
+                });
+
+                return true;
+            }
+        } else if (step === 2) {
+            reqData.userSurveysAnswersDTO[2].saQst = 3;
+            reqData.userSurveysAnswersDTO[2].saAnsList = [];
+
+            reqData.userSurveysAnswersDTO[3].saQst = 4;
+            reqData.userSurveysAnswersDTO[3].saAnsList = [];
+
+            Array.from(
+                document.querySelectorAll(
+                    ".survey_step_2_q_1 input"
+                ) as NodeListOf<HTMLInputElement>
+            ).forEach((item: HTMLInputElement, idx: number) => {
+                if (item.checked) {
+                    reqData.userSurveysAnswersDTO[2].saAnsList.push(idx + 1);
+                }
+            });
+
+            Array.from(
+                document.querySelectorAll(
+                    ".survey_step_2_q_2 input"
+                ) as NodeListOf<HTMLInputElement>
+            ).forEach((item: HTMLInputElement, idx: number) => {
+                if (item.checked) {
+                    reqData.userSurveysAnswersDTO[3].saAnsList.push(idx + 1);
+                }
+            });
+
+            return true;
+        }
+        return false;
+    };
+
+    /** isVaildAnswer : 20230327 주석처리
+     * 1번설문(점수체크)을 제외하고 나머지는 필수가 아니게 변경 요청
+     * */
+  /*const isVaildAnswer = (step: number) => {
     if (step === 1) {
       if (
         document.querySelectorAll(".scoreRadio input:checked")[0] !==
@@ -300,7 +364,7 @@ const SurveyDeStress = () => {
       }
     }
     return false;
-  };
+  };*/
 
   const handleSubmit = () => {
     fetch(`${import.meta.env.VITE_PUBLIC_API_SERVER_URL}usr/surveys`, {
@@ -340,7 +404,7 @@ const SurveyDeStress = () => {
   };
 
   const handleNextStep = () => {
-    if (isVaildAnswer(step) === true) {
+    if (isVaildAnswer(step)) {
       if (step < 3) {
         setStep(step + 1);
         window.scrollTo(0, 0);
@@ -396,7 +460,55 @@ const SurveyDeStress = () => {
   }, []);
 
   const handleDeStressSurveyComplete = () => {
-    if (isFirst == true) {
+      if (isFirst) {
+          setToast2(true);
+          setTimeout(() => {
+              setToast2(false);
+          }, 3000);
+          isFirst = false;
+      } else {
+          const lastScoreElement3 = document.querySelectorAll(
+              ".survey_step_3_q_3"
+          )[0] as HTMLTextAreaElement;
+
+          reqData.userSurveysAnswersDTO[4].saQst = 5;
+          reqData.userSurveysAnswersDTO[4].saAnsList = [];
+
+          reqData.userSurveysAnswersDTO[5].saQst = 6;
+          reqData.userSurveysAnswersDTO[5].saAnsList = [];
+
+          reqData.userSurveysAnswersDTO[6].saQst = 7;
+          reqData.userSurveysAnswersDTO[6].saAnsList = [];
+
+          Array.from(
+              document.querySelectorAll(
+                  ".survey_step_3_q_1 input"
+              ) as NodeListOf<HTMLInputElement>
+          ).forEach((item: HTMLInputElement, idx: number) => {
+              if (item.checked) {
+                  reqData.userSurveysAnswersDTO[4].saAnsList.push(idx + 1);
+              }
+          });
+
+          Array.from(
+              document.querySelectorAll(
+                  ".survey_step_3_q_2 input"
+              ) as NodeListOf<HTMLInputElement>
+          ).forEach((item: HTMLInputElement, idx: number) => {
+              if (item.checked) {
+                  reqData.userSurveysAnswersDTO[5].saAnsList.push(idx + 1);
+              }
+          });
+
+          reqData.userSurveysAnswersDTO[6].saEtcAns = lastScoreElement3.value;
+
+          handleSubmit();
+      }
+
+      /** 20230327 주석처리
+       * 1번설문(점수체크)을 제외하고 나머지는 필수가 아니게 변경 요청
+       * */
+    /*if (isFirst) {
       setToast2(true);
       setTimeout(() => {
         setToast2(false);
@@ -447,7 +559,7 @@ const SurveyDeStress = () => {
       } else {
         handlePopup();
       }
-    }
+    }*/
   };
 
   const moveSurveyMain = () => {
