@@ -5,10 +5,36 @@ import { UserInterface } from "@interfaces/userInterface";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ProgramFileInterface } from "@/interfaces/programFileInterface";
 import axios from "axios";
+import useAxios from "@hooks/useAxios";
 
 const DownLoadComponent = ({ fileList }: { fileList: ProgramFileInterface[] }) => {
+  const api = useAxios();
+
   const downloadFile = (url: string, name: string) => {
-    axios({
+      api
+          .post(`${import.meta.env.VITE_PUBLIC_API_SERVER_URL}usr/programs/file/check`,{
+              'filepath' : url
+          })
+          .then((res) => {
+              if(res.data.result === '0') {
+                  let downloadLink = document.createElement("a");
+                  downloadLink.href = `${import.meta.env.VITE_PUBLIC_API_SERVER_URL}usr/programs/file/download?filepath=${url}&filename=${name}`;
+                  downloadLink.download = name;
+                  document.body.appendChild(downloadLink);
+                  downloadLink.click();
+                  document.body.removeChild(downloadLink);
+
+              }else if(res.data.result === '1') {
+                  alert('실제 파일이 존재하지 않습니다.');
+              }else {
+                  alert('오류가 발생하였습니다.');
+              }
+          })
+          .catch((err) => {
+              console.log(err);
+          });
+
+    /*axios({
       url: import.meta.env.VITE_PUBLIC_APP_URL + 'proxyApi' + url,
       method: "GET",
       responseType: "blob",
@@ -26,7 +52,7 @@ const DownLoadComponent = ({ fileList }: { fileList: ProgramFileInterface[] }) =
       link.remove();
 
       window.URL.revokeObjectURL(fileObjectUrl);
-    });
+    });*/
   };
 
   const downloadFileAll = () => {
