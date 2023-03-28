@@ -49,7 +49,7 @@ const IndexPage = () => {
               tid += "*";
             }
             //handleModal01(name.value, data.body.userId)
-            handleModal01(name.value, tid);
+            handleModal01(name.value, tid, data.body.userId);
           } else {
             handleModal();
           }
@@ -85,7 +85,7 @@ const IndexPage = () => {
     });
   };
 
-  const handleModal01 = (userName: string, userId: string) => {
+  const handleModal01 = (userName: string, userId: string, originUserId: string) => {
     setModal({
       ...modal,
       show: true,
@@ -99,7 +99,7 @@ const IndexPage = () => {
           <br />
           <Link
             onClick={() => {
-              navigator.clipboard.writeText(userId);
+              navigator.clipboard.writeText(originUserId);
             }}
             to=""
             className="copy"

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import HeaderComponent from "@components/head/Header";
 
 const Policy = () => {
+    window.scrollTo(0, 0);
     const navigate = useNavigate();
     return (
         <React.Fragment>

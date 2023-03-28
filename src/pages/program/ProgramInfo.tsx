@@ -19,7 +19,7 @@ const ProgramInfo = () => {
   const api = useAxios();
   const [program, setProgram] = useState<ProgramInterface>();
   const user = useRecoilValue(userState);
-
+  window.scrollTo(0, 0);
 
   const getProgram = async () => {
     await api
