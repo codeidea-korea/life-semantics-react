@@ -38,11 +38,9 @@ const BookComponent = ({programFilter}: {programFilter?: ProgramFilterInterface}
     });
 
     const getProgramList = async () => {
-        console.log(requestData);
         await api
             .post("/usr/programs/list", requestData)
             .then((res) => {
-                console.log(res.data.body);
                 if (res.status === 200) {
                     setPrograms(res.data.body);
                     setProgramsOrigin(res.data.body);
@@ -105,10 +103,21 @@ const BookComponent = ({programFilter}: {programFilter?: ProgramFilterInterface}
         });
     }, [programFilter]);
 
+    let reservatioPeriod = '';  // 예약기간 변수
+    let startDate = null;       // 진행 시작 날짜
+    const nowDate = new Date(); // 오늘 날짜
+
     return (
         <React.Fragment>
             <div className="program-wrap">
                 {programs?.map((item, index) => {
+                    // 예약기간 엘리먼트 내용 생성
+                    if(item.pgSttDate) {
+                        startDate = new Date(item.pgSttDate);
+                        if(startDate >= nowDate) reservatioPeriod = '예약기간: '+item.pgAppSttDate+ ' ~ ' +item.pgAppEndDate;
+                        else reservatioPeriod = '';
+                    }
+
                     return (
                         <div className="prg prg-01" key={index}>
                             <div className="ready-prg">
@@ -140,7 +149,7 @@ const BookComponent = ({programFilter}: {programFilter?: ProgramFilterInterface}
                                 )}
                                 <ul className="term">
                                     <li className="red">
-                                        예약기간: {item.pgAppSttDate} ~ {item.pgAppEndDate}
+                                    {reservatioPeriod}
                                     </li>
                                     <li className="">
                                         진행기간: {item.pgSttDate} ~ {item.pgEndDate}

@@ -93,9 +93,9 @@ const Survey = () => {
             callBackShow: true,
             content: (
                 <div>
-                    아직 열리지 않은
+                    아직 예약한 프로그램이 없습니다.
                     <br />
-                    설문입니다.
+                    프로그램을 예약해주세요.
                 </div>
             ),
             confirmText: "확인",
@@ -591,9 +591,9 @@ const Survey = () => {
 
         let ymd = "";
 
-        var regex = /[^0-9]/g;	
+        var regex = /[^0-9]/g;
 
-        const reValue = value.replace(regex, ""); 
+        const reValue = value.replace(regex, "");
 
         if(reValue.length < 4) {
 
@@ -697,6 +697,11 @@ const Survey = () => {
                                 })
                             }
 
+                            // 사전설문 : 프로그램 진행 시작일 -7 부터 가능
+                            const today = new Date();
+                            const startDate = new Date(item.pgSttDate);
+                            startDate.setDate(startDate.getDate()-7);
+
                             return (
                                 <div key={index}>
                                     <div className="surveyName">
@@ -720,10 +725,19 @@ const Survey = () => {
                                         </div>
                                     </div>
                                     <ul>
-                                        <li className={item.surveys.pre.length - exceptCnt == 3 ? "active" : ""} onClick={(event) => handleNavigate(event, `/surveyBefore?pgNo=${item.pgNo}&type=${item.pgType}&type2=pre&title=${item.pgTitle}`)}>
-                                            사전 설문({item.surveys.pre.length - exceptCnt}/3)
-                                        </li>
-
+                                        {   /* 사전설문 : 프로그램 진행 시작일 -7 부터 가능 */
+                                            startDate <= today ?
+                                            <li className={item.surveys.pre.length - exceptCnt == 3 ? "active" : ""} onClick={(event) => handleNavigate(event, `/surveyBefore?pgNo=${item.pgNo}&type=${item.pgType}&type2=pre&title=${item.pgTitle}`)}>
+                                                사전 설문({item.surveys.pre.length - exceptCnt}/3)
+                                            </li>
+                                            :
+                                            <>
+                                                <span style={{color:"red", fontWeight:"bold", marginBottom:"10px", display:'block'}}>&#8251;&nbsp;&nbsp;아직 설문 기간이 아닙니다</span>
+                                                <li className="active" onClick={(event) => handleNotNavigate()}>
+                                                    사전 설문({item.surveys.pre.length - exceptCnt}/3)
+                                                </li>
+                                            </>
+                                        }
                                         {
                                             compareDates(item.pgSttDate) ? <li className="" onClick={(event) => handleNavigate(event, `/surveyToday?pgNo=${item.pgNo}&type=${item.pgType}`)}>
                                                 일일 설문
