@@ -53,7 +53,7 @@ const reqData: ReqData = {
       saQst: 0,
       saAnsList: [],
       saAns: 0,
-      saEtcAns: "string",
+      saEtcAns: "",
       saRegDate: getToday(),
     },
     {
@@ -61,7 +61,7 @@ const reqData: ReqData = {
       saQst: 0,
       saAnsList: [],
       saAns: 0,
-      saEtcAns: "string",
+      saEtcAns: "",
       saRegDate: getToday(),
     },
     {
@@ -69,7 +69,7 @@ const reqData: ReqData = {
       saQst: 0,
       saAnsList: [],
       saAns: 0,
-      saEtcAns: "string",
+      saEtcAns: "",
       saRegDate: getToday(),
     },
     {
@@ -77,7 +77,7 @@ const reqData: ReqData = {
       saQst: 0,
       saAnsList: [],
       saAns: 0,
-      saEtcAns: "string",
+      saEtcAns: "",
       saRegDate: getToday(),
     },
     {
@@ -85,7 +85,7 @@ const reqData: ReqData = {
       saQst: 0,
       saAnsList: [],
       saAns: 0,
-      saEtcAns: "string",
+      saEtcAns: "",
       saRegDate: getToday(),
     },
     {
@@ -93,7 +93,7 @@ const reqData: ReqData = {
       saQst: 0,
       saAnsList: [],
       saAns: 0,
-      saEtcAns: "string",
+      saEtcAns: "",
       saRegDate: getToday(),
     },
     {
@@ -101,7 +101,7 @@ const reqData: ReqData = {
       saQst: 0,
       saAnsList: [],
       saAns: 0,
-      saEtcAns: "string",
+      saEtcAns: "",
       saRegDate: getToday(),
     },
   ],
@@ -147,7 +147,6 @@ const SurveyDeStress = () => {
       if (step === 1) {
         reqData.userSurveysAnswersDTO[0].saAnsList?.forEach(
           (item: any, idx) => {
-            console.log(reqData);
             // const targetElement = document.querySelectorAll(
             //   ".scoreRadio input"
             // )[item - 1] as HTMLInputElement;
@@ -160,18 +159,15 @@ const SurveyDeStress = () => {
 
         reqData.userSurveysAnswersDTO[1].saAnsList?.forEach(
           (item: any, idx) => {
-            console.log(reqData);
             const targetElement = document.querySelectorAll(
               ".py_prob_list input"
             )[item - 1] as HTMLInputElement;
             targetElement.checked = true;
           }
         );
-      }
-      if (step === 2) {
+      }else if (step === 2) {
         reqData.userSurveysAnswersDTO[2].saAnsList?.forEach(
           (item: any, idx) => {
-            console.log(reqData);
             const targetElement = document.querySelectorAll(
               ".survey_step_2_q_1 input"
             )[item - 1] as HTMLInputElement;
@@ -181,13 +177,35 @@ const SurveyDeStress = () => {
 
         reqData.userSurveysAnswersDTO[3].saAnsList?.forEach(
           (item: any, idx) => {
-            console.log(reqData);
             const targetElement = document.querySelectorAll(
               ".survey_step_2_q_2 input"
             )[item - 1] as HTMLInputElement;
             targetElement.checked = true;
           }
         );
+      }else if (step === 3) {
+          reqData.userSurveysAnswersDTO[4].saAnsList?.forEach(
+              (item: any, idx) => {
+                  const targetElement = document.querySelectorAll(
+                      ".checkList03 .survey_step_3_q_1 input"
+                  )[item - 1] as HTMLInputElement;
+                  targetElement.checked = true;
+              }
+          );
+
+          reqData.userSurveysAnswersDTO[5].saAnsList?.forEach(
+              (item: any, idx) => {
+                  const targetElement = document.querySelectorAll(
+                      ".checkList03 .survey_step_3_q_2 input"
+                  )[item - 1] as HTMLInputElement;
+                  targetElement.checked = true;
+              }
+          );
+
+          const lastScoreElement3 = document.querySelectorAll(
+              ".survey_step_3_q_3"
+          )[0] as HTMLTextAreaElement;
+          if(reqData.userSurveysAnswersDTO[6].saEtcAns) lastScoreElement3.value = reqData.userSurveysAnswersDTO[6].saEtcAns;
       }
     }, 500);
   }
@@ -439,6 +457,40 @@ const SurveyDeStress = () => {
           setModal({ ...modal, show: false });
         }
       });
+    }else if(step === 3) {
+        reqData.userSurveysAnswersDTO[4].saQst = 5;
+        reqData.userSurveysAnswersDTO[4].saAnsList = [];
+
+        reqData.userSurveysAnswersDTO[5].saQst = 6;
+        reqData.userSurveysAnswersDTO[5].saAnsList = [];
+
+        reqData.userSurveysAnswersDTO[6].saQst = 7;
+        reqData.userSurveysAnswersDTO[6].saAnsList = [];
+
+        Array.from(
+            document.querySelectorAll(
+                ".survey_step_3_q_1 input"
+            ) as NodeListOf<HTMLInputElement>
+        ).forEach((item: HTMLInputElement, idx: number) => {
+            if (item.checked) {
+                reqData.userSurveysAnswersDTO[4].saAnsList.push(idx + 1);
+            }
+        });
+
+        Array.from(
+            document.querySelectorAll(
+                ".survey_step_3_q_2 input"
+            ) as NodeListOf<HTMLInputElement>
+        ).forEach((item: HTMLInputElement, idx: number) => {
+            if (item.checked) {
+                reqData.userSurveysAnswersDTO[5].saAnsList.push(idx + 1);
+            }
+        });
+
+        const lastScoreElement3 = document.querySelectorAll(
+            ".survey_step_3_q_3"
+        )[0] as HTMLTextAreaElement;
+        reqData.userSurveysAnswersDTO[6].saEtcAns = lastScoreElement3.value;
     }
 
     if (step < 4 && step > 1) {

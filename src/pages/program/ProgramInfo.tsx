@@ -155,7 +155,7 @@ const ProgramInfo = () => {
             </li>
             <li>
               <span>연락처</span>
-              <span>{program?.pgContact}</span>
+              <span><a href={`tel:${program?.pgContact}`}>{program?.pgContact}</a></span>
             </li>
             <li>
               <span>예약대상자</span>
