@@ -357,12 +357,12 @@ const Survey = () => {
 
         let requestBody = {
             ...beforeSurveyInfo,
-            ['userSmokeAmt']: Number(['userSmokeAmt']) || 0,
+            /*['userSmokeAmt']: Number(['userSmokeAmt']) || 0,
             ['userSmokeStartYear']: Number(['userSmokeAmt']) || 0,
             ['userSmokeEndYear']: Number(['userSmokeAmt']) || 0,
             ['userDrinkAmt']: Number(['userSmokeAmt']) || 0,
             ['userDrinkStartYear']: Number(['userSmokeAmt']) || 0,
-            ['userDrinkEndYear']: Number(['userSmokeAmt']) || 0,
+            ['userDrinkEndYear']: Number(['userSmokeAmt']) || 0,*/
             ['userDiagDate']: newUserDiagDate.join(','),
             ['userCureEndDate']: newUserCureEndDate.join(','),
             ['userDiagName']: newUserDiagName.join(',')

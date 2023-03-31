@@ -14,7 +14,7 @@ const ModifyInformation = () => {
             <div className="modifyList">
                 <ul>
                     <li onClick={event => handleNavigate("/joinModify", 1)}>회원정보 수정</li>
-                    <li onClick={event => handleNavigate("/joinModify", 2)}>개인정보 수정</li>
+                    <li onClick={event => handleNavigate("/joinModify", 2)}>건강정보 수정</li>
                     <li onClick={event => handleNavigate("/joinModify", 3)}>암 건강정보 수정</li>
                 </ul>
             </div>

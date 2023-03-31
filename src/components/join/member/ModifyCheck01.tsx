@@ -218,12 +218,12 @@ const ModifyCheck01 = () => {
                   </span></>}
               </div>
             </li>
-            <li>
+            {/*<li>
               <label>
                 <span>성별</span>
               </label>
               <span>{user.userGender === "m" ? "남" : "여"}</span>
-            </li>
+            </li>*/}
             <li>
               <label>
                 <span className="no_dot">이메일</span>

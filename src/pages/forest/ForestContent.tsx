@@ -56,37 +56,47 @@ const ForestContent = () => {
         <div className="forestContent">
           <p className="forestTitle">{forestInfo.name}</p>
           <ul>
-            <li>
-              <span>소재지</span>
-              <span>{forestInfo.address}</span>
-            </li>
-            <li>
-              <span>운영시간</span>
-              <span>하절기 06시 ~ 19시, 동절기 08시 ~ 17시</span>
-            </li>
-            <li>
-              <span>전화번호</span>
-              <span>{forestInfo.tel}</span>
-            </li>
-            <li>
-              <span>설명</span>
-              <div className="explainBox">
-                <p className="explainText">
-                  국내 치유의 숲 1호인 산음 치유의 숲은 국립 산음 자연휴양림
-                  내에 조성되어 있다. 산음 치유의 숲은 낙엽송과 잣나무, 활엽수
-                  등 다양한 수 종이 분포하고 있다. 지형이 복잡 다양해서
-                  지형요법을 활용해 산림치유 프로그램에 적합하다. 또한 고도는 약
-                  200m에서부터 1,000m까지 분포 하고 있어 기후요법, 운동요법 등을
-                  산림치유프로그램에 적용하는 것이 가능하다. 또 산음 치유의 숲은
-                  계곡이 잘 발달되어 음이온이 풍부하다.
-                </p>
-                <span className="moreText" onClick={handleChange}>
-                  더보기
-                </span>
-              </div>
-            </li>
+              <li>
+                  <span>지역</span>
+                  <span>{forestInfo.category2 ? forestInfo.category2 : forestInfo.category1}</span>
+              </li>
+              <li>
+                  <span>소재지</span>
+                  <span>{forestInfo.address}</span>
+              </li>
+              <li>
+                  <span>예약방법</span>
+                  <span>
+                      {
+                          forestInfo.reservation.includes('http') ?
+                              <a href={forestInfo.reservation} target={"_blank"}>{forestInfo.reservation}</a> :
+                              <>{forestInfo.reservation}</>
+                      }
+                  </span>
+              </li>
+              <li>
+                  <span>전화번호</span>
+                  <span><a href={`tel:${forestInfo.tel}`}>{forestInfo.tel}</a></span>
+              </li>
+              <li>
+                  <span style={{width:"35%"}}>암 통합 지지센터</span>
+                  <span>{forestInfo.center ? forestInfo.center : '-'}</span>
+                  {/*<span>설명</span>
+                  <div className="explainBox">
+                      <p className="explainText">
+                          국내 치유의 숲 1호인 산음 치유의 숲은 국립 산음 자연휴양림
+                          내에 조성되어 있다. 산음 치유의 숲은 낙엽송과 잣나무, 활엽수
+                          등 다양한 수 종이 분포하고 있다. 지형이 복잡 다양해서
+                          지형요법을 활용해 산림치유 프로그램에 적합하다. 또한 고도는 약
+                          200m에서부터 1,000m까지 분포 하고 있어 기후요법, 운동요법 등을
+                          산림치유프로그램에 적용하는 것이 가능하다. 또 산음 치유의 숲은
+                          계곡이 잘 발달되어 음이온이 풍부하다.
+                      </p>
+                      <span className="moreText" onClick={handleChange}>더보기</span>
+                  </div>*/}
+              </li>
           </ul>
-          <div className="forestImages">
+          {/*<div className="forestImages">
             <span>
               <img src="images/forest01.jpg" />
             </span>
@@ -102,7 +112,7 @@ const ForestContent = () => {
               진입
               <span>* 장애인 주차장 4개소 - 치유의 숲 내부 위치</span>
             </p>
-          </div>
+          </div>*/}
         </div>
         <Link to={"/forest"} className="listButton">
           목록으로 돌아가기

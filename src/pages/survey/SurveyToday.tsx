@@ -242,7 +242,6 @@ const SurveyToday = () => {
         if (element) {
             element.checked = false;
         }
-        console.log(ingData);
         ingData?.forEach((item2: any, idx: number) => {
             item2.forEach((item3: any, idx: number) => {
 
@@ -250,7 +249,7 @@ const SurveyToday = () => {
                     //왜 -1이 되어있었는지 잘모르겠음..ㅠㅠ
                     // const el = document.querySelectorAll('.scoreRadio input')[item3.qnaList[0].saAnsList[0] - 1] as HTMLInputElement
                     const el = document.querySelectorAll('.scoreRadio input')[item3.qnaList[0].saAnsList[0]] as HTMLInputElement
-                    el.checked = true;
+                    if(el) el.checked = true;
                 }
             });
 
