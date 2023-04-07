@@ -158,39 +158,61 @@ const ModifyCheck02 = ({ nextStep }: { nextStep: Function }) => {
 
     const handleSubmit = () => {
         const smokingElement1 = document.querySelector('#smoking') as HTMLInputElement;
-        smokingElement1.checked == true ? (reqData.userIsSmoke = "1") : (reqData.userIsSmoke = "0")
+        smokingElement1.checked ? (reqData.userIsSmoke = "1") : (reqData.userIsSmoke = "0")
 
         const smokeAmt = document.querySelector('#smoking_rate') as HTMLInputElement;
         reqData.userSmokeAmt = smokeAmt.value;
 
         const smokingStartYear = document.querySelector('#smoking_start') as HTMLInputElement
         const smokingEndYear = document.querySelector('#smoking_end') as HTMLInputElement
-        reqData.userSmokeStartYear = smokingStartYear.value
-        reqData.userSmokeEndYear = smokingEndYear.value
+
+        if(Number(smokingStartYear.value) < 1900
+        || Number(smokingStartYear.value) > new Date().getFullYear()) {
+            alert('흡연 기간을 확인하세요.');
+            return;
+
+        }else if(Number(smokingEndYear.value) < 1900
+        || Number(smokingEndYear.value) > new Date().getFullYear()) {
+            alert('흡연 기간을 확인하세요.');
+            return;
+
+        }else {
+            reqData.userSmokeStartYear = smokingStartYear.value;
+            reqData.userSmokeEndYear = smokingEndYear.value;
+        }
 
         const dringElement1 = document.querySelector('#drink') as HTMLInputElement;
-        dringElement1.checked == true ? (reqData.userIsDrink = "1") : (reqData.userIsDrink = "0")
+        dringElement1.checked ? (reqData.userIsDrink = "1") : (reqData.userIsDrink = "0")
 
         const drinkAmt = document.querySelector('#drinking_rate') as HTMLInputElement;
         reqData.userDrinkAmt = drinkAmt.value;
 
         const drinkingStartYear = document.querySelector('#drinking_start') as HTMLInputElement
         const drinkingEndYear = document.querySelector('#drinking_end') as HTMLInputElement
-        reqData.userDrinkStartYear = drinkingStartYear.value
-        reqData.userDrinkEndYear = drinkingEndYear.value
 
+        if(Number(drinkingStartYear.value) < 1900
+            || Number(drinkingStartYear.value) > new Date().getFullYear()) {
+            alert('음주 기간을 확인하세요.');
+            return;
+
+        }else if(Number(drinkingEndYear.value) < 1900
+            || Number(drinkingEndYear.value) > new Date().getFullYear()) {
+            alert('음주 기간을 확인하세요.');
+            return;
+
+        }else {
+            reqData.userDrinkStartYear = drinkingStartYear.value;
+            reqData.userDrinkEndYear = drinkingEndYear.value;
+        }
 
         const caffeineElement = document.querySelector('#Caffeine') as HTMLInputElement
-        caffeineElement.checked == true ? (reqData.userIsCaffeine = "1") : (reqData.userIsCaffeine = "0")
-
+        caffeineElement.checked ? (reqData.userIsCaffeine = "1") : (reqData.userIsCaffeine = "0")
 
         const wasSmokeElement = document.querySelector('#beforesmoking') as HTMLInputElement
-        wasSmokeElement.checked == true ? (reqData.userWasSmoke = "1") : (reqData.userWasSmoke = "0")
-
+        wasSmokeElement.checked ? (reqData.userWasSmoke = "1") : (reqData.userWasSmoke = "0")
 
         const wasDrinkElement = document.querySelector('#before_drink') as HTMLInputElement
-        wasDrinkElement.checked == true ? (reqData.userWasDrink = "1") : (reqData.userWasDrink = "0")
-
+        wasDrinkElement.checked ? (reqData.userWasDrink = "1") : (reqData.userWasDrink = "0")
 
         // if (String(smokeAmt.value).length !== 0 && String(smokingStartYear.value.length !== 0 && String(smokingEndYear.value).length !== 0 && drinkAmt.value.length !== 0 && String(drinkingStartYear.value).length !== 0 && String(drinkingEndYear.value).length !== 0)) {
         fetch(`${import.meta.env.VITE_PUBLIC_API_SERVER_URL}users/health`,

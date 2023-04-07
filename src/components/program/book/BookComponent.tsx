@@ -66,14 +66,16 @@ const BookComponent = ({programFilter}: {programFilter?: ProgramFilterInterface}
         return Math.ceil(dateDiff / 1000 / 60 / 60 / 24);
     };
 
-    const getMaker = (startDay: string, endDay: string) => {
-        const nowDate = new Date();
+    const getMaker = (startDay: string, endDay: string, status: string) => {
+        const nowDate = new Date(getyyyymmdd(new Date()) + ' 00:00:00');
         const startDate = new Date(startDay);
         const endDate = new Date(endDay);
+
         if (user.accessToken) {
-            if (nowDate > startDate && nowDate < endDate) {
+            if((status === 'inOperApplied' || status === 'uncancellable' || status === 'cancellable')
+                && (nowDate >= startDate && nowDate <= endDate)) {
                 return <span className="participate">참여 중</span>;
-            } else {
+            }else if(status === 'reservable' || status === 'cancellable') {
                 return <span className="reserve">예약 중</span>;
             }
         }
@@ -103,9 +105,17 @@ const BookComponent = ({programFilter}: {programFilter?: ProgramFilterInterface}
         });
     }, [programFilter]);
 
+    const getyyyymmdd = (date: Date) => {
+        let year = date.getFullYear();
+        let month = ("0" + (1 + date.getMonth())).slice(-2);
+        let day = ("0" + date.getDate()).slice(-2);
+        return year + '-' + month + '-' + day;
+    }
+
     let reservatioPeriod = '';  // 예약기간 변수
     let startDate = null;       // 진행 시작 날짜
-    const nowDate = new Date(); // 오늘 날짜
+    let endDate = null;       // 진행 시작 날짜
+    let nowDate = new Date(getyyyymmdd(new Date()) + ' 00:00:00'); // 오늘 날짜
 
     return (
         <React.Fragment>
@@ -113,9 +123,15 @@ const BookComponent = ({programFilter}: {programFilter?: ProgramFilterInterface}
                 {programs?.map((item, index) => {
                     // 예약기간 엘리먼트 내용 생성
                     if(item.pgSttDate) {
-                        startDate = new Date(item.pgSttDate);
-                        if(startDate >= nowDate) reservatioPeriod = '예약기간: '+item.pgAppSttDate+ ' ~ ' +item.pgAppEndDate;
-                        else reservatioPeriod = '';
+                        startDate = new Date(item.pgAppSttDate);
+                        endDate = new Date(item.pgAppEndDate);
+
+                        if( (startDate <= nowDate && nowDate <= endDate)
+                            || (nowDate <= startDate) ) {
+                            reservatioPeriod = '예약기간: '+item.pgAppSttDate+ ' ~ ' +item.pgAppEndDate;
+                        }else {
+                            reservatioPeriod = '';
+                        }
                     }
 
                     return (
@@ -123,8 +139,7 @@ const BookComponent = ({programFilter}: {programFilter?: ProgramFilterInterface}
                             <div className="ready-prg">
                                 {item.pgType === "goodBye" && (
                                     <div className="prg-head unBook unLog">
-                                        {(item.pgApply === "inOperApplied" || item.pgApply === "uncancellable" || item.pgApply === "cancellable") &&
-                                        getMaker(item.pgSttDate, item.pgEndDate)}
+                                        {getMaker(item.pgSttDate, item.pgEndDate, item.pgApply)}
                                         <p>{item.pgTitle}</p>
                                         {(item.pgApply === "reservable" || item.pgApply === "cancellable") && (
                                             <span className="d-day">
@@ -136,8 +151,7 @@ const BookComponent = ({programFilter}: {programFilter?: ProgramFilterInterface}
                                 )}
                                 {item.pgType === "goodNight" && (
                                     <div className="prg-head unBook sky">
-                                        {(item.pgApply === "inOperApplied" || item.pgApply === "uncancellable" || item.pgApply === "cancellable") &&
-                                        getMaker(item.pgSttDate, item.pgEndDate)}
+                                        {getMaker(item.pgSttDate, item.pgEndDate, item.pgApply)}
                                         <p>{item.pgTitle}</p>
                                         {(item.pgApply === "reservable" || item.pgApply === "cancellable") && (
                                             <span className="d-day">

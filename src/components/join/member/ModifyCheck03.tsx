@@ -257,8 +257,30 @@ const ModifyCheck03 = () => {
     userDiagName: [''],
   });
 
-  const handleCancerDate = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
-    const { name, value } = event.target;
+  const handleCancerDateYear = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
+      const { name, value } = event.target;
+      const reValue = value.replace(/[^0-9]/g, '');
+      let newDiagCancerList = { ...diagCancerList };
+      let newValue = '';
+      let ymd = '';
+
+      ymd += reValue.substring(0, 4);
+      $(event.target).val(ymd);
+
+      if (name === 'userDiagDate') {
+          newDiagCancerList.userDiagDate[index] = ymd+'년 ' + $(event.target).parent().parent().find('#cancer_start_month').val();
+          newValue = newDiagCancerList.userDiagDate.join(',');
+      }else {
+          newDiagCancerList.userCureEndDate[index] = ymd+'년 ' + $(event.target).parent().parent().find('#cancer_end_month').val();
+          newValue = newDiagCancerList.userCureEndDate.join(',');
+      }
+
+      setDiagCancerList(newDiagCancerList);
+      setBeforeSurveyInfo({
+          ...beforeSurveyInfo,
+          [name]: newValue
+      })
+    /*const { name, value } = event.target;
     let newDiagCancerList = { ...diagCancerList };
     let newValue = '';
 
@@ -275,8 +297,31 @@ const ModifyCheck03 = () => {
     setBeforeSurveyInfo({
       ...beforeSurveyInfo,
       [name]: newValue
-    })
+    })*/
   }
+
+    const handleCancerDateMonth = (event: React.ChangeEvent<HTMLSelectElement>, index: number) => {
+        const { name, value } = event.target;
+        let newDiagCancerList = { ...diagCancerList };
+        let newValue = '';
+        let newName = '';
+
+        if (name === 'cancer_start_month') {
+            newDiagCancerList.userDiagDate[index] = $(event.target).parent().parent().find('#cancer_start').val()+'년 ' + value;
+            newValue = newDiagCancerList.userDiagDate.join(',');
+            newName = 'userDiagDate';
+        }else {
+            newDiagCancerList.userCureEndDate[index] = $(event.target).parent().parent().find('#cancer_end').val()+'년 ' + value;
+            newValue = newDiagCancerList.userCureEndDate.join(',');
+            newName = 'userCureEndDate';
+        }
+
+        setDiagCancerList(newDiagCancerList);
+        setBeforeSurveyInfo({
+            ...beforeSurveyInfo,
+            [newName]: newValue
+        })
+    }
 
   const updateInfo = () => {
     fetch(`${import.meta.env.VITE_PUBLIC_API_SERVER_URL}users/view?userNo=${user.userNo}`,
@@ -401,7 +446,7 @@ const ModifyCheck03 = () => {
 
               {/* 추가되는 영역 : S */}
               {
-                diagCancerList.userDiagnosis.map((elem, idx) => (
+                  diagCancerList.userDiagnosis && diagCancerList.userDiagnosis.map((elem, idx) => (
                   <React.Fragment key={idx}>
                     <label>
                       <span style={{ margin: "50px 0 20px 0" }} ref={(element) => (cancerInfoRef.current[idx + 1] = element as HTMLSpanElement)}>
@@ -456,25 +501,79 @@ const ModifyCheck03 = () => {
                       <label>
                         <span style={{ margin: "50px 0 20px 0" }}>진단시기</span>
                       </label>
-                      <InputElement
-                        type="text"
-                        placeholder="예) 2015년 01월"
-                        id="cancer_start"
-                        name="userDiagDate"
-                        value={diagCancerList.userDiagDate[idx] ? diagCancerList.userDiagDate[idx] : ""}
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleCancerDate(event, idx)}
-                      />
+                        <div style={{display:"flex"}}>
+                            <span style={{width:"100%"}}>
+                                <label>* 년도</label>
+                                <InputElement
+                                    type="text"
+                                    placeholder="예) 2015"
+                                    id="cancer_start"
+                                    name="userDiagDate"
+                                    value={diagCancerList.userDiagDate[idx] ? diagCancerList.userDiagDate[idx].split('년')[0] : ""}
+                                    onInput={(event: React.ChangeEvent<HTMLInputElement>) => handleCancerDateYear(event, idx)}
+                                />
+                            </span>
+                            <span style={{width:"70%"}}>
+                                <label>* 월</label>
+                                <select name="cancer_start_month"
+                                        id="cancer_start_month"
+                                        defaultValue={diagCancerList.userDiagDate[idx] ? diagCancerList.userDiagDate[idx].split(' ')[1] : ""}
+                                        value={diagCancerList.userDiagDate[idx] ? diagCancerList.userDiagDate[idx].split(' ')[1] : ""}
+                                        style={{height:"45px"}}
+                                        onChange={(event: React.ChangeEvent<HTMLSelectElement>) => handleCancerDateMonth(event, idx)}>
+                                    <option value="01월">01월</option>
+                                    <option value="02월">02월</option>
+                                    <option value="03월">03월</option>
+                                    <option value="04월">04월</option>
+                                    <option value="05월">05월</option>
+                                    <option value="06월">06월</option>
+                                    <option value="07월">07월</option>
+                                    <option value="08월">08월</option>
+                                    <option value="09월">09월</option>
+                                    <option value="10월">10월</option>
+                                    <option value="11월">11월</option>
+                                    <option value="12월">12월</option>
+                                </select>
+                            </span>
+                        </div>
                       <label>
                         <span style={{ margin: "50px 0 20px 0" }}>치료종료 시기</span>
                       </label>
-                      <InputElement
-                        type="text"
-                        placeholder="예) 2015년 01월"
-                        id="cancer_end"
-                        name="userCureEndDate"
-                        value={diagCancerList.userCureEndDate[idx] ? diagCancerList.userCureEndDate[idx] : ""}
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleCancerDate(event, idx)}
-                      />
+                        <div style={{display:"flex"}}>
+                            <span style={{width:"100%"}}>
+                                <label>* 년도</label>
+                                <InputElement
+                                    type="text"
+                                    placeholder="예) 2015"
+                                    id="cancer_end"
+                                    name="userCureEndDate"
+                                    value={diagCancerList.userCureEndDate[idx] ? diagCancerList.userCureEndDate[idx].split('년')[0] : ""}
+                                    onInput={(event: React.ChangeEvent<HTMLInputElement>) => handleCancerDateYear(event, idx)}
+                                />
+                            </span>
+                            <span style={{width:"70%"}}>
+                                <label>* 월</label>
+                                <select name="cancer_end_month"
+                                        id="cancer_end_month"
+                                        defaultValue={diagCancerList.userCureEndDate[idx] ? diagCancerList.userCureEndDate[idx].split(' ')[1] : ""}
+                                        value={diagCancerList.userCureEndDate[idx] ? diagCancerList.userCureEndDate[idx].split(' ')[1] : ""}
+                                        style={{height:"45px"}}
+                                        onChange={(event: React.ChangeEvent<HTMLSelectElement>) => handleCancerDateMonth(event, idx)}>
+                                    <option value="01월">01월</option>
+                                    <option value="02월">02월</option>
+                                    <option value="03월">03월</option>
+                                    <option value="04월">04월</option>
+                                    <option value="05월">05월</option>
+                                    <option value="06월">06월</option>
+                                    <option value="07월">07월</option>
+                                    <option value="08월">08월</option>
+                                    <option value="09월">09월</option>
+                                    <option value="10월">10월</option>
+                                    <option value="11월">11월</option>
+                                    <option value="12월">12월</option>
+                                </select>
+                            </span>
+                        </div>
                     </div>
                   </React.Fragment>
                 ))

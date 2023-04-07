@@ -63,7 +63,6 @@ const JoinModify = () => {
 
         $(window).on("scroll", function () {
             const height = $(document).scrollTop();
-            console.log(height);
             if (this.scrollY > 100) {
                 $(".modifyProgress").addClass("fixed");
             } else {
@@ -116,7 +115,7 @@ const JoinModify = () => {
     return (
         <React.Fragment>
             {step === 2 ?
-                <TitleHeadComponent name='개인정보 수정' targetUrl="" />
+                <TitleHeadComponent name='건강정보 수정' targetUrl="" />
                 :
                 <TitleHeadComponent name={stepTitle} targetUrl="" />
             }
