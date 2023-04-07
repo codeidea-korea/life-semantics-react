@@ -4123,3 +4123,11 @@ button[type="button"] {
         margin-top: 30px;
     }
 }
+
+@media all and (max-width: 360px) {
+    .Login {
+        .Container {
+            margin: 0 25px;
+        }
+    }
+}
