@@ -147,10 +147,42 @@ const ModifyCheck03 = () => {
       return
     }
 
+    /*
+    * 20230411
+    * 암 종, 진단시기, 치료종료 시기 유효성 검사가 없어 새로 추가함
+    * 이미 너무 많은것들이 개발되어 있어 아래 방법으로 대처함...
+    */
+    const userCureEndDateArr = beforeSurveyInfo.userCureEndDate.split(',');
+    const userDiagDateArr = beforeSurveyInfo.userDiagDate.split(',');
+    const userDiagnosisArr = beforeSurveyInfo.userDiagnosis.split(',');
+
+    // 암 종, 진단시기, 치료종료 시기 개수로 1차 확인
+    if(userCureEndDateArr.length !== userDiagDateArr.length
+      || userDiagDateArr.length !== userDiagnosisArr.length) {
+      moveScroll(cancerInfoRef.current[1])
+      return;
+    }
+
+    let startYear = 0;
+    let endYear = 0;
+
+    // 년도 확인과, 암 종 null 확인으로 2차 확인
+    for (let i = 0; i < userDiagDateArr.length; i++) {
+        startYear = Number(userDiagDateArr[i].split('년')[0]);
+        endYear = Number(userCureEndDateArr[i].split('년')[0]);
+
+        if (startYear < 1900
+            || startYear > new Date().getFullYear()
+            || endYear < 1900
+            || endYear > new Date().getFullYear()
+            || (!userDiagnosisArr[i])) {
+            moveScroll(cancerInfoRef.current[1]);
+            return;
+        }
+    }
+
     requestRegBeforeSurveyInfo();
   };
-
-
 
   const [endPopup, setEndPopup] = useState(false);
   const [userAge,] = useState(Number(now.getFullYear()) - Number(user.userBirth?.substr(0, 4)) + 1);
@@ -320,7 +352,7 @@ const ModifyCheck03 = () => {
         setBeforeSurveyInfo({
             ...beforeSurveyInfo,
             [newName]: newValue
-        })
+        });
     }
 
   const updateInfo = () => {

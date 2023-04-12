@@ -190,19 +190,21 @@ const ModifyCheck02 = ({ nextStep }: { nextStep: Function }) => {
         const drinkingStartYear = document.querySelector('#drinking_start') as HTMLInputElement
         const drinkingEndYear = document.querySelector('#drinking_end') as HTMLInputElement
 
-        if(Number(drinkingStartYear.value) < 1900
-            || Number(drinkingStartYear.value) > new Date().getFullYear()) {
-            alert('음주 기간을 확인하세요.');
-            return;
+        if(reqData.userIsDrink === '1') {
+            if(Number(drinkingStartYear.value) < 1900
+                || Number(drinkingStartYear.value) > new Date().getFullYear()) {
+                alert('음주 기간을 확인하세요.');
+                return;
 
-        }else if(Number(drinkingEndYear.value) < 1900
-            || Number(drinkingEndYear.value) > new Date().getFullYear()) {
-            alert('음주 기간을 확인하세요.');
-            return;
+            }else if(Number(drinkingEndYear.value) < 1900
+                || Number(drinkingEndYear.value) > new Date().getFullYear()) {
+                alert('음주 기간을 확인하세요.');
+                return;
 
-        }else {
-            reqData.userDrinkStartYear = drinkingStartYear.value;
-            reqData.userDrinkEndYear = drinkingEndYear.value;
+            }else {
+                reqData.userDrinkStartYear = drinkingStartYear.value;
+                reqData.userDrinkEndYear = drinkingEndYear.value;
+            }
         }
 
         const caffeineElement = document.querySelector('#Caffeine') as HTMLInputElement

@@ -639,10 +639,10 @@ const Survey = () => {
         $(event.target).val(ymd);
 
         if (name === 'userDiagDate') {
-            newDiagCancerList.userDiagDate[index] = ymd+'년'+$('#cancer_start_month').val();
+            newDiagCancerList.userDiagDate[index] = ymd+'년 ' + $(event.target).parent().parent().find('#cancer_start_month').val();
             newValue = newDiagCancerList.userDiagDate.join(',');
         }else {
-            newDiagCancerList.userCureEndDate[index] = ymd+'년'+$('#cancer_end_month').val();
+            newDiagCancerList.userCureEndDate[index] = ymd+'년 ' + $(event.target).parent().parent().find('#cancer_end_month').val();
             newValue = newDiagCancerList.userCureEndDate.join(',');
         }
 
@@ -650,7 +650,7 @@ const Survey = () => {
         setBeforeSurveyInfo({
             ...beforeSurveyInfo,
             [name]: newValue
-        })
+        });
 
         /* 20230329 기존 로직 주석처리
         const { name, value } = event.target;
@@ -701,23 +701,26 @@ const Survey = () => {
     }
 
     const handleCancerDateMonth = (event: React.ChangeEvent<HTMLSelectElement>, index: number) => {
-        const { name } = event.target;
+        const { name, value } = event.target;
         let newDiagCancerList = { ...diagCancerList };
         let newValue = '';
+        let newName = '';
 
         if (name === 'cancer_start_month') {
-            newDiagCancerList.userDiagDate[index] = $('#cancer_start').val()+'년'+$('#cancer_start_month').val();
+            newDiagCancerList.userDiagDate[index] = $(event.target).parent().parent().find('#cancer_start').val()+'년 ' + value;
             newValue = newDiagCancerList.userDiagDate.join(',');
+            newName = 'userDiagDate';
         }else {
-            newDiagCancerList.userCureEndDate[index] = $('#cancer_end').val()+'년'+$('#cancer_end_month').val();
+            newDiagCancerList.userCureEndDate[index] = $(event.target).parent().parent().find('#cancer_end').val()+'년 ' + value;
             newValue = newDiagCancerList.userCureEndDate.join(',');
+            newName = 'userCureEndDate';
         }
 
         setDiagCancerList(newDiagCancerList);
         setBeforeSurveyInfo({
             ...beforeSurveyInfo,
-            [name]: newValue
-        })
+            [newName]: newValue
+        });
     }
 
     const handleDiagName = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
