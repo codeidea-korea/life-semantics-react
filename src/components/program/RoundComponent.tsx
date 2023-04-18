@@ -56,10 +56,10 @@ const RoundComponent = ({roundList}: {roundList: ProgramNumberDetailInterface[]}
           전체
         </SwiperSlide>
         
-        {roundList.map((round) => (
+        {roundList.map((round,index) => (
           <SwiperSlide
             className="roundNumber"
-            onClick={(event) => setDetail(event, round.prNum, '#41b946', '#fff')}
+            onClick={(event) => setDetail(event, index+1, '#41b946', '#fff')}
             key={round.prNum}
           >
             {round.prNum}회기
