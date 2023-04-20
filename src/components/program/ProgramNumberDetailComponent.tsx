@@ -10,7 +10,7 @@ const ProgramNumberDetailComponent = ({roundDetail}: {roundDetail: ProgramNumber
     <React.Fragment>
       <div className="round">
         <div className="roundItem">
-          <p>{roundDetail.prTitle}</p>
+          <p>{roundDetail.prNum + '회기 ' + roundDetail.prTitle}</p>
           <ul>
             <li>
               일시 : <span>{month[0] === '0' ? month[1] : month}/{day} {weekDay} {roundDetail.prSttTime}~{roundDetail.prEndTime}</span>
