@@ -75,9 +75,17 @@ const BookComponent = ({programFilter}: {programFilter?: ProgramFilterInterface}
             if((status === 'inOperApplied' || status === 'uncancellable' || status === 'cancellable')
                 && (nowDate >= startDate && nowDate <= endDate)) {
                 return <span className="participate">참여 중</span>;
-            }else if(status === 'reservable' || status === 'cancellable') {
+            }else if(status === 'cancellable' || status === 'uncancellable') {
                 return <span className="reserve">예약 중</span>;
             }
+
+            // 20230420 로직 변경으로 인한 주석처리
+            /*if((status === 'inOperApplied' || status === 'uncancellable' || status === 'cancellable')
+                && (nowDate >= startDate && nowDate <= endDate)) {
+                return <span className="participate">참여 중</span>;
+            }else if(status === 'reservable' || status === 'cancellable') {
+                return <span className="reserve">예약 중</span>;
+            }*/
         }
     };
 
