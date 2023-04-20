@@ -1219,6 +1219,12 @@ select {
             align-items: center;
             position: relative;
             height: 77px;
+            .participate + p {
+                margin-top:22px;
+            }
+            .reserve + p {
+                margin-top:22px;
+            }
             p {
                 font-weight: 700;
                 font-size: 18px;
