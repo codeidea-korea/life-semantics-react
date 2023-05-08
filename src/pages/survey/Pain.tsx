@@ -167,7 +167,12 @@ const Pain = () => {
   };
 
   const handleNextStep = () => {
-    if (isVaildAnswer(step) === true) {
+      if (step < 3) {
+          setStep(step + 1);
+          window.scrollTo(0, 0);
+      }
+
+    /*if (isVaildAnswer(step) === true) {
       if (step < 3) {
         setStep(step + 1);
         window.scrollTo(0, 0);
@@ -177,7 +182,7 @@ const Pain = () => {
       setTimeout(() => {
         setToast2(false);
       }, 3000);
-    }
+    }*/
   };
 
   const handlePrevStep = () => {
