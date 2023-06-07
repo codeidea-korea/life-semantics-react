@@ -116,7 +116,6 @@ const Pain = () => {
 
   useEffect(() => {
     const scHeight = $(".Step").prop("scrollHeight");
-    console.log(scHeight);
 
     $(window).on("scroll", function () {
       var height = $(document).scrollTop();
@@ -168,6 +167,7 @@ const Pain = () => {
 
   const handleNextStep = () => {
       if (step < 3) {
+          isVaildAnswer(step);
           setStep(step + 1);
           window.scrollTo(0, 0);
       }
@@ -247,7 +247,6 @@ const Pain = () => {
 
   function savePrev(step : number) {
     setTimeout(() => {
-      console.log(reqData);
       document.querySelectorAll(".frontPain span").forEach((item: any, idx) => {
         reqData.userSurveysAnswersDTO[0].saAnsList.forEach(
           (item2: any, idx2) => {
