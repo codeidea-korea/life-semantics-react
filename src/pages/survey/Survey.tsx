@@ -789,6 +789,15 @@ const Survey = () => {
                             const startDate = new Date(item.pgSttDate);
                             startDate.setDate(startDate.getDate()-7);
 
+                            /* 사후 설문 전용 변수들 : 기존 소스 안건드리고 그냥 새로 작성함 */
+                            // 오늘 날짜
+                            const newToday = today.getFullYear() + '-' + (today.getMonth() < 9 ? '0'+(today.getMonth()+1) : today.getMonth()+1) + '-' + (today.getDate() < 9 ? '0'+today.getDate() : today.getDate());
+                            // 프로그램 종료 날짜
+                            const pgEndDate = new Date(item.pgEndDate);
+                            pgEndDate.setDate(pgEndDate.getDate()+15);
+                            // 프로그램 종료 날짜 + 15일
+                            const endDatePlus15day = pgEndDate.getFullYear() + '-' + (pgEndDate.getMonth() < 9 ? '0'+(pgEndDate.getMonth()+1) : pgEndDate.getMonth()+1) + '-' + (pgEndDate.getDate() < 9 ? '0'+pgEndDate.getDate() : pgEndDate.getDate());
+
                             return (
                                 <div key={index}>
                                     <div className="surveyName">
@@ -843,12 +852,14 @@ const Survey = () => {
                                             </li>
                                         }
 
-                                        {item.surveys.end.length - afterExceptCnt == 3 ?
+                                        {/* 프로그램 종료일 <= 오늘 <= 프로그램 종료일+15일 */}
+                                        { (newToday >= item.pgEndDate) && (newToday <= endDatePlus15day) &&
+                                            (item.surveys.end.length - afterExceptCnt < 3) ?
                                             <li className="" onClick={(event) => handleNavigate(event, `/surveyAfter?pgNo=${item.pgNo}&type=${item.pgType}&type2=end&title=${item.pgTitle}`)}>
                                                 <Link to="">사후 설문({item.surveys.end.length - afterExceptCnt}/3)</Link>
                                             </li>
                                             :
-                                            <li className="active" onClick={(event) => handleNotNavigate()}>
+                                            <li className="active" /*onClick={(event) => handleNotNavigate()}*/>
                                                 <Link to="">사후 설문({item.surveys.end.length - afterExceptCnt}/3)</Link>
                                             </li>
                                         }
