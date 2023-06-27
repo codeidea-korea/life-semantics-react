@@ -589,7 +589,7 @@ const Survey = () => {
                             )
                                 .then((response) => response.json())
                                 .then((data) => {
-                                    document.querySelectorAll('.recent_not_survey')[idx].textContent = `최근 5일 이내 미작성 ${data}건`;
+                                    document.querySelectorAll('.recent_not_survey')[idx].textContent = `최근 5일 이내 미작성 ${5-(data<0 ? 0 : data)}건`;
                                 })
                                 .catch((error) => {
                                     console.log(error);
@@ -735,14 +735,11 @@ const Survey = () => {
         [name]: newValue
         })
     }
-    const compareDates = (dateString: string) => {
-        const today = new Date();
-        const inputDate = new Date(dateString);
-        if (inputDate > today) {
-            return false;
-        } else {
-            return true;
-        }
+
+    const compareDates = (date1: any, date2: any) => {
+        const newDate1 = new Date(date1).toDateString();
+        const newDate2 = new Date(date2).toDateString();
+        return new Date(newDate1) <= new Date(newDate2);
     }
 
     useEffect(() => {
@@ -757,6 +754,8 @@ const Survey = () => {
         window.addEventListener('mousedown', handleClick);
         return () => window.removeEventListener('mousedown', handleClick);
     }, [handleToolTipRef]);
+
+    const today = new Date();
 
     return (
         <React.Fragment>
@@ -784,19 +783,17 @@ const Survey = () => {
                                 })
                             }
 
-                            // 사전설문 : 프로그램 진행 시작일 -7 부터 가능
-                            const today = new Date();
-                            const startDate = new Date(item.pgSttDate);
-                            startDate.setDate(startDate.getDate()-7);
+                            // 프로그램 시작일 -7
+                            const startDateMinus7day = new Date(item.pgSttDate);
+                            startDateMinus7day.setDate(startDateMinus7day.getDate()-7);
 
-                            /* 사후 설문 전용 변수들 : 기존 소스 안건드리고 그냥 새로 작성함 */
-                            // 오늘 날짜
-                            const newToday = today.getFullYear() + '-' + (today.getMonth() < 9 ? '0'+(today.getMonth()+1) : today.getMonth()+1) + '-' + (today.getDate() < 9 ? '0'+today.getDate() : today.getDate());
-                            // 프로그램 종료 날짜
-                            const pgEndDate = new Date(item.pgEndDate);
-                            pgEndDate.setDate(pgEndDate.getDate()+15);
-                            // 프로그램 종료 날짜 + 15일
-                            const endDatePlus15day = pgEndDate.getFullYear() + '-' + (pgEndDate.getMonth() < 9 ? '0'+(pgEndDate.getMonth()+1) : pgEndDate.getMonth()+1) + '-' + (pgEndDate.getDate() < 9 ? '0'+pgEndDate.getDate() : pgEndDate.getDate());
+                            // 프로그램 종료일 +5
+                            const endDatePlus5day = new Date(new Date(item.pgEndDate).toDateString());
+                            endDatePlus5day.setDate(endDatePlus5day.getDate()+5);
+
+                            // 프로그램 종료일 +15
+                            const endDatePlus15day = new Date(new Date(item.pgEndDate).toDateString());
+                            endDatePlus15day.setDate(endDatePlus15day.getDate()+15);
 
                             return (
                                 <div key={index}>
@@ -821,21 +818,30 @@ const Survey = () => {
                                         </div>
                                     </div>
                                     <ul>
-                                        {   /* 사전설문 : 프로그램 진행 시작일 -7 부터 가능 */
-                                            startDate <= today ?
-                                            <li className={item.surveys.pre.length - exceptCnt == 3 ? "active" : ""} onClick={(event) => handleNavigate(event, `/surveyBefore?pgNo=${item.pgNo}&type=${item.pgType}&type2=pre&title=${item.pgTitle}`)}>
+                                        {
+                                            /* 사전 설문 로직
+                                            * 시작일-7 <= 오늘
+                                            * 오늘 <= 종료일
+                                            * */
+                                            compareDates(startDateMinus7day, today) && compareDates(today, item.pgEndDate) ?
+                                            <li className={item.surveys.pre.length - exceptCnt === 3 ? "active" : ""} onClick={(event) => handleNavigate(event, `/surveyBefore?pgNo=${item.pgNo}&type=${item.pgType}&type2=pre&title=${item.pgTitle}`)}>
                                                 사전 설문({item.surveys.pre.length - exceptCnt}/3)
                                             </li>
                                             :
                                             <>
-                                                <span style={{color:"red", fontWeight:"bold", marginBottom:"10px", display:'block'}}>&#8251;&nbsp;&nbsp;아직 설문 기간이 아닙니다</span>
+                                                {/*<span style={{color:"red", fontWeight:"bold", marginBottom:"10px", display:'block'}}>&#8251;&nbsp;&nbsp;아직 설문 기간이 아닙니다</span>*/}
                                                 <li className="active" onClick={(event) => handleNotNavigate()}>
                                                     사전 설문({item.surveys.pre.length - exceptCnt}/3)
                                                 </li>
                                             </>
                                         }
                                         {
-                                            compareDates(item.pgSttDate) ? <li className="" onClick={(event) => handleNavigate(event, `/surveyToday?pgNo=${item.pgNo}&type=${item.pgType}`)}>
+                                            /* 일일 설문 로직
+                                            * 시작일 <= 오늘
+                                            * 오늘 <= 종료일+5
+                                            * */
+                                            compareDates(item.pgSttDate, today) && compareDates(today, endDatePlus5day) ?
+                                            <li className="" onClick={(event) => handleNavigate(event, `/surveyToday?pgNo=${item.pgNo}&type=${item.pgType}`)}>
                                                 일일 설문
                                                 <br />
                                                 <span className="recent_not_survey"></span>
@@ -851,16 +857,19 @@ const Survey = () => {
                                                 <span className="recent_not_survey"></span>
                                             </li>
                                         }
-
-                                        {/* 프로그램 종료일 <= 오늘 <= 프로그램 종료일+15일 */}
-                                        { (newToday >= item.pgEndDate) && (newToday <= endDatePlus15day) &&
-                                            (item.surveys.end.length - afterExceptCnt < 3) ?
-                                            <li className="" onClick={(event) => handleNavigate(event, `/surveyAfter?pgNo=${item.pgNo}&type=${item.pgType}&type2=end&title=${item.pgTitle}`)}>
-                                                <Link to="">사후 설문({item.surveys.end.length - afterExceptCnt}/3)</Link>
+                                        {
+                                            /* 사후 설문 로직
+                                            * 종료일 <= 오늘
+                                            * 오늘 <= 종료일+15
+                                            * */
+                                            compareDates(item.pgEndDate, today) && compareDates(today, endDatePlus15day) ?
+                                            /*&& (item.surveys.end.length - afterExceptCnt < 3)*/
+                                            <li className={item.surveys.end.length - afterExceptCnt === 3 ? "active" : ""} onClick={(event) => handleNavigate(event, `/surveyAfter?pgNo=${item.pgNo}&type=${item.pgType}&type2=end&title=${item.pgTitle}`)}>
+                                                사후 설문({item.surveys.end.length - afterExceptCnt}/3)
                                             </li>
                                             :
-                                            <li className="active" /*onClick={(event) => handleNotNavigate()}*/>
-                                                <Link to="">사후 설문({item.surveys.end.length - afterExceptCnt}/3)</Link>
+                                            <li className="active" onClick={(event) => handleNotNavigate()}>
+                                                사후 설문({item.surveys.end.length - afterExceptCnt}/3)
                                             </li>
                                         }
                                     </ul>
@@ -868,7 +877,6 @@ const Survey = () => {
                                 )
                             }
                         )
-
                     }
                 </div>
             </div>

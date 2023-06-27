@@ -189,8 +189,6 @@ const SurveyToday = () => {
         navigate("/survey");
     };
 
-
-
     function getDates(start: string): Array<{ year: string, month: string, day: string, total: string }> {
         const startDate = new Date(start);
         const endDate = new Date();
@@ -211,6 +209,7 @@ const SurveyToday = () => {
 
     const [selectedDate, setSelectedDate] = useState<Array<{ year: string; month: string; day: string; total: string }>>([]);
     const [selectedIndex, setSelectedIndex] = useState<any>(0);
+    const [dDay, setDDay] = useState<any>('');
     const [ingData, setIngData] = useState<any>([])
     useEffect(() => {
         fetch(`${import.meta.env.VITE_PUBLIC_API_SERVER_URL}usr/programs/myList?paUserNo=${user.userNo}`,
@@ -223,11 +222,27 @@ const SurveyToday = () => {
             }).then((response) => {
                 return response.json();
             }).then((data) => {
+                if(data?.body?.length > 0) {
+                    setDDay('D+'+getDateDiff(new Date(new Date().toDateString()),new Date(new Date(data?.body[0].pgSttDate).toDateString())))
+                }
+
                 data.body.forEach((item: any, idx: number) => {
                     if (pgNo == item.pgNo) {
                         setIngData([...ingData, item.surveys.ing]);
+
                         // const sDate = getDates(item.pgSttDate);
-                        const sDate = getDates(item.pgSttDate).filter((e: any) => e.total <= getToday());
+                        // const sDate = getDates(item.pgSttDate).filter((e: any) => e.total <= getToday());
+                        // const sDate = getDates(item.pgSttDate).filter((e: any) => e.total <= item.pgEndDate);
+                        let sDate;
+
+                        if(new Date() <= new Date(item.pgEndDate)) {
+                            // 진행중인 프로그램인 경우에는 오늘-5 ~ 오늘 까지의 일일설문 가능
+                            sDate = getDates(item.pgSttDate).filter((e: any) => e.total <= getToday());
+                        }else {
+                            // 종료된 프로그램인 경우에는 종료일-5 ~ 종료일 까지의 일일설문 가능
+                            sDate = getDates(item.pgSttDate).filter((e: any) => e.total <= item.pgEndDate);
+                        }
+
                         setSelectedDate(sDate)
                         setSelectedIndex(sDate.length - 1);
                     }
@@ -261,6 +276,14 @@ const SurveyToday = () => {
         }
     }, [selectedIndex, selectedDate])
 
+    const getDateDiff = (d1: string | number | Date, d2: string | number | Date) => {
+        const date1 = new Date(d1);
+        const date2 = new Date(d2);
+
+        const diffDate = date1.getTime() - date2.getTime();
+
+        return Math.abs(diffDate / (1000 * 60 * 60 * 24)); // 밀리세컨 * 초 * 분 * 시 = 일
+    }
 
     const handlePrevDate = () => {
         if (selectedIndex > selectedDate.length - 6)
@@ -312,7 +335,7 @@ const SurveyToday = () => {
     }
 
     useEffect(() => {
-        console.log(selectedDate)
+        // console.log(selectedDate)
     }, [selectedDate])
 
     return (
@@ -321,7 +344,8 @@ const SurveyToday = () => {
             <div className="survey surveyToday">
 
 
-                <div className="dDay">D+{selectedDate.length}</div>
+                <div className="dDay">{dDay}</div>
+                {/*<div className="dDay">D+{selectedDate.length}</div>*/}
                 <div className='date'>
                     <button type='button' onClick={handlePrevDate}></button>
                     {selectedDate.map((date, index) => (
